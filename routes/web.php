@@ -52,8 +52,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('workspaces.projects', ProjectController::class)->middleware(['auth']);
-Route::resource('workspaces', WorkspaceController::class)->middleware(['auth']);
+Route::resource('workspaces.projects', ProjectController::class)->middleware(['auth'])->only(['store', 'show']);
+Route::resource('workspaces', WorkspaceController::class)->middleware(['auth'])->only(['store', 'show']);
 
 Route::get('/workspaces/{workspace}/home', function (Workspace $workspace) {
     return Inertia::render('Home', [
@@ -62,9 +62,12 @@ Route::get('/workspaces/{workspace}/home', function (Workspace $workspace) {
 })->name('workspaces.home')->middleware(['auth']);
 
 Route::get('/workspaces/{workspace}/tasks', function (Workspace $workspace) {
-    return Inertia::render('Home', [
-        'workspace' => $workspace
+    return Inertia::render('Workspace/MyTask', [
+        'workspace' => $workspace,
+        'projectList' => fn () => $workspace->project()->get()
+            ? $workspace->project()->get()
+            : null 
     ]);
-});
+})->name('workspaces.tasks');
 
 require __DIR__.'/auth.php';
