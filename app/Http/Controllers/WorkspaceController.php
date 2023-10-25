@@ -23,7 +23,10 @@ class WorkspaceController extends Controller
 
     public function show(Workspace $workspace) {
         return Inertia::render('Home', [
-            'workspace' => $workspace
+            'workspace' => $workspace,
+            'projects' => $workspace->project()->get()
+                ? $workspace->project()->get()
+                : null
         ]);
     }
 }
