@@ -57,7 +57,10 @@ Route::resource('workspaces', WorkspaceController::class)->middleware(['auth'])-
 
 Route::get('/workspaces/{workspace}/home', function (Workspace $workspace) {
     return Inertia::render('Home', [
-        'workspace' => $workspace
+        'workspace' => $workspace,
+        'projects' => fn () => $workspace->project()->get()
+            ? $workspace->project()->get()
+            : null
     ]);
 })->name('workspaces.home')->middleware(['auth']);
 
