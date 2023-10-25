@@ -4,7 +4,7 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, router } from '@inertiajs/react';
-import { User, Workspace } from '@/types';
+import { Project, User, Workspace } from '@/types';
 import { NavSectionContainer } from '@/Components/NavSectionContainer';
 import { NavSectionItem } from '@/Components/NavSectionItem';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -13,7 +13,15 @@ import { CreateWorkspaceForm } from '@/Components/Workspace/CreateWorkspaceForm'
 import { CreateProjectForm } from '@/Components/Workspace/Project/CreateProjectForm';
 import { Briefcase, ChevronLeft, ClipboardCheck, Home } from 'lucide-react';
 
-export default function Authenticated({ user, header, children, workspaceList, currentWorkspace }: PropsWithChildren<{ user: User, header?: ReactNode, workspaceList: Workspace[], currentWorkspace?: Workspace }>) {
+type AuthenticatedProps = {
+    user: User;
+    header?: ReactNode;
+    workspaces?: Workspace[];
+    currentWorkspace?: Workspace;
+    projects?: Project[];
+}
+
+export default function Authenticated({ user, header, children, workspaces, currentWorkspace, projects }: PropsWithChildren<AuthenticatedProps>) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     const { setIsOpen, showDialog } = useDialog();
 
@@ -152,7 +160,7 @@ export default function Authenticated({ user, header, children, workspaceList, c
                             </Dropdown.Trigger>
                             <Dropdown.Content>
                                 <div className='p-3'>
-                                    {workspaceList.map((value) => {
+                                    {workspaces?.map((value) => {
                                         return (
                                             <NavSectionItem className='text-textcolor' active={currentWorkspace?.id == value.id} key={value.id} href={route('workspaces.show', value.id)} >
                                                 {value.title}
@@ -164,23 +172,24 @@ export default function Authenticated({ user, header, children, workspaceList, c
                         </Dropdown>
                     </div>
                     <div className='flex flex-col p-3 border-b-[1px] border-bordercolor'>
-                        <NavSectionItem className='hover:bg-bgactive' active={route().current('workspaces.home', currentWorkspace?.id)} href={route('workspaces.home', { id: currentWorkspace?.id })} >
+                        <NavSectionItem className='hover:bg-bgactive rounded-lg' active={route().current('workspaces.home', currentWorkspace?.id)} href={route('workspaces.home', { id: currentWorkspace?.id })} >
                             <Home className='h-4 text-textweak' />
                             <h3 className='text-textcolor'>Home</h3>
                         </NavSectionItem>
-                        <NavSectionItem className='hover:bg-bgactive' active={route().current('workspaces.tasks', currentWorkspace?.id)} href={route('workspaces.tasks', currentWorkspace?.id)}>
-                            <ClipboardCheck />
+                        <NavSectionItem className='hover:bg-bgactive rounded-lg' active={route().current('workspaces.tasks', currentWorkspace?.id)} href={route('workspaces.tasks', currentWorkspace?.id)}>
+                            <ClipboardCheck className='h-4 text-textweak' />
                             <h3 className='text-textcolor'>My Tasks</h3>
                         </NavSectionItem>
                     </div>
                     <NavSectionContainer header='Project' onClickAdd={handleCreateProject}>
                         {/** Dynamically iterated project */}
-                        <NavSectionItem active={route().current('dashboard')} href={route('dashboard')} >
-                            Project Title
-                        </NavSectionItem>
-                        <NavSectionItem active={false} href={route('dashboard')} >
-                            Project Title
-                        </NavSectionItem>
+                        {projects?.map((project) => {
+                            return (
+                                <NavSectionItem key={project.id} active={route().current('workspaces.projects.show', { workspace: project.workspace_id, project: project.id })} href={route('workspaces.projects.show', { workspace: project.workspace_id, project: project.id })} >
+                                    {project.name}
+                                </NavSectionItem>
+                            )
+                        })}
                     </NavSectionContainer>
                     <NavSectionContainer header='Insight'>
                         <NavSectionItem active={false} href={route('dashboard')} >
