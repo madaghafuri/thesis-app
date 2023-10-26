@@ -75,10 +75,10 @@ Route::get('/workspaces/{workspace}/tasks', function (Workspace $workspace) {
 })->name('workspaces.tasks');
 
 Route::controller(ProjectController::class)->group(function () {
-    Route::get('/workspaces/{workspace}/projects/{project}/list', 'list')->name('project.list');
-    Route::get('/workspaces/{workspace}/projects/{project}/board', 'board')->name('project.board');
-    Route::get('/workspaces/{workspace}/projects/{project}/calendar', 'calendar')->name('project.calendar');
-    Route::get('/workspaces/{workspace}/projects/{project}/dashboard', 'dashboard')->name('project.dashboard');
-})->middleware([HandleProjectViewRequest::class, 'auth']);
+    Route::get('/workspaces/{workspace}/projects/{project}/list', 'list')->name('project.list')->middleware([HandleProjectViewRequest::class, 'auth']);
+    Route::get('/workspaces/{workspace}/projects/{project}/board', 'board')->name('project.board')->middleware([HandleProjectViewRequest::class, 'auth']);
+    Route::get('/workspaces/{workspace}/projects/{project}/calendar', 'calendar')->name('project.calendar')->middleware([HandleProjectViewRequest::class, 'auth']);
+    Route::get('/workspaces/{workspace}/projects/{project}/dashboard', 'dashboard')->name('project.dashboard')->middleware([HandleProjectViewRequest::class, 'auth']);
+});
 
 require __DIR__.'/auth.php';

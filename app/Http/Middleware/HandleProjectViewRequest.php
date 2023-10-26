@@ -22,7 +22,9 @@ class HandleProjectViewRequest
             'data' => [
                 'workspace' => $request->route('workspace'),
                 'project' => $request->route('project'),
-                'projectList' => $request->route('workspace')->project()->get(),
+                'projectList' => fn () => $request->user()
+                    ? $request->route('workspace')->project()->get()
+                    : null
             ]
         ]);
 
