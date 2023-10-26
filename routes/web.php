@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\WorkspaceController;
+use App\Http\Middleware\HandleProjectViewRequest;
 use App\Models\User;
 use App\Models\Workspace;
 use Illuminate\Foundation\Application;
@@ -72,5 +73,12 @@ Route::get('/workspaces/{workspace}/tasks', function (Workspace $workspace) {
             : null 
     ]);
 })->name('workspaces.tasks');
+
+Route::controller(ProjectController::class)->group(function () {
+    Route::get('/workspaces/{workspace}/projects/{project}/list', 'list')->name('project.list');
+    Route::get('/workspaces/{workspace}/projects/{project}/board', 'board')->name('project.board');
+    Route::get('/workspaces/{workspace}/projects/{project}/calendar', 'calendar')->name('project.calendar');
+    Route::get('/workspaces/{workspace}/projects/{project}/dashboard', 'dashboard')->name('project.dashboard');
+})->middleware([HandleProjectViewRequest::class, 'auth']);
 
 require __DIR__.'/auth.php';
