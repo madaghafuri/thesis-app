@@ -23,3 +23,11 @@ export type Workspace = {
     created_at: string;
     updated_at: string;
 }
+
+export type Project = {
+    id: number;
+    name: string;
+    workspace_id: number;
+    created_at: number;
+    updated_at: number;
+}

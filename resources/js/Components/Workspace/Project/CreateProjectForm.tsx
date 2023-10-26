@@ -4,7 +4,7 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import { Workspace } from "@/types";
 import { useForm } from "@inertiajs/react"
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 
 type ProjectFormData = {
     name: string;
@@ -17,15 +17,20 @@ type ProjectFormProps = {
 export function CreateProjectForm({ currentWorkspace }: ProjectFormProps) {
     const { data, setData, post, processing } = useForm<ProjectFormData>();
     const { showDialog } = useDialog();
+    const [loading, setLoading] = useState(false);
 
     const handleCreateProject = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        post(route('workspaces.projects.store', currentWorkspace?.id), {
-            onSuccess: () => {
-                showDialog(undefined, '');
-            }
-        });
+        setLoading(true);
+        setTimeout(() => {
+            post(route('workspaces.projects.store', currentWorkspace?.id), {
+                onSuccess: () => {
+                    showDialog(undefined, '');
+                    setLoading(false);
+                }
+            });
+        }, 1000);
     }
 
     return (
@@ -45,7 +50,7 @@ export function CreateProjectForm({ currentWorkspace }: ProjectFormProps) {
                 </div>
 
                 <div className="flex items-center justify-end p-4">
-                    <PrimaryButton type="submit" className="bg-blue" disabled={processing}>
+                    <PrimaryButton type="submit" className="bg-blue" disabled={loading}>
                         Create
                     </PrimaryButton>
                 </div>

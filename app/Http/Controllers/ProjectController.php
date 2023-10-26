@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
-use App\Models\User;
+use App\Models\Workspace;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Workspace $workspace)
     {
         //
     }
@@ -20,7 +20,7 @@ class ProjectController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Workspace $workspace)
     {
         //
     }
@@ -28,27 +28,33 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store($workspaceId, Request $request)
+    public function store(Request $request, Workspace $workspace)
     {
-        $userId = $request->user()->id;
-        $workspace = User::all()->where('id', '=', $userId)->first()->workspace()->get();
+        $project = $workspace->project()->create([
+            'name' => $request->name
+        ]);
 
-        Log::info($workspace);
-        error_log("Hello World");
+        $project->save();
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Project $project)
+    public function show(Workspace $workspace, Project $project)
     {
-        //
+        return Inertia::render('Workspace/Project/Show', [
+            'data' => [
+                'workspace' => $workspace,
+                'projectList' => $workspace->project()->get(),
+                'project' => $project
+            ]
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Project $project)
+    public function edit(Workspace $workspace, Project $project)
     {
         //
     }
@@ -56,7 +62,7 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Project $project)
+    public function update(Request $request, Workspace $workspace, Project $project)
     {
         //
     }
@@ -64,8 +70,24 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Project $project)
+    public function destroy(Workspace $workspace, Project $project)
     {
         //
+    }
+
+    public function list(Workspace $workspace, Project $project) {
+        return Inertia::render('Workspace/Project/List');
+    }
+
+    public function board(Workspace $workspace, Project $project) {
+        return Inertia::render('Workspace/Project/Board');
+    }
+
+    public function calendar(Workspace $workspace, Project $project) {
+        return Inertia::render('Workspace/Project/Calendar');
+    }
+
+    public function dashboard(Workspace $workspace, Project $project) {
+        return Inertia::render('Workspace/Project/Dashboard');
     }
 }

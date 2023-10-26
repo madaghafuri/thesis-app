@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\WorkspaceController;
+use App\Http\Middleware\HandleProjectViewRequest;
 use App\Models\User;
 use App\Models\Workspace;
 use Illuminate\Foundation\Application;
@@ -52,19 +53,32 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('workspaces.projects', ProjectController::class)->middleware(['auth']);
-Route::resource('workspaces', WorkspaceController::class)->middleware(['auth']);
+Route::resource('workspaces.projects', ProjectController::class)->middleware(['auth'])->only(['store', 'show']);
+Route::resource('workspaces', WorkspaceController::class)->middleware(['auth'])->only(['store', 'show']);
 
 Route::get('/workspaces/{workspace}/home', function (Workspace $workspace) {
     return Inertia::render('Home', [
-        'workspace' => $workspace
+        'workspace' => $workspace,
+        'projects' => fn () => $workspace->project()->get()
+            ? $workspace->project()->get()
+            : null
     ]);
 })->name('workspaces.home')->middleware(['auth']);
 
 Route::get('/workspaces/{workspace}/tasks', function (Workspace $workspace) {
-    return Inertia::render('Home', [
-        'workspace' => $workspace
+    return Inertia::render('Workspace/MyTask', [
+        'workspace' => $workspace,
+        'projectList' => fn () => $workspace->project()->get()
+            ? $workspace->project()->get()
+            : null 
     ]);
-});
+})->name('workspaces.tasks');
+
+Route::controller(ProjectController::class)->group(function () {
+    Route::get('/workspaces/{workspace}/projects/{project}/list', 'list')->name('project.list');
+    Route::get('/workspaces/{workspace}/projects/{project}/board', 'board')->name('project.board');
+    Route::get('/workspaces/{workspace}/projects/{project}/calendar', 'calendar')->name('project.calendar');
+    Route::get('/workspaces/{workspace}/projects/{project}/dashboard', 'dashboard')->name('project.dashboard');
+})->middleware([HandleProjectViewRequest::class, 'auth']);
 
 require __DIR__.'/auth.php';
