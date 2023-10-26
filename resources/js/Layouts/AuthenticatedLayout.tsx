@@ -185,7 +185,7 @@ export default function Authenticated({ user, header, children, workspaces, curr
                         {/** Dynamically iterated project */}
                         {projects?.map((project) => {
                             return (
-                                <NavSectionItem key={project.id} active={route().current('workspaces.projects.show', { workspace: project.workspace_id, project: project.id })} href={route('workspaces.projects.show', { workspace: project.workspace_id, project: project.id })} >
+                                <NavSectionItem className='font-thin text-sm' key={project.id} active={route().current('workspaces.projects.show', { workspace: project.workspace_id, project: project.id })} href={route('workspaces.projects.show', { workspace: project.workspace_id, project: project.id })} >
                                     {project.name}
                                 </NavSectionItem>
                             )

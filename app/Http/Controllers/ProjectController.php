@@ -74,4 +74,20 @@ class ProjectController extends Controller
     {
         //
     }
+
+    public function list(Workspace $workspace, Project $project) {
+        return Inertia::render('Workspace/Project/List');
+    }
+
+    public function board(Workspace $workspace, Project $project) {
+        return Inertia::render('Workspace/Project/Board');
+    }
+
+    public function calendar(Workspace $workspace, Project $project) {
+        return Inertia::render('Workspace/Project/Calendar');
+    }
+
+    public function dashboard(Workspace $workspace, Project $project) {
+        return Inertia::render('Workspace/Project/Dashboard');
+    }
 }
