@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SectionController;
 use App\Http\Controllers\WorkspaceController;
 use App\Http\Middleware\HandleProjectViewRequest;
 use App\Models\User;
@@ -79,6 +80,10 @@ Route::controller(ProjectController::class)->group(function () {
     Route::get('/workspaces/{workspace}/projects/{project}/board', 'board')->name('project.board')->middleware([HandleProjectViewRequest::class, 'auth']);
     Route::get('/workspaces/{workspace}/projects/{project}/calendar', 'calendar')->name('project.calendar')->middleware([HandleProjectViewRequest::class, 'auth']);
     Route::get('/workspaces/{workspace}/projects/{project}/dashboard', 'dashboard')->name('project.dashboard')->middleware([HandleProjectViewRequest::class, 'auth']);
+});
+
+Route::controller(SectionController::class)->group(function () {
+    Route::post('/projects/{project}/section', 'store')->name('section.store');
 });
 
 require __DIR__.'/auth.php';
