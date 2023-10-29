@@ -16,7 +16,6 @@ class HandleProjectViewRequest
      */
     public function handle(Request $request, Closure $next): Response
     {
-        error_log($request->route('workspace'));
 
         Inertia::share([
             'data' => [
