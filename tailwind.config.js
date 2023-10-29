@@ -24,6 +24,7 @@ export default {
                 bgactive: '#424244',
                 blue: '#4573d2',
                 black: '#1e1f21',
+                danger: '#e26d7e'
             }
         },
     },

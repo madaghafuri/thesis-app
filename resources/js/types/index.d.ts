@@ -28,6 +28,22 @@ export type Project = {
     id: number;
     name: string;
     workspace_id: number;
-    created_at: number;
-    updated_at: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export type Section = {
+    id: number;
+    project_id: number;
+    name: string;
+    created_at: string;
+    updated_at: string;
+    tasks: Task[]
+}
+
+export type Task = {
+    id: number;
+    name: string;
+    created_at: string;
+    updated_at: string;
 }

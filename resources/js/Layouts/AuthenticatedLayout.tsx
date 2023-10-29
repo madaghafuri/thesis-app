@@ -11,7 +11,8 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { useDialog } from '@/Components/Dialog';
 import { CreateWorkspaceForm } from '@/Components/Workspace/CreateWorkspaceForm';
 import { CreateProjectForm } from '@/Components/Workspace/Project/CreateProjectForm';
-import { Briefcase, ChevronLeft, ClipboardCheck, Home } from 'lucide-react';
+import { Briefcase, ChevronLeft, ClipboardCheck, Home, Pencil, Trash } from 'lucide-react';
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '@/Components/ContextMenu';
 
 type AuthenticatedProps = {
     user: User;
@@ -183,13 +184,35 @@ export default function Authenticated({ user, header, children, workspaces, curr
                     </div>
                     <NavSectionContainer header='Project' onClickAdd={handleCreateProject}>
                         {/** Dynamically iterated project */}
-                        {projects?.map((project) => {
-                            return (
-                                <NavSectionItem className='font-thin text-sm' key={project.id} active={route().current('workspaces.projects.show', { workspace: project.workspace_id, project: project.id })} href={route('workspaces.projects.show', { workspace: project.workspace_id, project: project.id })} >
-                                    {project.name}
-                                </NavSectionItem>
-                            )
-                        })}
+                        <ContextMenu>
+                            <ContextMenuTrigger>
+                                <div className='flex flex-col'>
+                                    {projects?.map((project) => {
+                                        return (
+                                            <NavSectionItem
+                                                className='font-thin text-sm'
+                                                key={project.id}
+                                                active={route().current('workspaces.projects.show', { workspace: project.workspace_id, project: project.id })
+                                                || route().current('project.list', { workspace: project.workspace_id, project: project.id })}
+                                                href={route('workspaces.projects.show', { workspace: project.workspace_id, project: project.id })}
+                                            >
+                                                {project.name}
+                                            </NavSectionItem>
+                                        )
+                                    })}
+                                </div>
+                            </ContextMenuTrigger>
+                            <ContextMenuContent className='bg-content text-textcolor border-bordercolor'>
+                                <ContextMenuItem className='hover:bg-bgactive'>
+                                    <Pencil className='h-3.5 text-textweak' />
+                                    Rename
+                                </ContextMenuItem>
+                                <ContextMenuItem className='hover:bg-bgactive text-danger'>
+                                    <Trash className='h-3.5'/>
+                                    Delete
+                                </ContextMenuItem>
+                            </ContextMenuContent>
+                        </ContextMenu>
                     </NavSectionContainer>
                     <NavSectionContainer header='Insight'>
                         <NavSectionItem active={false} href={route('dashboard')} >

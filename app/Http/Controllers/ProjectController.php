@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\Section;
 use App\Models\Workspace;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -33,6 +34,13 @@ class ProjectController extends Controller
         $project = $workspace->project()->create([
             'name' => $request->name
         ]);
+        
+        $data = [
+            ['name' => 'To Do'],
+            ['name' => 'Doing'],
+            ['name' => 'Done']
+        ];
+        $project->sections()->createMany($data);
 
         $project->save();
     }
@@ -76,7 +84,13 @@ class ProjectController extends Controller
     }
 
     public function list(Workspace $workspace, Project $project) {
-        return Inertia::render('Workspace/Project/List');
+        $sections = $project->sections()->get();
+
+        error_log($sections);
+
+        return Inertia::render('Workspace/Project/List', [
+            'sections' => $sections
+        ]);
     }
 
     public function board(Workspace $workspace, Project $project) {

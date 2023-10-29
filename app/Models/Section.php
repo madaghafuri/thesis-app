@@ -5,16 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Project extends Model
+class Section extends Model
 {
     use HasFactory;
 
-    public function workspace() {
-        return $this->belongsTo(Workspace::class);
-    }
-
-    public function sections() {
-        return $this->hasMany(Section::class);
+    public function project() {
+        return $this->belongsTo(Project::class);
     }
 
     public function tasks() {
