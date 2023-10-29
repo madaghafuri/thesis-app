@@ -32,7 +32,7 @@ export default function DialogProvider({ children }: PropsWithChildren) {
                 leaveTo="transform scale-95 opacity-0"
                 as={Fragment}
             >
-                <Dialog as="div" open={!!Component} onClose={() => setComponent(undefined)} className="fixed inset-0 z-50 flex items-center justify-center bg-white/10">
+                <Dialog as="div" open={!!Component} onClose={() => setComponent(undefined)} className="fixed inset-0 z-50 flex items-center justify-center bg-white/10 backdrop-blur-sm">
                         <Dialog.Panel className="w-full max-w-sm rounded-md bg-nav text-textcolor">
                             <div className="p-5 flex items-center justify-between border-bordercolor border-b-[1px]">
                                 <Dialog.Title>{title}</Dialog.Title>
