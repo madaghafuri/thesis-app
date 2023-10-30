@@ -48,7 +48,7 @@ export default function List() {
                         }
 
                         return (
-                            <ProjectSectionContainer key={section.id} header={section.name} onAddTask={handleAddTask}>
+                            <ProjectSectionContainer key={section.id} section={section} onAddTask={handleAddTask}>
                                 {/* {section.tasks.map((task) => {
                                     return (
                                         <TaskRow key={task.id} task={task} />

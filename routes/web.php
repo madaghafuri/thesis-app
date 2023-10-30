@@ -83,7 +83,8 @@ Route::controller(ProjectController::class)->group(function () {
 });
 
 Route::controller(SectionController::class)->group(function () {
-    Route::post('/projects/{project}/section', 'store')->name('section.store');
+    Route::post('/projects/{project}/section', 'store')->name('section.store')->middleware(['auth']);
+    Route::patch('/projects/{project}/section/{section}', 'update')->name('section.update')->middleware(['auth']);
 });
 
 require __DIR__.'/auth.php';

@@ -4,18 +4,26 @@ import { Menu, Transition } from "@headlessui/react";
 import { ChevronDown, GripVertical, MoreHorizontal, Plus } from "lucide-react";
 import { ChangeEvent, ChangeEventHandler, Fragment, MouseEventHandler, PropsWithChildren, useState } from "react";
 import { SectionMenu } from "./Section/SectionMenu";
+import { SectionTitle } from "./Section/SectionTitle";
+import { router } from "@inertiajs/react";
+import { Section } from "@/types";
 
 type Props = {
-    header?: string;
+    section: Section;
     onChangeHeader?: ChangeEventHandler;
     onAddTask?: MouseEventHandler<HTMLDivElement>;
 }
 
-export function ProjectSectionContainer({ header = 'Section', children, onChangeHeader, onAddTask = () => {} }: PropsWithChildren<Props>) {
+export function ProjectSectionContainer({ section, children, onChangeHeader, onAddTask = () => {} }: PropsWithChildren<Props>) {
     const [hovered, setHovered] = useState(false);
+    const [sectionName, setSectionName] = useState(section.name);
 
     const handleChangeHeader = (event: ChangeEvent<HTMLInputElement>) => {
+        setSectionName(event.target.value);
+    }
 
+    const handleBlur = () => {
+        router.patch(route('section.update', { project: section.project_id, section: section.id }), { name: sectionName });
     }
 
     return (
@@ -28,7 +36,7 @@ export function ProjectSectionContainer({ header = 'Section', children, onChange
                 <PrimaryButton className="hover:bg-bgactive px-1 py-1">
                     <ChevronDown className="text-textweak h-5" />
                 </PrimaryButton>
-                <h2 className="select-none text-textcolor font-bold text-lg">{header}</h2>
+                <SectionTitle value={sectionName} onChange={handleChangeHeader} onBlur={handleBlur} />
         
                 {hovered ? (
                     <PrimaryButton className="hover:bg-bgactive px-1 py-1">
