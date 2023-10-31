@@ -16,13 +16,13 @@ return new class extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('section_id')->unsigned();
             $table->bigInteger('project_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('section_id')->references('id')->on('sections');
-            $table->foreign('project_id')->references('id')->on('projects');
-            $table->string('name');
-            $table->date('due_date');
-            $table->date('start_date');
-            $table->string('description');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade');
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+            $table->string('name')->nullable();
+            $table->date('due_date')->nullable();
+            $table->date('start_date')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

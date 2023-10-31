@@ -6,10 +6,8 @@ import { Fragment } from "react";
 export function SectionMenu() {
     return (
         <Menu as="div" className="relative inline-block text-left">
-            <Menu.Button>
-                <PrimaryButton className="px-1 py-1 hover:bg-bgactive">
-                    <MoreHorizontal className="h-4 text-textweak" />
-                </PrimaryButton>
+            <Menu.Button className="text-textweak hover:bg-bgactive rounded-md p-1">
+                <MoreHorizontal />
             </Menu.Button>
             <Transition
                 as={Fragment}

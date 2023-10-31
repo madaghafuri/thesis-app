@@ -10,7 +10,7 @@ export function SectionTitle({ className, type = 'text', isFocused = false, ...p
             {...props}
             type={type}
             className={cn(
-                "text-textcolor font-medium bg-inherit border-none rounded-md focus:ring-textcolor",
+                "text-textcolor font-extrabold bg-inherit border-none rounded-md focus:ring-textcolor",
             )}
             />
     )

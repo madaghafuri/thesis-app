@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\WorkspaceController;
 use App\Http\Middleware\HandleProjectViewRequest;
 use App\Models\User;
@@ -85,6 +86,12 @@ Route::controller(ProjectController::class)->group(function () {
 Route::controller(SectionController::class)->group(function () {
     Route::post('/projects/{project}/section', 'store')->name('section.store')->middleware(['auth']);
     Route::patch('/projects/{project}/section/{section}', 'update')->name('section.update')->middleware(['auth']);
+});
+
+Route::controller(TaskController::class)->group(function () {
+    Route::post('/projects/{project}/sections/{section}/task', 'store')->name('task.store')->middleware(['auth']);
+    Route::patch('/tasks/{task}', 'update')->name('task.update')->middleware(['auth']);
+    Route::delete('/tasks/{task}', 'destroy')->name('task.destroy')->middleware(['auth']);
 });
 
 require __DIR__.'/auth.php';

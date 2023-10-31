@@ -8,6 +8,8 @@ use App\Models\Workspace;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+use function Laravel\Prompts\error;
+
 class ProjectController extends Controller
 {
     /**
@@ -85,11 +87,11 @@ class ProjectController extends Controller
 
     public function list(Workspace $workspace, Project $project) {
         $sections = $project->sections()->get();
-
-        error_log($sections);
+        $tasks = $project->tasks()->get();
 
         return Inertia::render('Workspace/Project/List', [
-            'sections' => $sections
+            'sections' => $sections,
+            'tasks' => $tasks
         ]);
     }
 

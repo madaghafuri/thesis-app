@@ -1,3 +1,4 @@
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/Components/ContextMenu";
 import { useDialog } from "@/Components/Dialog";
 import PrimaryButton from "@/Components/PrimaryButton";
 import { Sheet, SheetContent, SheetTrigger } from "@/Components/Sheet";
@@ -8,12 +9,13 @@ import { ListSectionHeader } from "@/Components/Workspace/Project/Section/ListSe
 import { TaskRow } from "@/Components/Workspace/Project/Section/Task/TaskRow";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { PageProps, Section, Task } from "@/types";
-import { usePage } from "@inertiajs/react";
-import { Plus } from "lucide-react";
+import { router, usePage } from "@inertiajs/react";
+import { Plus, Trash } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 
 type ListPageProps = {
     sections: Section[];
+    tasks: Task[];
 }
 
 export default function List() {
@@ -24,18 +26,6 @@ export default function List() {
 
     const handleCreateSection = () => {
         showDialog(<CreateSectionForm project={props.data.project} />, 'Create Section');
-
-        // setSections((prev) => {
-        //     const newSections = [...prev];
-        //     newSections.push({
-        //         id: 2,
-        //         name: "More",
-        //         created_at: "Now",
-        //         updated_at: 'Then',
-        //         tasks: []
-        //     });
-        //     return newSections;
-        // })
     }
 
     return (
@@ -49,11 +39,26 @@ export default function List() {
 
                         return (
                             <ProjectSectionContainer key={section.id} section={section} onAddTask={handleAddTask}>
-                                {/* {section.tasks.map((task) => {
+                                {props.tasks.map((task) => {
+                                    const handleDeleteTask = () => {
+                                        router.delete(route('task.destroy', { task: task.id }));
+                                    }
+
+                                    if (task.section_id === section.id)
                                     return (
-                                        <TaskRow key={task.id} task={task} />
+                                        <ContextMenu key={task.id}>
+                                            <ContextMenuTrigger>
+                                                <TaskRow task={task} />
+                                            </ContextMenuTrigger>
+                                            <ContextMenuContent className="border-bordercolor text-textcolor bg-nav">
+                                                <ContextMenuItem className="hover:bg-bgactive select-none text-danger" onClick={handleDeleteTask}>
+                                                    <Trash className="h-3.5"/>
+                                                    Delete
+                                                </ContextMenuItem>
+                                            </ContextMenuContent>
+                                        </ContextMenu>
                                     )
-                                })} */}
+                                })}
                             </ProjectSectionContainer>
                         )
                     })}
