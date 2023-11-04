@@ -43,6 +43,10 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        $user->workspace()->create([
+            'title' => "$user->name's Workspace"
+        ]);
+
         event(new Registered($user));
 
         Auth::login($user);

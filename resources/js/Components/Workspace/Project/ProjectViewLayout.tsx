@@ -1,5 +1,5 @@
 import NavLink from "@/Components/NavLink"
-import { Project, Workspace } from "@/types"
+import { Project, User, Workspace } from "@/types"
 import { usePage } from "@inertiajs/react"
 import { Calendar, KanbanSquare, LayoutDashboard, ScrollText } from "lucide-react"
 import { PropsWithChildren } from "react"
@@ -9,6 +9,7 @@ export type ProjectViewProps = {
         workspace: Workspace;
         projectList: Project[];
         project: Project;
+        members: User[];
     }
 }
 
@@ -52,7 +53,7 @@ function ViewLayoutHeader() {
 export function ProjectViewLayout({ children }: PropsWithChildren) {
 
     return (
-        <section>
+        <section className="w-full">
             <header className="text text-textcolor px-4 pt-2 border-b-[1px] border-bordercolor">
                 <ViewLayoutHeader />
             </header>

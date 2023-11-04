@@ -12,14 +12,14 @@ type FormData = {
 
 export function CreateWorkspaceForm({ className }: { className?: string }) {
     const { data, setData, post, errors, processing, recentlySuccessful } = useForm<FormData>();
-    const { showDialog } = useDialog();
+    const { showModal } = useDialog();
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         post(route('workspaces.store'), {
             onSuccess: () => {
-                showDialog(undefined, '');
+                showModal(undefined, '');
             },
             onError: (error) => {
                 console.log(error);

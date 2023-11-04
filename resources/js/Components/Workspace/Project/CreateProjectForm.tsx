@@ -16,7 +16,7 @@ type ProjectFormProps = {
 
 export function CreateProjectForm({ currentWorkspace }: ProjectFormProps) {
     const { data, setData, post, processing } = useForm<ProjectFormData>();
-    const { showDialog } = useDialog();
+    const { showModal } = useDialog();
     const [loading, setLoading] = useState(false);
 
     const handleCreateProject = (event: FormEvent<HTMLFormElement>) => {
@@ -26,7 +26,7 @@ export function CreateProjectForm({ currentWorkspace }: ProjectFormProps) {
         setTimeout(() => {
             post(route('workspaces.projects.store', currentWorkspace?.id), {
                 onSuccess: () => {
-                    showDialog(undefined, '');
+                    showModal(undefined, '');
                     setLoading(false);
                 }
             });

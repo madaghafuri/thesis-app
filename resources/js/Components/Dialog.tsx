@@ -3,26 +3,26 @@ import { Dispatch, Fragment, PropsWithChildren, ReactNode, SetStateAction, creat
 import SecondaryButton from "./SecondaryButton";
 import { X } from "lucide-react";
 
-export type DialogProps = {
+export type ModalProps = {
     isOpen: boolean;
     setIsOpen: Dispatch<SetStateAction<boolean>>;
-    showDialog: (component: ReactNode, title: string) => void;
+    showModal: (component: ReactNode, title: string) => void;
 }
 
-const DialogContext = createContext<DialogProps>({ isOpen: false, setIsOpen: () => {}, showDialog: () => {} });
+const ModalContext = createContext<ModalProps>({ isOpen: false, setIsOpen: () => {}, showModal: () => {} });
 
 export default function DialogProvider({ children }: PropsWithChildren) {
     const [isOpen, setIsOpen] = useState(false);
     const [Component, setComponent] = useState<ReactNode | undefined>();
     const [title, setTitle] = useState('');
 
-    const showDialog = (component: ReactNode, title: string) => {
+    const showModal = (component: ReactNode, title: string) => {
         setComponent(component);
         setTitle(title);
     }
 
     return (
-        <DialogContext.Provider value={{ isOpen, setIsOpen, showDialog }}>
+        <ModalContext.Provider value={{ isOpen, setIsOpen, showModal }}>
             <Transition show={!!Component}
                 enter="transition duration-150 ease-out"
                 enterFrom="transform scale-90 opacity-0"
@@ -45,12 +45,12 @@ export default function DialogProvider({ children }: PropsWithChildren) {
                 </Dialog>
             </Transition>
             {children}
-        </DialogContext.Provider>
+        </ModalContext.Provider>
     )
 }
 
 export function useDialog() {
-    const context = useContext(DialogContext);
+    const context = useContext(ModalContext);
     if (!context) throw Error('useDialog must be used within a DialogProvider');
 
     return context
