@@ -48,4 +48,13 @@ export type Task = {
     name: string;
     created_at: string;
     updated_at: string;
+    user: User;
+    priority: Priority;
+}
+
+export type Priority = {
+    id: number;
+    name: string;
+    created_at: string;
+    updated_at: string;
 }

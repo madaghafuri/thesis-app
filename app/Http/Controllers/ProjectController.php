@@ -89,6 +89,11 @@ class ProjectController extends Controller
         $sections = $project->sections()->get();
         $tasks = $project->tasks()->get();
 
+        foreach ($tasks as $task) {
+            $user = $task->user()->first();
+            $task->user = $user;
+        }
+
         return Inertia::render('Workspace/Project/List', [
             'sections' => $sections,
             'tasks' => $tasks

@@ -24,7 +24,13 @@ export default {
                 bgactive: '#424244',
                 blue: '#4573d2',
                 black: '#1e1f21',
-                danger: '#e26d7e'
+                danger: '#e26d7e',
+                red: '#f06a6a',
+                yellow: '#f1bd6c',
+                green: '#5da283',
+                indigo: '#8d84e8',
+                magenta: '#f9aaef',
+                pinl: '#ffc7db'
             }
         },
     },

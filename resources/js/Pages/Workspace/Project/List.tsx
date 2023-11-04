@@ -20,12 +20,12 @@ type ListPageProps = {
 
 export default function List() {
     const { props } = usePage<PageProps<ProjectViewProps & ListPageProps>>();
-    const { showDialog } = useDialog();
+    const { showModal } = useDialog();
 
     console.log(props);
 
     const handleCreateSection = () => {
-        showDialog(<CreateSectionForm project={props.data.project} />, 'Create Section');
+        showModal(<CreateSectionForm project={props.data.project} />, 'Create Section');
     }
 
     return (

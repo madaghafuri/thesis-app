@@ -24,14 +24,14 @@ type AuthenticatedProps = {
 
 export default function Authenticated({ user, header, children, workspaces, currentWorkspace, projects }: PropsWithChildren<AuthenticatedProps>) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
-    const { setIsOpen, showDialog } = useDialog();
+    const { setIsOpen, showModal } = useDialog();
 
     const handleCreateWorkspace = () => {
-        showDialog(<CreateWorkspaceForm />, 'Create Workspace');
+        showModal(<CreateWorkspaceForm />, 'Create Workspace');
     }
 
     const handleCreateProject = () => {
-        showDialog(<CreateProjectForm currentWorkspace={currentWorkspace} />, 'Create Project');
+        showModal(<CreateProjectForm currentWorkspace={currentWorkspace} />, 'Create Project');
     }
 
     return (
@@ -141,7 +141,7 @@ export default function Authenticated({ user, header, children, workspaces, curr
                 </div>
             </nav>
 
-            <div className='flex'>
+            <div className='flex justify-center'>
                 <nav className='w-1/6 bg-nav flex flex-col'>
                     <div className='p-3 border-b-[1px] border-bordercolor'>
                         <Dropdown>
@@ -221,7 +221,7 @@ export default function Authenticated({ user, header, children, workspaces, curr
                     </NavSectionContainer>
                 </nav>
 
-                <main className='grow min-h-screen bg-content'>{children}</main>
+                <main className='w-5/6 min-h-screen bg-content'>{children}</main>
             </div>
         </div>
     );
