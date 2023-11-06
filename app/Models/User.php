@@ -16,6 +16,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Workspace::class, 'workspace_users');
     }
 
+    public function tasks() {
+        return $this->hasMany(Task::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *

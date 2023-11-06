@@ -91,7 +91,9 @@ class ProjectController extends Controller
 
         foreach ($tasks as $task) {
             $user = $task->user()->first();
+            $priority = $task->priority()->first();
             $task->user = $user;
+            $task->priority = $priority;
         }
 
         return Inertia::render('Workspace/Project/List', [
@@ -101,7 +103,20 @@ class ProjectController extends Controller
     }
 
     public function board(Workspace $workspace, Project $project) {
-        return Inertia::render('Workspace/Project/Board');
+        $sections = $project->sections()->get();
+        $tasks = $project->tasks()->get();
+
+        foreach($tasks as $task) {
+            $user = $task->user()->first();
+            $priority = $task->priority()->first();
+            $task->user = $user;
+            $task->priority = $priority;
+        }
+
+        return Inertia::render('Workspace/Project/Board', [
+            'sections' => $sections,
+            'tasks' => $tasks
+        ]);
     }
 
     public function calendar(Workspace $workspace, Project $project) {

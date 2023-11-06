@@ -6,13 +6,14 @@ import { SectionMenu } from "./Section/SectionMenu";
 import { SectionTitle } from "./Section/SectionTitle";
 import { router } from "@inertiajs/react";
 import { Section } from "@/types";
+import TextInput from "@/Components/TextInput";
 
 type Props = {
     section: Section;
-    onAddTask?: MouseEventHandler<HTMLDivElement>;
+    onAddTask?: MouseEventHandler<HTMLDivElement | HTMLButtonElement>;
 }
 
-export function ProjectSectionContainer({ section, children, onAddTask = () => {} }: PropsWithChildren<Props>) {
+export function ListSectionContainer({ section, children, onAddTask = () => {} }: PropsWithChildren<Props>) {
     const [hovered, setHovered] = useState(false);
     const [sectionName, setSectionName] = useState(section.name);
 
@@ -55,6 +56,46 @@ export function ProjectSectionContainer({ section, children, onAddTask = () => {
                 <div className="text-textweak py-1 px-10 hover:bg-bgactive select-none" onClick={handleAddTask}>
                     Add task...
                 </div>
+            </main>
+        </div>
+    )
+}
+
+export function BoardSectionContainer({ children, section, onAddTask = () => {} }: PropsWithChildren<Props>) {
+    const [sectionName, setSectionName] = useState(section.name);
+    const [containerHovered, setContainerHovered] = useState(false);
+    const [editingSectionTitle, setEditingSectionTitle] = useState(false);
+
+    const handleChangeHeader = (event: ChangeEvent<HTMLInputElement>) => {
+        setSectionName(event.target.value);
+    }
+
+    const handleConfirmHeaderChange = () => {
+        router.patch(route('section.update', { project: section.project_id, section: section.id }), { name: sectionName });
+        setEditingSectionTitle(false);
+    }
+
+    return (
+        <div className={cn(
+            "rounded-md px-2 py-1 w-80 flex flex-col gap-1",
+            containerHovered && "ring-bordercolor ring-1"
+        )}>
+            <section className="flex items-center justify-between gap-1" onMouseEnter={() => setContainerHovered(true)} onMouseLeave={() => setContainerHovered(false)}>
+                {editingSectionTitle ? 
+                <SectionTitle isFocused value={sectionName} onBlur={handleConfirmHeaderChange} onChange={handleChangeHeader} />
+                : <PrimaryButton className="w-auto normal-case text-base tracking-tight" onClick={() => setEditingSectionTitle(true)} >{section.name}</PrimaryButton>}
+                <div className="flex items-center">
+                    <PrimaryButton className="hover:bg-bgactive px-1 py-1 text-textweak">
+                        <Plus className="h-5" />
+                    </PrimaryButton>
+                    <SectionMenu />
+                </div>
+            </section>
+            <main className="flex flex-col gap-0.5">
+                {children}
+                <PrimaryButton className="hover:bg-bgactive justify-center w-full text-textweak" onClick={onAddTask}>
+                    Add task...
+                </PrimaryButton>
             </main>
         </div>
     )

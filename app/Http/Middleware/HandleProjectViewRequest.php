@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Priority;
 use Closure;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -24,7 +25,8 @@ class HandleProjectViewRequest
                 'projectList' => fn () => $request->user()
                     ? $request->route('workspace')->project()->get()
                     : null,
-                'members' => $request->route('workspace')->user()->get()
+                'members' => $request->route('workspace')->user()->get(),
+                'priorities' => Priority::all(),
             ]
         ]);
 
