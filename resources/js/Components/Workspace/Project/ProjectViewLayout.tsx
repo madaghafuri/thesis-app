@@ -1,5 +1,5 @@
 import NavLink from "@/Components/NavLink"
-import { Project, User, Workspace } from "@/types"
+import { Priority, Project, User, Workspace } from "@/types"
 import { usePage } from "@inertiajs/react"
 import { Calendar, KanbanSquare, LayoutDashboard, ScrollText } from "lucide-react"
 import { PropsWithChildren } from "react"
@@ -10,6 +10,7 @@ export type ProjectViewProps = {
         projectList: Project[];
         project: Project;
         members: User[];
+        priorities: Priority[];
     }
 }
 

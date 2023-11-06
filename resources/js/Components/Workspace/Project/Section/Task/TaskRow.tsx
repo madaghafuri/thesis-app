@@ -19,7 +19,6 @@ type TaskRowProps = {
 
 export function TaskRow({ task }: TaskRowProps) {
     const [currTask, setCurrTask] = useState(task);
-    console.log(currTask);
 
     const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setCurrTask((prev) => {

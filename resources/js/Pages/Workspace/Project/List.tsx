@@ -2,7 +2,7 @@ import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } 
 import { useDialog } from "@/Components/Dialog";
 import PrimaryButton from "@/Components/PrimaryButton";
 import { Sheet, SheetContent, SheetTrigger } from "@/Components/Sheet";
-import { ProjectSectionContainer } from "@/Components/Workspace/Project/ProjectSectionContainer";
+import { ListSectionContainer } from "@/Components/Workspace/Project/ProjectSectionContainer";
 import { ProjectViewLayout, ProjectViewProps } from "@/Components/Workspace/Project/ProjectViewLayout";
 import { CreateSectionForm } from "@/Components/Workspace/Project/Section/CreateSectionForm";
 import { ListSectionHeader } from "@/Components/Workspace/Project/Section/ListSectionHeader";
@@ -38,7 +38,7 @@ export default function List() {
                         }
 
                         return (
-                            <ProjectSectionContainer key={section.id} section={section} onAddTask={handleAddTask}>
+                            <ListSectionContainer key={section.id} section={section} onAddTask={handleAddTask}>
                                 {props.tasks.map((task) => {
                                     const handleDeleteTask = () => {
                                         router.delete(route('task.destroy', { task: task.id }));
@@ -59,7 +59,7 @@ export default function List() {
                                         </ContextMenu>
                                     )
                                 })}
-                            </ProjectSectionContainer>
+                            </ListSectionContainer>
                         )
                     })}
                     <PrimaryButton className="hover:bg-bgactive text-textweak ml-3 px-2" onClick={handleCreateSection}>

@@ -50,6 +50,7 @@ export type Task = {
     updated_at: string;
     user: User;
     priority: Priority;
+    due_date: string;
 }
 
 export type Priority = {
