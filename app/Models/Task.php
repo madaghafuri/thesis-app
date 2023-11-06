@@ -21,6 +21,10 @@ class Task extends Model
         return $this->belongsTo(Project::class);
     }
 
+    public function priority() {
+        return $this->belongsTo(Priority::class);
+    }
+
     protected $fillable = [
         'user_id',
         'project_id',

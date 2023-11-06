@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Priority;
 use App\Models\Project;
 use App\Models\Section;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
-
-use function PHPUnit\Framework\isNull;
 
 class TaskController extends Controller
 {
@@ -22,13 +21,28 @@ class TaskController extends Controller
     }
 
     public function update(Request $request, Task $task) {
-        $task->update([
-            'name' => $request->name,
-            'due_date' => $request->due_date,
-            'start_date' => $request->start_date,
-            'description' => $request->description,
-            'user_id' => $request->assignee_id
+
+        $validatedData = $request->validate([
+            'name' => 'max:255',
+            'due_date' => 'date',
+            'description' => 'max:255',
         ]);
+
+        $task->update([
+            'name' => $validatedData["name"],
+            'due_date' => $validatedData["due_date"],
+            'description' => $validatedData["description"],
+        ]);
+
+        $assignee = User::where('id', $request["user"]["id"])->first();
+        $priority = Priority::where('id', $request["priority"]["id"])->first();
+
+        error_log($request->due_date);
+
+        $task->user()->associate($assignee);
+        $task->priority()->associate($priority);
+
+        $task->save();
     }
 
     public function destroy(Task $task) {
