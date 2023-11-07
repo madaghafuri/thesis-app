@@ -96,6 +96,17 @@ class ProjectController extends Controller
             $task->priority = $priority;
         }
 
+        foreach ($sections as $section) {
+            $taskList = $project->tasks()->where('section_id', $section->id)->get();
+            foreach ($taskList as $task) {
+                $user = $task->user()->first();
+                $priority = $task->priority()->first();
+                $task->user = $user;
+                $task->priority = $priority;
+            }
+            $section->tasks = $taskList;
+        }
+
         return Inertia::render('Workspace/Project/List', [
             'sections' => $sections,
             'tasks' => $tasks
@@ -111,6 +122,17 @@ class ProjectController extends Controller
             $priority = $task->priority()->first();
             $task->user = $user;
             $task->priority = $priority;
+        }
+
+        foreach ($sections as $section) {
+            $taskList = $project->tasks()->where('section_id', $section->id)->get();
+            foreach ($taskList as $task) {
+                $user = $task->user()->first();
+                $priority = $task->priority()->first();
+                $task->user = $user;
+                $task->priority = $priority;
+            }
+            $section->tasks = $taskList;
         }
 
         return Inertia::render('Workspace/Project/Board', [
