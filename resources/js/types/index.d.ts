@@ -13,49 +13,51 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     workspaceList: any[]
 };
 
-export type Workspace = {
+export type Base = {
     id: number;
+    created_at: string;
+    updated_at: string;
+}
+
+// export type Workspace = {
+//     id: number;
+//     pivot: {
+//         user_id: number;
+//         workspace_id: number;
+//     };
+//     title: string;
+//     created_at: string;
+//     updated_at: string;
+// }
+
+export type Workspace = Base & {
     pivot: {
         user_id: number;
         workspace_id: number;
-    };
+    }
     title: string;
-    created_at: string;
-    updated_at: string;
 }
 
-export type Project = {
-    id: number;
+export type Project = Base & {
     name: string;
     workspace_id: number;
-    created_at: string;
-    updated_at: string;
 }
 
-export type Section = {
-    id: number;
+export type Section = Base & {
     project_id: number;
     name: string;
-    created_at: string;
-    updated_at: string;
     tasks: Task[]
 }
 
-export type Task = {
-    id: number;
+export type Task = Base & {
     section_id: number;
     project_id: number;
     name: string;
-    created_at: string;
-    updated_at: string;
     user: User;
     priority: Priority;
     due_date: string;
 }
 
-export type Priority = {
-    id: number;
+export type Priority = Base & {
     name: string;
-    created_at: string;
-    updated_at: string;
 }

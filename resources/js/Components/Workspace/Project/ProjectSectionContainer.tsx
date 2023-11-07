@@ -7,6 +7,7 @@ import { SectionTitle } from "./Section/SectionTitle";
 import { router } from "@inertiajs/react";
 import { Section } from "@/types";
 import TextInput from "@/Components/TextInput";
+import { DragOverEvent, useDndMonitor } from "@dnd-kit/core";
 
 type Props = {
     section: Section;
@@ -74,6 +75,12 @@ export function BoardSectionContainer({ children, section, onAddTask = () => {} 
         router.patch(route('section.update', { project: section.project_id, section: section.id }), { name: sectionName });
         setEditingSectionTitle(false);
     }
+
+    const handleDragOver = ({ over }: DragOverEvent) => {
+        // console.log(over);
+    }
+
+    useDndMonitor({ onDragOver: handleDragOver })
 
     return (
         <div className={cn(

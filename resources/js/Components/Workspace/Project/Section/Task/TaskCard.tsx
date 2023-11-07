@@ -18,16 +18,17 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { SelectSingleEventHandler } from "react-day-picker";
 import { SectionTitle } from "../SectionTitle";
 import DangerButton from "@/Components/DangerButton";
+import { SortableItem } from "../Sortable/SortableItem";
+import { cn } from "@/utils";
 
-export function TaskCard({ task, }: { task: Task }) {
+export function TaskCard({ task, className = "" }: { task: Task, className?: string }) {
     const { data: taskData, setData, processing, patch, errors } = useForm<Task>(task);
     const { props } = usePage<PageProps<ProjectViewProps>>();
     const [openAssigneeOptions, setOpenAssigneeOptions] = useState(false);
     const [date, setDate] = useState<Date>();
+    const [open, setOpen] = useState(false);
 
     const currentTaskDate = new Date(taskData.due_date);
-
-    console.log(taskData);
 
     const priorities: Priority[] = [
         { id: -1, name: '-', created_at: "Never", updated_at: "Never" },
@@ -50,33 +51,42 @@ export function TaskCard({ task, }: { task: Task }) {
         patch(route('task.update', { task: taskData.id }));
     }
 
+    const handlePointerUp = () => {
+        setOpen(true);
+    }
+
     return (
-        <Sheet>
-            <SheetTrigger>
-                <Card className="border-bordercolor bg-black text-textcolor hover:bg-black/70">
-                    <CardHeader>
-                        <CardTitle className="text-left truncate text-lg">{task.name || "Lorem ipsum dolor lamet lkjasdlkji alkjdai asldkaji alkdjalkjd"}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex flex-col justify-center gap-3">
-                        {task.priority ? <Badge className="text-black w-fit" variant={task.priority.name.toLowerCase() as 'high' | 'medium' | 'low'} >{task.priority.name}</Badge>
-                        : null}
-                        <div className="flex items-center gap-3">
-                            {task.user ? (
-                                <Avatar>
-                                    <AvatarFallback className="bg-blue">{task.user.name[0]}</AvatarFallback>
-                                </Avatar>
-                            )
-                            : (
-                                <Avatar>
-                                    <AvatarFallback className="-z-40">H</AvatarFallback>
-                                </Avatar>
-                            )}
-                            {task.priority ? (
-                                <span className="text-textweak text-sm">{formatDistanceToNow(currentTaskDate)}</span>
-                            ) : null}
-                        </div>
-                    </CardContent>
-                </Card>
+        <Sheet open={open} onOpenChange={setOpen} >
+            <SheetTrigger disabled onPointerUpCapture={handlePointerUp}>
+                <SortableItem item={task}>
+                    <Card className={cn(
+                        "border-bordercolor bg-black text-textcolor hover:bg-black/70",
+                        className
+                    )}>
+                        <CardHeader className="p-4">
+                            <CardTitle className="text-left truncate text-lg">{task.name || "Lorem ipsum dolor lamet lkjasdlkji alkjdai asldkaji alkdjalkjd"}</CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex flex-col justify-center gap-3 p-4">
+                            {task.priority ? <Badge className="text-black w-fit" variant={task.priority.name.toLowerCase() as 'high' | 'medium' | 'low'} >{task.priority.name}</Badge>
+                            : null}
+                            <div className="flex items-center gap-3">
+                                {task.user ? (
+                                    <Avatar>
+                                        <AvatarFallback className="bg-blue">{task.user.name[0]}</AvatarFallback>
+                                    </Avatar>
+                                )
+                                : (
+                                    <Avatar>
+                                        <AvatarFallback className="-z-40">H</AvatarFallback>
+                                    </Avatar>
+                                )}
+                                {task.priority ? (
+                                    <span className="text-textweak text-sm">{formatDistanceToNow(currentTaskDate)}</span>
+                                ) : null}
+                            </div>
+                        </CardContent>
+                    </Card>
+                </SortableItem>
             </SheetTrigger>
             <SheetContent className="bg-black text-textcolor border-bordercolor min-w-[40rem]">
                 <SheetHeader>
