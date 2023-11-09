@@ -1,9 +1,14 @@
+import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from "@/Components/ContextMenu";
+import { useToast } from "@/Components/Toast/useToast";
 import { BoardSectionContainer } from "@/Components/Workspace/Project/ProjectSectionContainer";
 import { ProjectViewLayout, ProjectViewProps } from "@/Components/Workspace/Project/ProjectViewLayout";
 import { TaskCard } from "@/Components/Workspace/Project/Section/Task/TaskCard";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { PageProps, Section, Task } from "@/types";
 import { router, usePage } from "@inertiajs/react";
+import { ContextMenuItem } from "@radix-ui/react-context-menu";
+import { format } from "date-fns";
+import { Trash } from "lucide-react";
 import { useState } from "react";
 
 type BoardPageProps = {
@@ -13,7 +18,7 @@ type BoardPageProps = {
 
 export default function Board() {
     const { props } = usePage<PageProps<ProjectViewProps & BoardPageProps>>();
-    const [tasks, setTasks] = useState(props.tasks);
+    const { toast } = useToast();
 
     console.log(props.sections);
 
@@ -29,8 +34,30 @@ export default function Board() {
                         return (
                             <BoardSectionContainer key={section.id} section={section} onAddTask={handleAddTask}>
                                 {section.tasks.map((task) => {
-                                    if (task.section_id === section.id) return (
-                                        <TaskCard key={task.id} task={task} />
+                                    const handleDeleteTask = () => {
+                                        router.delete(route('task.destroy', { task: task.id }), {
+                                            onSuccess: () => {
+                                                toast({
+                                                    title: `${task.name} has been deleted.`,
+                                                    description: format(new Date(), "PPP"),
+                                                    variant: "destructive"
+                                                });
+                                            }
+                                        });
+                                    }
+
+                                    return (
+                                        <ContextMenu>
+                                            <ContextMenuTrigger>
+                                                <TaskCard key={task.id} task={task} />
+                                            </ContextMenuTrigger>
+                                            <ContextMenuContent className="bg-black border-bordercolor">
+                                                <ContextMenuItem className="text-danger text-sm hover:bg-bgactive p-1 flex items-center gap-2 select-none" onClick={handleDeleteTask}>
+                                                    <Trash />
+                                                    Delete
+                                                </ContextMenuItem>
+                                            </ContextMenuContent>
+                                        </ContextMenu>
                                     )
                                 })}
                             </BoardSectionContainer>
