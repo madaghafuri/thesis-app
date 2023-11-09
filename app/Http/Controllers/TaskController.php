@@ -23,26 +23,30 @@ class TaskController extends Controller
     public function update(Request $request, Task $task) {
 
         $validatedData = $request->validate([
-            'name' => 'max:255',
-            'due_date' => 'date',
-            'description' => 'max:255',
+            'name' => 'max:255|nullable',
+            'due_date' => 'date|nullable',
+            'description' => 'max:255|nullable',
         ]);
 
-        $task->update([
+        $updatedData = $task->update([
             'name' => $validatedData["name"],
             'due_date' => $validatedData["due_date"],
             'description' => $validatedData["description"],
         ]);
+        
+        if ($request->has('user') && $request["user"] !== null) {
+            $assignee = User::where('id', $request["user"]["id"])->first();
+            $task->user()->associate($assignee);
+        }
+        
+        if ($request->has('priority') && $request["priority"] !== null) {
+            $priority = Priority::where('id', $request["priority"]["id"])->first();
+            $task->priority()->associate($priority);
+        }
 
-        $assignee = User::where('id', $request["user"]["id"])->first();
-        $priority = Priority::where('id', $request["priority"]["id"])->first();
-
-        error_log($request->due_date);
-
-        $task->user()->associate($assignee);
-        $task->priority()->associate($priority);
-
-        $task->save();
+        if ($updatedData) {
+            $task->save();
+        }
     }
 
     public function destroy(Task $task) {
