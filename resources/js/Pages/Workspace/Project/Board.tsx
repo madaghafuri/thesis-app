@@ -1,4 +1,5 @@
-import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from "@/Components/ContextMenu";
+import { ContextMenu, ContextMenuContent, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from "@/Components/ContextMenu";
+import { Separator } from "@/Components/Separator";
 import { useToast } from "@/Components/Toast/useToast";
 import { BoardSectionContainer } from "@/Components/Workspace/Project/ProjectSectionContainer";
 import { ProjectViewLayout, ProjectViewProps } from "@/Components/Workspace/Project/ProjectViewLayout";
@@ -8,8 +9,7 @@ import { PageProps, Section, Task } from "@/types";
 import { router, usePage } from "@inertiajs/react";
 import { ContextMenuItem } from "@radix-ui/react-context-menu";
 import { format } from "date-fns";
-import { Trash } from "lucide-react";
-import { useState } from "react";
+import { ArrowRightLeft, Trash } from "lucide-react";
 
 type BoardPageProps = {
     sections: Section[];
@@ -51,9 +51,27 @@ export default function Board() {
                                             <ContextMenuTrigger>
                                                 <TaskCard key={task.id} task={task} />
                                             </ContextMenuTrigger>
-                                            <ContextMenuContent className="bg-black border-bordercolor">
-                                                <ContextMenuItem className="text-danger text-sm hover:bg-bgactive p-1 flex items-center gap-2 select-none" onClick={handleDeleteTask}>
-                                                    <Trash />
+                                            <ContextMenuContent className="bg-black border-bordercolor w-[10rem]">
+                                                <ContextMenuSub>
+                                                    <ContextMenuSubTrigger className="text-textcolor text-sm hover:bg-bgactive p-1 flex items-center gap-2 select-none rounded" >
+                                                        <ArrowRightLeft className="text-textweak h-4" />
+                                                        Move To
+                                                    </ContextMenuSubTrigger>
+                                                    <ContextMenuSubContent className="bg-black border-bordercolor text-textcolor">
+                                                        {props.sections.map((section) => {
+                                                            const handleMoveSection = () => {
+                                                                router.patch(route('task.update', { task: task.id }), { ...task as any, section_id: section.id  })
+                                                            }
+
+                                                            return (
+                                                                <ContextMenuItem key={section.id} className="p-1 select-none text-sm rounded hover:bg-bgactive" onClick={handleMoveSection}>{section.name}</ContextMenuItem>
+                                                            )
+                                                        })}
+                                                    </ContextMenuSubContent>
+                                                </ContextMenuSub>
+                                                <Separator />
+                                                <ContextMenuItem className="text-danger text-sm hover:bg-bgactive p-1 flex items-center gap-2 select-none rounded" onClick={handleDeleteTask}>
+                                                    <Trash className="h-4" />
                                                     Delete
                                                 </ContextMenuItem>
                                             </ContextMenuContent>

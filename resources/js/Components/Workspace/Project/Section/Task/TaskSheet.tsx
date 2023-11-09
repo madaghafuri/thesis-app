@@ -58,7 +58,7 @@ export function TaskSheet({task}: { task: Task }) {
             <div>
                 <form className="flex flex-col gap-2" onSubmit={handleSaveChange}>
                     <div className="mt-4 w-full">
-                        <SectionTitle className="min-w-full" placeholder="Write a Task name" isFocused={false} value={taskData.name} onChange={e => setData('name', e.target.value)} />
+                        <SectionTitle className="min-w-full" defaultValue={taskData.name} placeholder="Write a Task name" isFocused={false} value={taskData.name} onChange={e => setData('name', e.target.value)} />
                     </div>
                     <div className="grid grid-cols-4 items-center">
                         <InputLabel value="Assignee" />

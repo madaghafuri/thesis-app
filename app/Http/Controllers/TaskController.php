@@ -21,6 +21,7 @@ class TaskController extends Controller
     }
 
     public function update(Request $request, Task $task) {
+        error_log($request);
 
         $validatedData = $request->validate([
             'name' => 'max:255|nullable',
@@ -33,6 +34,11 @@ class TaskController extends Controller
             'due_date' => $validatedData["due_date"],
             'description' => $validatedData["description"],
         ]);
+
+        if ($request["section_id"] !== null) {
+            $section = Section::where('id', $request["section_id"])->first();
+            $task->section()->associate($section);
+        }
         
         if ($request->has('user') && $request["user"] !== null) {
             $assignee = User::where('id', $request["user"]["id"])->first();

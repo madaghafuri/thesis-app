@@ -14,7 +14,7 @@ export function TaskCard({ task, }: { task: Task }) {
             <SheetTrigger className="w-full">
                 <Card className="border-bordercolor bg-black text-textcolor hover:bg-black/70">
                     <CardHeader className="p-4">
-                        <CardTitle className="text-left truncate text-lg">{task.name || "Lorem ipsum dolor lamet lkjasdlkji alkjdai asldkaji alkdjalkjd"}</CardTitle>
+                        <CardTitle className="text-left truncate text-lg">{task.name || ""}</CardTitle>
                     </CardHeader>
                     <CardContent className="flex flex-col justify-center gap-3 p-4 pt-0">
                         {task.priority ? <Badge className="text-black w-fit" variant={task.priority.name.toLowerCase() as 'high' | 'medium' | 'low'} >{task.priority.name}</Badge>
