@@ -15,6 +15,8 @@ export default function Board() {
     const { props } = usePage<PageProps<ProjectViewProps & BoardPageProps>>();
     const [tasks, setTasks] = useState(props.tasks);
 
+    console.log(props.sections);
+
     return (
         <Authenticated user={props.auth.user} workspaces={props.workspaceList} projects={props.data.projectList} currentWorkspace={props.data.workspace} >
             <ProjectViewLayout>
@@ -26,7 +28,7 @@ export default function Board() {
 
                         return (
                             <BoardSectionContainer key={section.id} section={section} onAddTask={handleAddTask}>
-                                {props.tasks.map((task) => {
+                                {section.tasks.map((task) => {
                                     if (task.section_id === section.id) return (
                                         <TaskCard key={task.id} task={task} />
                                     )

@@ -39,7 +39,7 @@ export default function List() {
 
                         return (
                             <ListSectionContainer key={section.id} section={section} onAddTask={handleAddTask}>
-                                {props.tasks.map((task) => {
+                                {section.tasks.map((task) => {
                                     const handleDeleteTask = () => {
                                         router.delete(route('task.destroy', { task: task.id }));
                                     }

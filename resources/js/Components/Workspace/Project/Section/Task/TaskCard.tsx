@@ -27,8 +27,6 @@ export function TaskCard({ task, }: { task: Task }) {
 
     const currentTaskDate = new Date(taskData.due_date);
 
-    console.log(taskData);
-
     const priorities: Priority[] = [
         { id: -1, name: '-', created_at: "Never", updated_at: "Never" },
         ...props.data.priorities
