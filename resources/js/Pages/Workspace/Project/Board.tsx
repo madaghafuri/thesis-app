@@ -1,10 +1,15 @@
+import { ContextMenu, ContextMenuContent, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from "@/Components/ContextMenu";
+import { Separator } from "@/Components/Separator";
+import { useToast } from "@/Components/Toast/useToast";
 import { BoardSectionContainer } from "@/Components/Workspace/Project/ProjectSectionContainer";
 import { ProjectViewLayout, ProjectViewProps } from "@/Components/Workspace/Project/ProjectViewLayout";
 import { TaskCard } from "@/Components/Workspace/Project/Section/Task/TaskCard";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { PageProps, Section, Task } from "@/types";
 import { router, usePage } from "@inertiajs/react";
-import { useState } from "react";
+import { ContextMenuItem } from "@radix-ui/react-context-menu";
+import { format } from "date-fns";
+import { ArrowRightLeft, Trash } from "lucide-react";
 
 type BoardPageProps = {
     sections: Section[];
@@ -13,7 +18,7 @@ type BoardPageProps = {
 
 export default function Board() {
     const { props } = usePage<PageProps<ProjectViewProps & BoardPageProps>>();
-    const [tasks, setTasks] = useState(props.tasks);
+    const { toast } = useToast();
 
     console.log(props.sections);
 
@@ -29,8 +34,48 @@ export default function Board() {
                         return (
                             <BoardSectionContainer key={section.id} section={section} onAddTask={handleAddTask}>
                                 {section.tasks.map((task) => {
-                                    if (task.section_id === section.id) return (
-                                        <TaskCard key={task.id} task={task} />
+                                    const handleDeleteTask = () => {
+                                        router.delete(route('task.destroy', { task: task.id }), {
+                                            onSuccess: () => {
+                                                toast({
+                                                    title: `${task.name} has been deleted.`,
+                                                    description: format(new Date(), "PPP"),
+                                                    variant: "destructive"
+                                                });
+                                            }
+                                        });
+                                    }
+
+                                    return (
+                                        <ContextMenu>
+                                            <ContextMenuTrigger>
+                                                <TaskCard key={task.id} task={task} />
+                                            </ContextMenuTrigger>
+                                            <ContextMenuContent className="bg-black border-bordercolor w-[10rem]">
+                                                <ContextMenuSub>
+                                                    <ContextMenuSubTrigger className="text-textcolor text-sm hover:bg-bgactive p-1 flex items-center gap-2 select-none rounded" >
+                                                        <ArrowRightLeft className="text-textweak h-4" />
+                                                        Move To
+                                                    </ContextMenuSubTrigger>
+                                                    <ContextMenuSubContent className="bg-black border-bordercolor text-textcolor">
+                                                        {props.sections.map((section) => {
+                                                            const handleMoveSection = () => {
+                                                                router.patch(route('task.update', { task: task.id }), { ...task as any, section_id: section.id  })
+                                                            }
+
+                                                            return (
+                                                                <ContextMenuItem key={section.id} className="p-1 select-none text-sm rounded hover:bg-bgactive" onClick={handleMoveSection}>{section.name}</ContextMenuItem>
+                                                            )
+                                                        })}
+                                                    </ContextMenuSubContent>
+                                                </ContextMenuSub>
+                                                <Separator />
+                                                <ContextMenuItem className="text-danger text-sm hover:bg-bgactive p-1 flex items-center gap-2 select-none rounded" onClick={handleDeleteTask}>
+                                                    <Trash className="h-4" />
+                                                    Delete
+                                                </ContextMenuItem>
+                                            </ContextMenuContent>
+                                        </ContextMenu>
                                     )
                                 })}
                             </BoardSectionContainer>

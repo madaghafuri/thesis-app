@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import DialogProvider from './Components/Dialog';
+import { Toaster } from './Components/Toast/Toaster';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -17,6 +18,7 @@ createInertiaApp({
         root.render(
             <DialogProvider>
                 <App {...props} />
+                <Toaster />
             </DialogProvider>);
     },
     progress: {

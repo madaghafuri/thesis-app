@@ -108,7 +108,7 @@ class ProjectController extends Controller
         $sections = $project->sections()->get();
 
         foreach($sections as $section) {
-            $taskList = $project->tasks()->where('section_id', $section->id)->get();
+            $taskList = $project->tasks()->where('section_id', $section->id)->get()->sortBy('updated_at')->values()->all();
             foreach($taskList as $task) {
                 $user = $task->user()->first();
                 $priority = $task->priority()->first();
