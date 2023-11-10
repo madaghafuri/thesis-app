@@ -9,14 +9,14 @@ import { useDialog } from "@/Components/Dialog";
 
 export function CreateSectionForm({ project }: { project: Project }) {
     const { data, setData, post, processing } = useForm<{ name: string }>()
-    const { showDialog } = useDialog();
+    const { showModal } = useDialog();
 
     const handleCreateSection = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         post(route('section.store', { project: project.id }), {
             onSuccess: () => {
-                showDialog(undefined, '');
+                showModal(undefined, '');
             }
         });
     }
