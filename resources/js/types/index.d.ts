@@ -51,11 +51,22 @@ export type Task = {
     user: User;
     priority: Priority;
     due_date: string;
+    times: TimeTrack[];
 }
 
 export type Priority = {
     id: number;
     name: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export type TimeTrack = {
+    id: number;
+    task_id: number;
+    start_time?: string;
+    end_time?: string;
+    duration: number;
     created_at: string;
     updated_at: string;
 }

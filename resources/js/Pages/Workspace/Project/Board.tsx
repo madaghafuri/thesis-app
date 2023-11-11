@@ -47,9 +47,9 @@ export default function Board() {
                                     }
 
                                     return (
-                                        <ContextMenu>
+                                        <ContextMenu key={task.id}>
                                             <ContextMenuTrigger>
-                                                <TaskCard key={task.id} task={task} />
+                                                <TaskCard task={task} />
                                             </ContextMenuTrigger>
                                             <ContextMenuContent className="bg-black border-bordercolor w-[10rem]">
                                                 <ContextMenuSub>
