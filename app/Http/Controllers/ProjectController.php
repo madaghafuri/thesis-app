@@ -112,8 +112,10 @@ class ProjectController extends Controller
             foreach($taskList as $task) {
                 $user = $task->user()->first();
                 $priority = $task->priority()->first();
+                $times = $task->timeTrackers()->get();
                 $task->user = $user;
                 $task->priority = $priority;
+                $task->times = $times;
             }
             $section->tasks = $taskList;
         }
