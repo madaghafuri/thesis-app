@@ -25,6 +25,10 @@ class Task extends Model
         return $this->belongsTo(Priority::class);
     }
 
+    public function timeTrackers() {
+        return $this->hasMany(TimeTracker::class);
+    }
+
     protected $fillable = [
         'user_id',
         'project_id',

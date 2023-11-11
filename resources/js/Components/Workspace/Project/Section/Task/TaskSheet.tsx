@@ -1,12 +1,12 @@
 import { Button } from "@/Components/Button";
 import { SheetClose, SheetContent, SheetFooter, SheetHeader } from "@/Components/Sheet";
-import { Trash, UserCircle2 } from "lucide-react";
+import { ChevronDown, Play, StopCircle, Trash, Trash2, UserCircle2 } from "lucide-react";
 import { SectionTitle } from "../SectionTitle";
 import InputLabel from "@/Components/InputLabel";
 import { Popover, PopoverContent, PopoverTrigger } from "@/Components/Popover";
 import { Avatar, AvatarFallback } from "@/Components/Avatar";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/Components/Command";
-import { useForm, usePage } from "@inertiajs/react";
+import { router, useForm, usePage } from "@inertiajs/react";
 import { PageProps, Priority, Task, User } from "@/types";
 import { ProjectViewProps } from "../../ProjectViewLayout";
 import { Calendar as CalendarIcon } from 'lucide-react';
@@ -17,14 +17,22 @@ import { SelectSingleEventHandler } from "react-day-picker";
 import { format, formatISO } from "date-fns";
 import { FormEvent, useState } from "react";
 import { Badge } from "@/Components/Badge";
+import { useTrackTime } from "@/hooks/useTimeTrack";
+import { secondsToHours } from "@/utils";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/Components/Accordion";
 
 export function TaskSheet({task}: { task: Task }) {
     const { data: taskData, setData, processing, patch, errors } = useForm<Task>(task);
     const { props } = usePage<PageProps<ProjectViewProps>>();
     const [openAssigneeOptions, setOpenAssigneeOptions] = useState(false);
     const [date, setDate] = useState<Date>();
+    const { isCounting, elapsedTime, startTimer, stopTimer } = useTrackTime();
     
     const currentTaskDate = new Date(taskData.due_date);
+
+    const accumulatedTime = task.times.reduce((time, curr) => {
+        return time += curr.duration
+    }, 0)
 
     const priorities: Priority[] = [
         { id: -1, name: '-', created_at: "Never", updated_at: "Never" },
@@ -47,18 +55,96 @@ export function TaskSheet({task}: { task: Task }) {
         setData('due_date', formatISO(val));
     }
 
+    const startTimeTracking = () => {
+        router.post(route('time.start', { task: task.id }), {}, {
+            onSuccess: () => {
+                startTimer();
+            }
+        })
+    }
+
+    const stopTimeTracking = () => {
+        router.post(route('time.stop', { task: task.id }), { duration: elapsedTime }, {
+            onSuccess: () => {
+                stopTimer()
+            }
+        });
+    }
+
     return (
-        <SheetContent className="bg-black text-textcolor border-bordercolor min-w-[40rem]">
-            <SheetHeader>
+        <SheetContent className="bg-content text-textcolor border-bordercolor min-w-[40rem]">
+            <SheetHeader className="grid grid-cols-3 items-center">
                 <Button className="w-fit text-danger gap-2 items-center border-[1px] border-danger hover:bg-danger hover:text-textcolor">
                     <Trash />
                     Delete
                 </Button>
+                <div className="rounded-md border-bordercolor border-[1px] flex justify-center items-center w-fit gap-0 pl-2">
+                    {isCounting ? (
+                        <Button className="hover:bg-bgactive text-textcolor bg-danger h-6 px-0" onClick={stopTimeTracking}>
+                            <StopCircle className="h-4" />
+                        </Button>
+                    ): (
+                        <Button className="hover:bg-bgactive text-textcolor hover:text-textcolor bg-indigo h-6 px-0" onClick={startTimeTracking}>
+                            <Play className="h-4" />
+                        </Button>
+                    )}
+                    <Popover>
+                        <PopoverTrigger>
+                            <div className="flex items-center justify-between w-24 font-thin text-sm p-2 pr-0">
+                                {secondsToHours(elapsedTime)}
+                                <ChevronDown className="h-4" />
+                            </div>
+                        </PopoverTrigger>
+                        <PopoverContent className="bg-black drop-shadow-2xl border-bordercolor text-textcolor w-[20rem]">
+                            <h2 className="text-textcolor text-center">Time Tracker</h2>
+                            {task.times.length > 0 ? (
+                                <Accordion type="single" collapsible>
+                                    <AccordionItem value="acc-time">
+                                        <AccordionTrigger>
+                                            <div className="grid grid-cols-2 items-center text-sm mt-3">
+                                                {task.user ? (
+                                                    <Avatar className="bg-yellow text-black">
+                                                        <AvatarFallback>M</AvatarFallback>
+                                                    </Avatar>
+                                                ): (
+                                                    <UserCircle2 className="text-textweak stroke-1" />
+                                                )}
+                                                {task.user ? (
+                                                    <p className="text-right">{secondsToHours(accumulatedTime)}</p>
+                                                ): null}
+                                            </div>
+                                        </AccordionTrigger>
+                                        <AccordionContent>
+                                            {task.times.map((time) => {
+                                                const trackedDate = new Date(time.created_at);
+                                                const timeTrackedDate = format(trackedDate, "PP").split(',')[0];
+
+                                                const handleDeleteTimeTrack = () => {
+                                                    router.delete(route('time.destroy', { timeTracker: time.id }));
+                                                }
+
+                                                return (
+                                                    <div className="bg-bgactive select-none grid grid-cols-3 items-center text-textweak p-2 border-[1px] border-black" key={time.id}>
+                                                        <span className="text-sm font-thin">{timeTrackedDate}</span>
+                                                        <span className="text-sm font-thin text-textcolor">{secondsToHours(time.duration)}</span>
+                                                        <Button className="place-self-end self-center h-4 px-0" onClick={handleDeleteTimeTrack}>
+                                                            <Trash2 className="h-4 text-danger" />
+                                                        </Button>
+                                                    </div>
+                                                )
+                                            })}
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                </Accordion>
+                            ): null}
+                        </PopoverContent>    
+                    </Popover>
+                </div>
             </SheetHeader>
             <div>
                 <form className="flex flex-col gap-2" onSubmit={handleSaveChange}>
                     <div className="mt-4 w-full">
-                        <SectionTitle className="min-w-full" defaultValue={taskData.name} placeholder="Write a Task name" isFocused={false} value={taskData.name} onChange={e => setData('name', e.target.value)} />
+                        <SectionTitle className="min-w-full" placeholder="Write a Task name" isFocused={false} value={taskData.name} onChange={e => setData('name', e.target.value)} />
                     </div>
                     <div className="grid grid-cols-4 items-center">
                         <InputLabel value="Assignee" />
