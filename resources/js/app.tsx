@@ -6,6 +6,7 @@ import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import DialogProvider from './Components/Dialog';
 import { Toaster } from './Components/Toast/Toaster';
+import TaskTrackerContextProvider from './TaskTrackerProvider';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -16,10 +17,13 @@ createInertiaApp({
         const root = createRoot(el);
 
         root.render(
-            <DialogProvider>
-                <App {...props} />
-                <Toaster />
-            </DialogProvider>);
+                <DialogProvider>
+                    <TaskTrackerContextProvider>
+                        <App {...props} />
+                        <Toaster />
+                    </TaskTrackerContextProvider>
+                </DialogProvider>    
+            );
     },
     progress: {
         color: '#4B5563',

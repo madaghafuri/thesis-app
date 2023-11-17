@@ -90,7 +90,7 @@ export default function Authenticated({ user, header, children, workspaces, curr
                             </div>
                         </div>
 
-                        <div className="-mr-2 flex items-center sm:hidden">
+                        {/* <div className="-mr-2 flex items-center sm:hidden">
                             <button
                                 onClick={() => setShowingNavigationDropdown((previousState) => !previousState)}
                                 className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out"
@@ -112,11 +112,11 @@ export default function Authenticated({ user, header, children, workspaces, curr
                                     />
                                 </svg>
                             </button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
-                <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
+                {/* <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
                             Dashboard
@@ -138,10 +138,10 @@ export default function Authenticated({ user, header, children, workspaces, curr
                             </ResponsiveNavLink>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </nav>
 
-            <div className='flex justify-center'>
+            <div className='flex justify-center min-h-screen'>
                 <nav className='w-1/6 bg-nav flex flex-col'>
                     <div className='p-3 border-b-[1px] border-bordercolor'>
                         <Dropdown>
