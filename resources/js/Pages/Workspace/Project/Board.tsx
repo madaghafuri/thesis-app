@@ -5,6 +5,7 @@ import { BoardSectionContainer } from "@/Components/Workspace/Project/ProjectSec
 import { ProjectViewLayout, ProjectViewProps } from "@/Components/Workspace/Project/ProjectViewLayout";
 import { TaskCard } from "@/Components/Workspace/Project/Section/Task/TaskCard";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
+import TaskTrackerContextProvider from "@/TaskTrackerProvider";
 import { PageProps, Section, Task } from "@/types";
 import { router, usePage } from "@inertiajs/react";
 import { ContextMenuItem } from "@radix-ui/react-context-menu";
@@ -49,7 +50,9 @@ export default function Board() {
                                     return (
                                         <ContextMenu key={task.id}>
                                             <ContextMenuTrigger>
-                                                <TaskCard task={task} />
+                                                {/* <TaskTrackerContextProvider> */}
+                                                    <TaskCard task={task} />
+                                                {/* </TaskTrackerContextProvider> */}
                                             </ContextMenuTrigger>
                                             <ContextMenuContent className="bg-black border-bordercolor w-[10rem]">
                                                 <ContextMenuSub>

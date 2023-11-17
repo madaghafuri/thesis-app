@@ -1,7 +1,7 @@
 import NavLink from "@/Components/NavLink"
 import { Priority, Project, User, Workspace } from "@/types"
 import { usePage } from "@inertiajs/react"
-import { Calendar, KanbanSquare, LayoutDashboard, ScrollText } from "lucide-react"
+import { Calendar, Gauge, KanbanSquare, LayoutDashboard, ScrollText } from "lucide-react"
 import { PropsWithChildren } from "react"
 
 export type ProjectViewProps = {
@@ -41,6 +41,10 @@ function ViewLayoutHeader() {
                     <NavLink href={route('project.dashboard', { workspace: data.workspace.id, project: data.project.id })} active={route().current('project.dashboard', { workspace: data.workspace.id, project: data.project.id })}>
                         <LayoutDashboard className="h-4" />
                         Dashboard
+                    </NavLink>
+                    <NavLink href={route('project.workload', { workspace: data.workspace.id, project: data.project.id })} active={route().current('project.workload', { workspace: data.workspace.id, project: data.project.id })}>
+                        <Gauge className="h-4" />
+                        Workload
                     </NavLink>
                 </section>
             </div>

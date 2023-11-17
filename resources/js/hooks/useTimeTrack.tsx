@@ -10,7 +10,6 @@ export const useTrackTime = () => {
         if (counting) {
             interval = setInterval(() => {
                 setElapsedTime(prev => prev+1);
-                console.log('+1');
             }, 1000);
         }
 

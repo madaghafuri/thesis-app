@@ -82,6 +82,7 @@ Route::controller(ProjectController::class)->group(function () {
     Route::get('/workspaces/{workspace}/projects/{project}/board', 'board')->name('project.board')->middleware([HandleProjectViewRequest::class, 'auth']);
     Route::get('/workspaces/{workspace}/projects/{project}/calendar', 'calendar')->name('project.calendar')->middleware([HandleProjectViewRequest::class, 'auth']);
     Route::get('/workspaces/{workspace}/projects/{project}/dashboard', 'dashboard')->name('project.dashboard')->middleware([HandleProjectViewRequest::class, 'auth']);
+    Route::get('/workspaces/{workspace}/projects/{project}/workload', 'workload')->name('project.workload')->middleware([HandleProjectViewRequest::class, 'auth']);
 });
 
 Route::controller(SectionController::class)->group(function () {

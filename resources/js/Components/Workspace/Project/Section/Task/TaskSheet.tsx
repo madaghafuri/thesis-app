@@ -20,13 +20,14 @@ import { Badge } from "@/Components/Badge";
 import { useTrackTime } from "@/hooks/useTimeTrack";
 import { secondsToHours } from "@/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/Components/Accordion";
+import { useTaskTrackerContext } from "@/TaskTrackerProvider";
 
 export function TaskSheet({task}: { task: Task }) {
     const { data: taskData, setData, processing, patch, errors } = useForm<Task>(task);
     const { props } = usePage<PageProps<ProjectViewProps>>();
     const [openAssigneeOptions, setOpenAssigneeOptions] = useState(false);
     const [date, setDate] = useState<Date>();
-    const { isCounting, elapsedTime, startTimer, stopTimer } = useTrackTime();
+    const { isCounting, elapsedTime, startTimer, stopTimer, setCurrentlyTrackedTask, currentlyTrackedTask } = useTaskTrackerContext();
     
     const currentTaskDate = new Date(taskData.due_date);
 
@@ -59,6 +60,7 @@ export function TaskSheet({task}: { task: Task }) {
         router.post(route('time.start', { task: task.id }), {}, {
             onSuccess: () => {
                 startTimer();
+                setCurrentlyTrackedTask(task);
             }
         })
     }
@@ -66,7 +68,8 @@ export function TaskSheet({task}: { task: Task }) {
     const stopTimeTracking = () => {
         router.post(route('time.stop', { task: task.id }), { duration: elapsedTime }, {
             onSuccess: () => {
-                stopTimer()
+                stopTimer();
+                setCurrentlyTrackedTask(null);
             }
         });
     }
@@ -79,7 +82,7 @@ export function TaskSheet({task}: { task: Task }) {
                     Delete
                 </Button>
                 <div className="rounded-md border-bordercolor border-[1px] flex justify-center items-center w-fit gap-0 pl-2">
-                    {isCounting ? (
+                    {!!currentlyTrackedTask && currentlyTrackedTask.id === task.id && isCounting ? (
                         <Button className="hover:bg-bgactive text-textcolor bg-danger h-6 px-0" onClick={stopTimeTracking}>
                             <StopCircle className="h-4" />
                         </Button>
@@ -91,7 +94,7 @@ export function TaskSheet({task}: { task: Task }) {
                     <Popover>
                         <PopoverTrigger>
                             <div className="flex items-center justify-between w-24 font-thin text-sm p-2 pr-0">
-                                {secondsToHours(elapsedTime)}
+                                {!!currentlyTrackedTask && currentlyTrackedTask.id === task.id ? secondsToHours(elapsedTime): secondsToHours(0)}
                                 <ChevronDown className="h-4" />
                             </div>
                         </PopoverTrigger>
