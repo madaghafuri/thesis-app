@@ -43,7 +43,7 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        if ($request->workspace_id !== null) {
+        if ($request->workspace_id != null) {
             $user->workspace()->attach($request->workspace_id);
         }
 
