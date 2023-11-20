@@ -5,11 +5,11 @@ import { PageProps, Project } from "@/types";
 import { useForm, usePage } from "@inertiajs/react";
 import { FormEvent } from "react";
 import { ProjectViewProps } from "../ProjectViewLayout";
-import { useDialog } from "@/Components/Dialog";
+import { useModal } from "@/Components/Dialog";
 
 export function CreateSectionForm({ project }: { project: Project }) {
     const { data, setData, post, processing } = useForm<{ name: string }>()
-    const { showModal } = useDialog();
+    const { showModal } = useModal();
 
     const handleCreateSection = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();

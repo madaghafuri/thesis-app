@@ -1,5 +1,5 @@
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/Components/ContextMenu";
-import { useDialog } from "@/Components/Dialog";
+import { useModal } from "@/Components/Dialog";
 import PrimaryButton from "@/Components/PrimaryButton";
 import { Sheet, SheetContent, SheetTrigger } from "@/Components/Sheet";
 import { ListSectionContainer } from "@/Components/Workspace/Project/ProjectSectionContainer";
@@ -20,7 +20,7 @@ type ListPageProps = {
 
 export default function List() {
     const { props } = usePage<PageProps<ProjectViewProps & ListPageProps>>();
-    const { showModal } = useDialog();
+    const { showModal } = useModal();
 
     console.log(props);
 

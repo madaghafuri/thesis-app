@@ -2,6 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Dispatch, Fragment, PropsWithChildren, ReactNode, SetStateAction, createContext, useContext, useState } from "react";
 import SecondaryButton from "./SecondaryButton";
 import { X } from "lucide-react";
+import { Button } from "./Button";
 
 export type ModalProps = {
     isOpen: boolean;
@@ -35,10 +36,10 @@ export default function DialogProvider({ children }: PropsWithChildren) {
                 <Dialog as="div" open={!!Component} onClose={() => setComponent(undefined)} className="fixed inset-0 z-50 flex items-center justify-center bg-white/10 backdrop-blur-sm">
                         <Dialog.Panel className="w-full max-w-sm rounded-md bg-nav text-textcolor">
                             <div className="p-5 flex items-center justify-between border-bordercolor border-b-[1px]">
-                                <Dialog.Title>{title}</Dialog.Title>
-                                <SecondaryButton onClick={() => setComponent(undefined)}>
+                                <Dialog.Title className="font-bold text-2xl">{title}</Dialog.Title>
+                                <Button className="h-8 hover:bg-bgactive px-2 text-textweak hover:text-textcolor" onClick={() => setComponent(undefined)}>
                                     <X className="h-5" />
-                                </SecondaryButton>
+                                </Button>
                             </div>
                             {Component}
                         </Dialog.Panel>
@@ -49,9 +50,9 @@ export default function DialogProvider({ children }: PropsWithChildren) {
     )
 }
 
-export function useDialog() {
+export function useModal() {
     const context = useContext(ModalContext);
-    if (!context) throw Error('useDialog must be used within a DialogProvider');
+    if (!context) throw Error('useModal must be used within a DialogProvider');
 
     return context
 }

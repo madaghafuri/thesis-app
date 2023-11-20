@@ -1,4 +1,4 @@
-import { useDialog } from "@/Components/Dialog";
+import { useModal } from "@/Components/Dialog";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
@@ -16,7 +16,7 @@ type ProjectFormProps = {
 
 export function CreateProjectForm({ currentWorkspace }: ProjectFormProps) {
     const { data, setData, post, processing } = useForm<ProjectFormData>();
-    const { showModal } = useDialog();
+    const { showModal } = useModal();
     const [loading, setLoading] = useState(false);
 
     const handleCreateProject = (event: FormEvent<HTMLFormElement>) => {
