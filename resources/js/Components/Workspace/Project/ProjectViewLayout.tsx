@@ -1,8 +1,11 @@
+import { Button } from "@/Components/Button"
+import { useModal } from "@/Components/Dialog"
 import NavLink from "@/Components/NavLink"
 import { Priority, Project, User, Workspace } from "@/types"
 import { usePage } from "@inertiajs/react"
-import { Calendar, Gauge, KanbanSquare, LayoutDashboard, ScrollText } from "lucide-react"
+import { Calendar, Gauge, KanbanSquare, LayoutDashboard, ScrollText, Users } from "lucide-react"
 import { PropsWithChildren } from "react"
+import { InviteWorkspaceForm } from "../InviteWorkspaceForm"
 
 export type ProjectViewProps = {
     data: {
@@ -17,6 +20,11 @@ export type ProjectViewProps = {
 function ViewLayoutHeader() {
     const { props } = usePage<ProjectViewProps>();
     const data = props.data;
+    const { showModal } = useModal();
+
+    const handleShowInviteForm = () => {
+        showModal(<InviteWorkspaceForm workspace={data.workspace} />, "Invite With Email");
+    }
 
     return (
         <div className="flex flex-row items-center">
@@ -49,7 +57,10 @@ function ViewLayoutHeader() {
                 </section>
             </div>
             <div className="w-2/12">
-                Share
+                <Button className="bg-blue h-8 px-2 hover:bg-blue/70" onClick={handleShowInviteForm}>
+                    <Users className="h-4" />
+                    Share
+                </Button>
             </div>
         </div>
     )

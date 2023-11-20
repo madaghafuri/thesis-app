@@ -4,7 +4,7 @@ import TextInput from "../TextInput";
 import { useForm } from "@inertiajs/react";
 import PrimaryButton from "../PrimaryButton";
 import { FormEvent } from "react";
-import { useDialog } from "../Dialog";
+import { useModal } from "../Dialog";
 
 type FormData = {
     name: string;
@@ -12,7 +12,7 @@ type FormData = {
 
 export function CreateWorkspaceForm({ className }: { className?: string }) {
     const { data, setData, post, errors, processing, recentlySuccessful } = useForm<FormData>();
-    const { showModal } = useDialog();
+    const { showModal } = useModal();
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();

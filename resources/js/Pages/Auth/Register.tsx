@@ -6,12 +6,13 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-export default function Register() {
+export default function Register({ invited_workspace_id }: { invitation_token: string; invited_workspace_id: number; }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
         password: '',
         password_confirmation: '',
+        workspace_id: invited_workspace_id
     });
 
     useEffect(() => {

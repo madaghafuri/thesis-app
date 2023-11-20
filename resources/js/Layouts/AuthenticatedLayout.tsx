@@ -8,11 +8,12 @@ import { Project, User, Workspace } from '@/types';
 import { NavSectionContainer } from '@/Components/NavSectionContainer';
 import { NavSectionItem } from '@/Components/NavSectionItem';
 import PrimaryButton from '@/Components/PrimaryButton';
-import { useDialog } from '@/Components/Dialog';
+import { useModal } from '@/Components/Dialog';
 import { CreateWorkspaceForm } from '@/Components/Workspace/CreateWorkspaceForm';
 import { CreateProjectForm } from '@/Components/Workspace/Project/CreateProjectForm';
 import { Briefcase, ChevronLeft, ClipboardCheck, Home, Pencil, Trash } from 'lucide-react';
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '@/Components/ContextMenu';
+import { Button } from '@/Components/Button';
 
 type AuthenticatedProps = {
     user: User;
@@ -24,7 +25,7 @@ type AuthenticatedProps = {
 
 export default function Authenticated({ user, header, children, workspaces, currentWorkspace, projects }: PropsWithChildren<AuthenticatedProps>) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
-    const { setIsOpen, showModal } = useDialog();
+    const { setIsOpen, showModal } = useModal();
 
     const handleCreateWorkspace = () => {
         showModal(<CreateWorkspaceForm />, 'Create Workspace');
