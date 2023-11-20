@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SectionController;
@@ -98,5 +99,8 @@ Route::controller(TaskController::class)->group(function () {
 
 Route::post('/time-tracker/{task}/start', [TimeTrackerController::class, 'startTracking'])->middleware(['auth'])->name('time.start');
 Route::post('/time-tracker/{task}/stop', [TimeTrackerController::class, 'stopTracking'])->middleware(['auth'])->name('time.stop');
+
+Route::post('/invitation', [InvitationController::class, 'sendInvitation'])->name('email.invite');
+Route::get('/invitation/{token}', [InvitationController::class, 'acceptInvitation'])->name('invite.accept');
 
 require __DIR__.'/auth.php';
