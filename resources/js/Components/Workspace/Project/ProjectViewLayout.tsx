@@ -73,7 +73,7 @@ export function ProjectViewLayout({ children }: PropsWithChildren) {
             <header className="text text-textcolor px-4 pt-2 border-b-[1px] border-bordercolor">
                 <ViewLayoutHeader />
             </header>
-            <main>{children}</main>
+            <main className="text-textcolor">{children}</main>
         </section>
     )
 }
