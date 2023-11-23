@@ -58,4 +58,16 @@ class TaskController extends Controller
     public function destroy(Task $task) {
         $task->delete();
     }
+
+    public function getTask(Request $request) {
+        $tasks = Task::all()->where('project_id', $request->query('project_id'));
+
+        $data = [
+            'data' => [
+                'tasks' => $tasks
+            ]
+        ];
+
+        return response()->json($data, 200);
+    }
 }

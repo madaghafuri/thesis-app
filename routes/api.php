@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\V1\TaskController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +18,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::get('/users', function(Request $request) {
+    $users = User::all();
+
+    error_log($request->query('with'));
+
+    return response()->json($users);
+});
+
+Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\Api\V1'], function() {
+    Route::apiResource('tasks', TaskController::class);
 });
