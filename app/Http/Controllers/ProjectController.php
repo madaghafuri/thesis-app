@@ -52,13 +52,7 @@ class ProjectController extends Controller
      */
     public function show(Workspace $workspace, Project $project)
     {
-        return Inertia::render('Workspace/Project/Show', [
-            'data' => [
-                'workspace' => $workspace,
-                'projectList' => $workspace->project()->get(),
-                'project' => $project
-            ]
-        ]);
+        return redirect()->to(route('project.board', [ 'workspace' => $workspace, 'project' => $project ]));
     }
 
     /**
@@ -126,7 +120,21 @@ class ProjectController extends Controller
     }
 
     public function calendar(Workspace $workspace, Project $project) {
-        return Inertia::render('Workspace/Project/Calendar');
+        $users = $workspace->user()->get();
+        foreach($users as $user) {
+            $tasks = $user->tasks()->get();
+            foreach($tasks as $task) {
+                $priority = $task->priority()->first();
+                $times = $task->timeTrackers()->get();
+                $task->priority = $priority;
+                $task->times = $times;
+            }
+            $user->tasks = $tasks;
+        }
+
+        return Inertia::render('Workspace/Project/Calendar', [
+            'users' => $users
+        ]);
     }
 
     public function dashboard(Workspace $workspace, Project $project) {
