@@ -194,7 +194,11 @@ export default function Authenticated({ user, header, children, workspaces, curr
                                                 className='font-thin text-sm'
                                                 key={project.id}
                                                 active={route().current('workspaces.projects.show', { workspace: project.workspace_id, project: project.id })
-                                                || route().current('project.list', { workspace: project.workspace_id, project: project.id })}
+                                                || route().current('project.list', { workspace: project.workspace_id, project: project.id })
+                                                || route().current('project.board', { workspace: project.workspace_id, project: project.id })
+                                                || route().current('project.calendar', { workspace: project.workspace_id, project: project.id })
+                                                || route().current('project.workload', { workspace: project.workspace_id, project: project.id })
+                                            }
                                                 href={route('workspaces.projects.show', { workspace: project.workspace_id, project: project.id })}
                                             >
                                                 {project.name}
@@ -214,11 +218,6 @@ export default function Authenticated({ user, header, children, workspaces, curr
                                 </ContextMenuItem>
                             </ContextMenuContent>
                         </ContextMenu>
-                    </NavSectionContainer>
-                    <NavSectionContainer header='Insight'>
-                        <NavSectionItem active={false} href={route('dashboard')} >
-                            Goals
-                        </NavSectionItem>
                     </NavSectionContainer>
                 </nav>
 

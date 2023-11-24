@@ -206,7 +206,7 @@ export const TaskColumnPriority = ({ onSelect = () => {}, value }: TaskColumnPri
 
                             return (
                                 <CommandItem key={value.id} className="hover:bg-bgactive" onSelect={handleSelect}>
-                                    <Badge className={`bg-yellow text-black font-thin`}>{value.name}</Badge>
+                                    <Badge variant={value.name.toLowerCase() as 'high'} className={`text-black font-thin`}>{value.name}</Badge>
                                 </CommandItem>
                             )
                         })}
