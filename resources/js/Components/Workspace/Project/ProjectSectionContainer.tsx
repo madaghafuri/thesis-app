@@ -48,7 +48,7 @@ export function ListSectionContainer({ section, children, onAddTask = () => {} }
                 ) : null}
 
                 {hovered ? (
-                    <SectionMenu />
+                    <SectionMenu section={section} />
                 ) : null}
             </section>
             <main>
@@ -88,7 +88,7 @@ export function BoardSectionContainer({ children, section, onAddTask = () => {} 
                     <PrimaryButton className="hover:bg-bgactive px-1 py-1 text-textweak">
                         <Plus className="h-5" />
                     </PrimaryButton>
-                    <SectionMenu />
+                    <SectionMenu section={section} />
                 </div>
             </section>
             <main className="flex flex-col gap-0.5">

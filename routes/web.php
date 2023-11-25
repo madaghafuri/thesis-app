@@ -89,6 +89,7 @@ Route::controller(ProjectController::class)->group(function () {
 Route::controller(SectionController::class)->group(function () {
     Route::post('/projects/{project}/section', 'store')->name('section.store')->middleware(['auth']);
     Route::patch('/projects/{project}/section/{section}', 'update')->name('section.update')->middleware(['auth']);
+    Route::delete('/sections/{section}', 'destroy')->name('section.destroy')->middleware(['auth']);
 });
 
 Route::controller(TaskController::class)->group(function () {

@@ -1,9 +1,15 @@
 import PrimaryButton from "@/Components/PrimaryButton";
+import { Section } from "@/types";
 import { Menu, Transition } from "@headlessui/react";
+import { router } from "@inertiajs/react";
 import { MoreHorizontal, Pencil, Trash } from "lucide-react";
 import { Fragment } from "react";
 
-export function SectionMenu() {
+export function SectionMenu({ section }: {section: Section}) {
+    const handleDeleteSection = () => {
+        router.delete(route('section.destroy', { section: section.id }));
+    }
+
     return (
         <Menu as="div" className="relative inline-block text-left">
             <Menu.Button className="text-textweak hover:bg-bgactive rounded-md p-1">
@@ -38,7 +44,7 @@ export function SectionMenu() {
                         </Menu.Item>
                         <Menu.Item>
                             {({ active }) => (
-                                <PrimaryButton className="text-danger font-thin hover:bg-bgactive gap-2 w-full">
+                                <PrimaryButton className="text-danger font-thin hover:bg-bgactive gap-2 w-full" onClick={handleDeleteSection}>
                                     <Trash className="h-4" />
                                     Delete
                                 </PrimaryButton>

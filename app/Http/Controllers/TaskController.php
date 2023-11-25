@@ -43,6 +43,8 @@ class TaskController extends Controller
         if ($request->has('user') && $request["user"] !== null) {
             $assignee = User::where('id', $request["user"]["id"])->first();
             $task->user()->associate($assignee);
+        } else if ($request["user"] == null) {
+            $task->user()->disassociate();
         }
         
         if ($request->has('priority') && $request["priority"] !== null) {
