@@ -22,4 +22,8 @@ class SectionController extends Controller
             'name' => $request->name
         ]);
     }
+
+    public function destroy(Section $section) {
+        $section->delete();
+    }
 }
