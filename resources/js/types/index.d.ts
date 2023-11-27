@@ -32,6 +32,7 @@ export type Project = {
     updated_at: string;
 }
 
+
 export type Section = {
     id: number;
     project_id: number;
@@ -48,10 +49,11 @@ export type Task = {
     name: string;
     created_at: string;
     updated_at: string;
-    user: User;
+    user: User | null;
     priority: Priority;
     due_date: string;
     times: TimeTrack[];
+    description: string;
 }
 
 export type Priority = {

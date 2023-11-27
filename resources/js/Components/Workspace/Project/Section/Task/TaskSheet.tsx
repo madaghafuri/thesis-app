@@ -1,6 +1,6 @@
 import { Button } from "@/Components/Button";
 import { SheetClose, SheetContent, SheetFooter, SheetHeader } from "@/Components/Sheet";
-import { ChevronDown, Play, StopCircle, Trash, Trash2, UserCircle2 } from "lucide-react";
+import { ChevronDown, Play, StopCircle, Trash, Trash2, UserCircle2, X } from "lucide-react";
 import { SectionTitle } from "../SectionTitle";
 import InputLabel from "@/Components/InputLabel";
 import { Popover, PopoverContent, PopoverTrigger } from "@/Components/Popover";
@@ -40,10 +40,7 @@ export function TaskSheet({task}: { task: Task }) {
         ...props.data.priorities
     ]
 
-    const members: User[] = [
-        { id: -1, email: "-", name: "-", email_verified_at: "-" },
-        ...props.data.members
-    ]
+    const members: User[] = props.data.members;
 
     const handleSaveChange = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -153,21 +150,26 @@ export function TaskSheet({task}: { task: Task }) {
                         <InputLabel value="Assignee" />
 
                         <Popover open={openAssigneeOptions} onOpenChange={setOpenAssigneeOptions}>
-                            <PopoverTrigger>
-                                {taskData.user ? (
-                                    <div className="flex items-center gap-2 rounded-md hover:bg-bgactive p-2 w-fit">
-                                        <Avatar>
-                                            <AvatarFallback className="bg-yellow text-black">{taskData.user.name[0].toUpperCase()}</AvatarFallback>
-                                        </Avatar>
-                                        {taskData.user.name}
-                                    </div>
-                                ) : (
-                                    <div className="flex p-2 items-center rounded-md justify-start text-textweak hover:bg-bgactive w-fit gap-2 tracking-tight">
-                                        <UserCircle2 className="h-4" />
-                                        <h4 className="font-thin text-sm hover:text-textcolor" >No Assignee</h4>
-                                    </div>
-                                )}
-                            </PopoverTrigger>
+                            <div className="flex items-center">
+                                <PopoverTrigger>
+                                    {taskData.user ? (
+                                        <div className="flex items-center gap-2 rounded-md hover:bg-bgactive p-2 w-fit">
+                                            <Avatar>
+                                                <AvatarFallback className="bg-yellow text-black">{taskData.user.name[0].toUpperCase()}</AvatarFallback>
+                                            </Avatar>
+                                            {taskData.user.name}
+                                        </div>
+                                    ) : (
+                                        <div className="flex p-2 items-center rounded-md justify-start text-textweak hover:bg-bgactive w-fit gap-2 tracking-tight">
+                                            <UserCircle2 className="h-4" />
+                                            <h4 className="font-thin text-sm hover:text-textcolor" >No Assignee</h4>
+                                        </div>
+                                    )}
+                                </PopoverTrigger>
+                                <Button className="hover:bg-bgactive w-fit h-8 px-2" onClick={() => setData('user', null)}>
+                                    <X className="h-4" />
+                                </Button>
+                            </div>
                             <PopoverContent className="bg-black border-bordercolor p-0">
                                 <Command className="text-textweak">
                                     <CommandInput placeholder="Search members..." className="focus:ring-0 focus:border-none" />
@@ -253,7 +255,13 @@ export function TaskSheet({task}: { task: Task }) {
                             </SelectContent>
                         </Select>
                     </div>
-                    <Textarea className="bg-black min-h-[10rem]" placeholder="What is this taskData about?" />
+                    <InputLabel value="Description" />
+                    <Textarea
+                        value={taskData.description}
+                        className="bg-black min-h-[10rem] border-none unset resize-none ring-0 focus:ring-0"
+                        placeholder="What is this taskData about?"
+                        onChange={(e) => setData('description', e.target.value)}
+                    />
                     <SheetFooter className="mt-4">
                         <SheetClose asChild>
                             <Button type="submit" className="bg-blue">Save Changes</Button>
