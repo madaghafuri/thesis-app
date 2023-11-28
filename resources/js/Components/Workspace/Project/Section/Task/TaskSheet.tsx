@@ -1,13 +1,13 @@
 import { Button } from "@/Components/Button";
 import { SheetClose, SheetContent, SheetFooter, SheetHeader } from "@/Components/Sheet";
-import { ChevronDown, Play, StopCircle, Trash, Trash2, UserCircle2, X } from "lucide-react";
+import { ChevronDown, Play, Plus, StopCircle, Trash, Trash2, UserCircle2, X } from "lucide-react";
 import { SectionTitle } from "../SectionTitle";
 import InputLabel from "@/Components/InputLabel";
 import { Popover, PopoverContent, PopoverTrigger } from "@/Components/Popover";
 import { Avatar, AvatarFallback } from "@/Components/Avatar";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/Components/Command";
-import { router, useForm, usePage } from "@inertiajs/react";
-import { PageProps, Priority, Task, User } from "@/types";
+import { Link, router, useForm, usePage } from "@inertiajs/react";
+import { Files, PageProps, Priority, Task, User } from "@/types";
 import { ProjectViewProps } from "../../ProjectViewLayout";
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { Calendar } from "@/Components/Calendar";
@@ -15,21 +15,86 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Textarea } from "@/Components/TextArea";
 import { SelectSingleEventHandler } from "react-day-picker";
 import { format, formatISO } from "date-fns";
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, Fragment, ReactNode, useState } from "react";
 import { Badge } from "@/Components/Badge";
-import { useTrackTime } from "@/hooks/useTimeTrack";
-import { secondsToHours } from "@/utils";
+import { AcceptedFileType, getFileType, secondsToHours } from "@/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/Components/Accordion";
 import { useTaskTrackerContext } from "@/TaskTrackerProvider";
+import { FileInput } from "./FileInput";
+import TextIcon from '@/assets/text.svg?react';
+import ImageIcon from '@/assets/image.svg?react';
+import XLSIcon from '@/assets/xls.svg?react';
+import DOCSIcon from '@/assets/docs.svg?react';
+import PPTIcon from '@/assets/ppt.svg?react';
+import PDFIcon from '@/assets/pdf.svg?react';
+
+const FileType: Record<AcceptedFileType, ReactNode> = {
+    text: <TextIcon />,
+    images: <ImageIcon />,
+    xls: <XLSIcon />,
+    docs: <DOCSIcon />,
+    ppt: <PPTIcon />,
+    pdf: <PDFIcon />
+}
+
+const FileTypeName: Record<AcceptedFileType, string> = {
+    text: 'Text File',
+    pdf: 'PDF File',
+    images: 'Image File',
+    xls: 'Document',
+    docs: 'Document',
+    ppt: 'Document',
+}
+
+export function FileComp({ file }: { file: Files }) {
+    const fileType = getFileType(file.filePath);
+
+    const handleDeleteFile = () => {
+        // router.post(route('file.destroy', { file: file.id }), {
+        //     data: {
+        //         fileName: file.files
+        //     },
+        // });
+    }
+
+    const handleDownloadFile = () => {
+        router.get(route('file.download', {
+            filePath: file.filePath,
+            fileName: file.fileName
+        }));
+    }
+
+    return (
+        <div className="flex items-center gap-2 rounded-md p-2 outline outline-1 outline-bordercolor">
+            {FileType[fileType]}   
+            <div className="flex items-center gap-2">
+                <div className="flex flex-col gap-1 w-32">
+                    <h3 className="text-xs font-light truncate">{file.fileName}</h3>
+                    <div className="flex items-center gap-2">
+                        <h3 className="text-xs font-light">{FileTypeName[fileType]}</h3>
+                        <a className="text-xs font-light hover:text-blue underline select-none" href={`${window.location.origin}/storage/${file.filePath}`} target="_blank">Download</a>
+                    </div>
+                </div>
+                <Button className="hover:bg-bgactive h-8 px-2" onClick={handleDeleteFile}>
+                    <X className="h-5" />
+                </Button>
+            </div>
+        </div>
+        
+    )
+}
 
 export function TaskSheet({task}: { task: Task }) {
     const { data: taskData, setData, processing, patch, errors } = useForm<Task>(task);
     const { props } = usePage<PageProps<ProjectViewProps>>();
     const [openAssigneeOptions, setOpenAssigneeOptions] = useState(false);
     const [date, setDate] = useState<Date>();
+    const [files, setFiles] = useState<File[]>([]);
     const { isCounting, elapsedTime, startTimer, stopTimer, setCurrentlyTrackedTask, currentlyTrackedTask } = useTaskTrackerContext();
     
     const currentTaskDate = new Date(taskData.due_date);
+
+    console.log(window.location);
 
     const accumulatedTime = task.times.reduce((time, curr) => {
         return time += curr.duration
@@ -69,6 +134,27 @@ export function TaskSheet({task}: { task: Task }) {
                 setCurrentlyTrackedTask(null);
             }
         });
+    }
+
+    const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files !== null) {
+            const tempFiles = Array.from(e.target.files);
+            setFiles([...files, ...tempFiles]);
+
+            const formData = new FormData();
+            tempFiles.forEach((val, index) => {
+                formData.append(`files[${index}]`, val);
+            });
+
+            router.post(route('task.files', { task: taskData.id }), formData, {
+                onProgress: (progress) => {
+                    console.log(progress);
+                },
+                onError: (error) => {
+                    console.log(error);
+                }
+            });
+        }
     }
 
     return (
@@ -257,11 +343,19 @@ export function TaskSheet({task}: { task: Task }) {
                     </div>
                     <InputLabel value="Description" />
                     <Textarea
-                        value={taskData.description}
+                        value={taskData.description || ""}
                         className="bg-black min-h-[10rem] border-none unset resize-none ring-0 focus:ring-0"
                         placeholder="What is this taskData about?"
                         onChange={(e) => setData('description', e.target.value)}
                     />
+                    <div className="flex items-center gap-3 mt-3">
+                        {task.files.length > 0 ? task.files.map((value) => {
+                            return (
+                                <FileComp key={value.id} file={value} />
+                            )
+                        }): null}
+                        <FileInput onChange={handleFileInputChange} />
+                    </div>
                     <SheetFooter className="mt-4">
                         <SheetClose asChild>
                             <Button type="submit" className="bg-blue">Save Changes</Button>
