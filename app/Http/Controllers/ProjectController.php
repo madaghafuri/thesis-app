@@ -107,9 +107,11 @@ class ProjectController extends Controller
                 $user = $task->user()->first();
                 $priority = $task->priority()->first();
                 $times = $task->timeTrackers()->get();
+                $files = $task->files()->get();
                 $task->user = $user;
                 $task->priority = $priority;
                 $task->times = $times;
+                $task->files = $files;
             }
             $section->tasks = $taskList;
         }
