@@ -29,6 +29,10 @@ class Task extends Model
         return $this->hasMany(TimeTracker::class);
     }
 
+    public function files() {
+        return $this->hasMany(TaskFiles::class);
+    }
+
     protected $fillable = [
         'user_id',
         'project_id',

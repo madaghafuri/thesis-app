@@ -54,6 +54,10 @@ export type Task = {
     due_date: string;
     times: TimeTrack[];
     description: string;
+    /**
+     * TODO
+     */
+    files: Files[];
 }
 
 export type Priority = {
@@ -75,4 +79,13 @@ export type TimeTrack = {
 
 export type WorkloadUser = User & {
     tasks: Task[];
+}
+
+export type Files = {
+    id: number;
+    task_id: number;
+    filePath: string;
+    fileName: string;
+    created_at: string;
+    updated_at: string;
 }

@@ -21,3 +21,34 @@ export function secondsToHours(seconds: number): string {
 
     return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }
+
+export type AcceptedFileType = "images" | "text" | "xls" | "docs" | "ppt" | "pdf"
+
+export function getFileType(file: string): AcceptedFileType {
+    const type = file.split(".");
+
+    switch (type[1]) {
+        case 'jpg':
+        case 'jpeg':
+        case 'png':
+        case 'webp':
+            return 'images'
+    
+        case 'xls':
+        case 'xlsx':
+            return 'xls'
+
+        case 'docs':
+        case 'docsx':
+            return 'docs'
+
+        case 'ppt':
+        case 'pptx':
+            return 'ppt'
+
+        case 'pdf':
+            return 'pdf'
+        default:
+            return 'text'
+    }
+}

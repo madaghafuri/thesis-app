@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\DownloadFileController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TaskFileController;
 use App\Http\Controllers\TimeTrackerController;
 use App\Http\Controllers\WorkspaceController;
 use App\Http\Middleware\HandleProjectViewRequest;
@@ -97,6 +99,13 @@ Route::controller(TaskController::class)->group(function () {
     Route::patch('/tasks/{task}', 'update')->name('task.update')->middleware(['auth']);
     Route::delete('/tasks/{task}', 'destroy')->name('task.destroy')->middleware(['auth']);
 });
+
+Route::controller(TaskFileController::class)->group(function () {
+    Route::post('/tasks/{task}/file', 'upload')->name('task.files')->middleware(['auth']);
+    Route::post('/files/{taskFile}', 'destroy')->name('file.destroy');
+});
+
+Route::get('/download', DownloadFileController::class)->name('file.download')->middleware(['auth']);
 
 Route::post('/time-tracker/{task}/start', [TimeTrackerController::class, 'startTracking'])->middleware(['auth'])->name('time.start');
 Route::post('/time-tracker/{task}/stop', [TimeTrackerController::class, 'stopTracking'])->middleware(['auth'])->name('time.stop');

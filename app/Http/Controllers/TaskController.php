@@ -21,8 +21,6 @@ class TaskController extends Controller
     }
 
     public function update(Request $request, Task $task) {
-        error_log($request);
-
         $validatedData = $request->validate([
             'name' => 'max:255|nullable',
             'due_date' => 'date|nullable',
