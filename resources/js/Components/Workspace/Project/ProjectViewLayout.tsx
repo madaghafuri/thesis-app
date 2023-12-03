@@ -70,7 +70,7 @@ export function ProjectViewLayout({ children }: PropsWithChildren) {
 
     return (
         <section className="w-full">
-            <header className="text text-textcolor px-4 pt-2 border-b-[1px] border-bordercolor">
+            <header className="text text-textcolor px-4 pt-2 border-b-[1px] border-bordercolor bg-dark-gray">
                 <ViewLayoutHeader />
             </header>
             <main className="text-textcolor">{children}</main>

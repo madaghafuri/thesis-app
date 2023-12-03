@@ -22,8 +22,6 @@ export default function List() {
     const { props } = usePage<PageProps<ProjectViewProps & ListPageProps>>();
     const { showModal } = useModal();
 
-    console.log(props);
-
     const handleCreateSection = () => {
         showModal(<CreateSectionForm project={props.data.project} />, 'Create Section');
     }

@@ -2,8 +2,8 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "
 import { Popover, PopoverContent, PopoverTrigger } from "@/Components/Popover";
 import { PageProps, Priority, Task, User } from "@/types"
 import { cn } from "@/utils";
-import { router, usePage } from "@inertiajs/react";
-import { Plus } from "lucide-react";
+import { router, useForm, usePage } from "@inertiajs/react";
+import { CornerDownRight, Plus } from "lucide-react";
 import { ChangeEvent, InputHTMLAttributes, useEffect, useRef, useState } from "react";
 import { ProjectViewProps } from "../../ProjectViewLayout";
 import { Button } from "@/Components/Button";
@@ -18,7 +18,8 @@ type TaskRowProps = {
 }
 
 export function TaskRow({ task }: TaskRowProps) {
-    const [currTask, setCurrTask] = useState(task);
+    const { data: currTask, setData: setCurrTask } = useForm<Task>(task);
+    const [nameHovered, setNameHovered] = useState(false);
 
     const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setCurrTask((prev) => {
@@ -45,8 +46,14 @@ export function TaskRow({ task }: TaskRowProps) {
     
     return (
         <div className="w-full flex items-center text-textcolor text-sm font-thin hover:bg-bgactive">
-            <div className="w-[44rem] min-h-full border-y-[1px] border-r-[1px] border-bordercolor pl-10 flex items-center">
+            <div className="w-[44rem] min-h-full border-y-[1px] border-r-[1px] border-bordercolor pl-10 flex items-center" onMouseEnter={() => setNameHovered(true)} onMouseLeave={() => setNameHovered(false)}>
                 <TaskColumnName value={currTask.name || ''} onChange={handleNameChange} className="bg-inherit w-full p-[0.41rem] focus:bg-bgactive rounded-md select-none" onBlur={handleConfirmNameChange} />
+                {nameHovered ? (
+                    <Button className="h-7 px-2 text-xs text-bordercolor hover:bg-dark-gray">
+                        <CornerDownRight className="h-4" />
+                        Open
+                    </Button>
+                ): null}
             </div>
             <div className="w-40 min-h-full border-y-[1px] border-r-[1px] border-bordercolor">
                 <TaskColumnAssignee assignee={currTask.user} task={task} onSelect={handleSelectAssignee} />
@@ -84,7 +91,7 @@ export const TaskColumnName = ({ className, type, isFocused = false, ...props }:
 }
 
 type TaskColumnAssigneeProps = {
-    assignee?: User;
+    assignee?: User | null;
     task?: Task;
     onSelect?: (value: User) => void;
 }

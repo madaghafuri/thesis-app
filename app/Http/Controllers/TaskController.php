@@ -25,11 +25,13 @@ class TaskController extends Controller
             'name' => 'max:255|nullable',
             'due_date' => 'date|nullable',
             'description' => 'max:255|nullable',
+            'start_date' => 'date|nullable',
         ]);
 
         $updatedData = $task->update([
             'name' => $validatedData["name"],
             'due_date' => $validatedData["due_date"],
+            'start_date' => $validatedData["start_date"],
             'description' => $validatedData["description"],
         ]);
 

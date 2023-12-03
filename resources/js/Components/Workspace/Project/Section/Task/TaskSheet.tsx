@@ -65,7 +65,7 @@ export function FileComp({ file }: { file: Files }) {
     }
 
     return (
-        <div className="flex items-center gap-2 rounded-md p-2 outline outline-1 outline-bordercolor">
+        <div className="flex items-center gap-2 rounded-md p-2 outline outline-1 outline-bordercolor hover:outline-textcolor">
             {FileType[fileType]}   
             <div className="flex items-center gap-2">
                 <div className="flex flex-col gap-1 w-32">
@@ -88,13 +88,17 @@ export function TaskSheet({task}: { task: Task }) {
     const { data: taskData, setData, processing, patch, errors } = useForm<Task>(task);
     const { props } = usePage<PageProps<ProjectViewProps>>();
     const [openAssigneeOptions, setOpenAssigneeOptions] = useState(false);
-    const [date, setDate] = useState<Date>();
+    const [date, setDate] = useState<{
+        start_date: Date;
+        due_date: Date;
+    }>({
+        start_date: new Date(task.start_date),
+        due_date: new Date(task.due_date)
+    });
     const [files, setFiles] = useState<File[]>([]);
     const { isCounting, elapsedTime, startTimer, stopTimer, setCurrentlyTrackedTask, currentlyTrackedTask } = useTaskTrackerContext();
     
     const currentTaskDate = new Date(taskData.due_date);
-
-    console.log(window.location);
 
     const accumulatedTime = task.times.reduce((time, curr) => {
         return time += curr.duration
@@ -110,12 +114,25 @@ export function TaskSheet({task}: { task: Task }) {
     const handleSaveChange = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        patch(route('task.update', { task: taskData.id }));
+        patch(route('task.update', { task: task.id }));
     }
 
     const handleSelectDueDate = (val: Date) => {
-        setDate(val);
+        setDate((prev) => {
+            const newDate = {...prev};
+            newDate.due_date = val
+            return newDate;
+        });
         setData('due_date', formatISO(val));
+    }
+
+    const handleSelectStartDate = (val: Date) => {
+        setDate((prev) => {
+            const newDate = {...prev};
+            newDate.start_date = val;
+            return newDate;
+        });
+        setData('start_date', formatISO(val));
     }
 
     const startTimeTracking = () => {
@@ -146,7 +163,7 @@ export function TaskSheet({task}: { task: Task }) {
                 formData.append(`files[${index}]`, val);
             });
 
-            router.post(route('task.files', { task: taskData.id }), formData, {
+            router.post(route('task.files', { task: task.id }), formData, {
                 onProgress: (progress) => {
                     console.log(progress);
                 },
@@ -157,10 +174,14 @@ export function TaskSheet({task}: { task: Task }) {
         }
     }
 
+    const handleDeleteTask = () => {
+        router.delete(route('task.destroy', { task: task.id }));
+    }
+
     return (
         <SheetContent className="bg-content text-textcolor border-bordercolor min-w-[40rem]">
             <SheetHeader className="grid grid-cols-3 items-center">
-                <Button className="w-fit text-danger gap-2 items-center border-[1px] border-danger hover:bg-danger hover:text-textcolor">
+                <Button className="w-fit text-danger gap-2 items-center border-[1px] border-danger hover:bg-danger hover:text-textcolor" onClick={handleDeleteTask}>
                     <Trash />
                     Delete
                 </Button>
@@ -288,19 +309,37 @@ export function TaskSheet({task}: { task: Task }) {
                     </div>
 
                     <div className="grid grid-cols-4 items-center">
-                        <InputLabel value="Due Date" />
-                        
+                        <InputLabel value="Start Date" />
+
                         <Popover>
                             <PopoverTrigger>
                                 <div className="flex items-center gap-2 p-2 rounded-md hover:bg-bgactive text-textweak w-auto">
                                     <CalendarIcon className="h-4" />
-                                    <h4 className="font-thin text-sm hover:text-textcolor">{taskData.due_date ? format(currentTaskDate, "PPP") : <span>No Due Date</span>}</h4>
+                                    <h4 className="font-thin text-sm hover:text-textcolor">{taskData.start_date ? format(date.start_date, "PPP") : <span>No Start Date</span>}</h4>
                                 </div>
                             </PopoverTrigger>
                             <PopoverContent className="bg-nav w-auto text-textweak p-0 border-bordercolor">
                                 <Calendar
                                     mode="single"
-                                    selected={date}
+                                    selected={date.start_date}
+                                    onSelect={handleSelectStartDate as SelectSingleEventHandler}
+                                    initialFocus
+                                />
+                            </PopoverContent>
+                        </Popover>
+                        <InputLabel className="text-center" value="Due Date" />
+                        
+                        <Popover>
+                            <PopoverTrigger>
+                                <div className="flex items-center gap-2 p-2 rounded-md hover:bg-bgactive text-textweak w-auto">
+                                    <CalendarIcon className="h-4" />
+                                    <h4 className="font-thin text-sm hover:text-textcolor">{taskData.due_date ? format(date.due_date, "PPP") : <span>No Due Date</span>}</h4>
+                                </div>
+                            </PopoverTrigger>
+                            <PopoverContent className="bg-nav w-auto text-textweak p-0 border-bordercolor">
+                                <Calendar
+                                    mode="single"
+                                    selected={date.due_date}
                                     onSelect={handleSelectDueDate as SelectSingleEventHandler}
                                     initialFocus
                                 />

@@ -105,7 +105,7 @@ Route::controller(TaskFileController::class)->group(function () {
     Route::post('/files/{taskFile}', 'destroy')->name('file.destroy');
 });
 
-Route::get('/download', DownloadFileController::class)->name('file.download')->middleware(['auth']);
+// Route::get('/download', DownloadFileController::class)->name('file.download')->middleware(['auth']);
 
 Route::post('/time-tracker/{task}/start', [TimeTrackerController::class, 'startTracking'])->middleware(['auth'])->name('time.start');
 Route::post('/time-tracker/{task}/stop', [TimeTrackerController::class, 'stopTracking'])->middleware(['auth'])->name('time.stop');

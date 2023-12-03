@@ -1,10 +1,15 @@
 import { addDays, eachDayOfInterval, endOfMonth, format, getDate, getDay, getYear, setDate, startOfMonth } from "date-fns";
 import { CalendarDayCell } from "./CalendarDayCell";
+import { usePage } from "@inertiajs/react";
+import { PageProps, Task, WorkloadUser } from "@/types";
+import { ProjectViewProps } from "../ProjectViewLayout";
 
 export function CalendarView({date}: { date: Date }) {
     const monthStart = startOfMonth(date);
     const monthEnd = endOfMonth(date);
     const daysOfMonth = eachDayOfInterval({ start: monthStart, end: monthEnd });
+
+    const { props } = usePage<PageProps<ProjectViewProps & { users: WorkloadUser[], tasks: Task[] }>>();
 
     //Get the days from the previous month
     const prevMonthDays = [];
@@ -19,17 +24,6 @@ export function CalendarView({date}: { date: Date }) {
     }
 
     const weekDays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-    // const lastDayOfMonth = getDay(monthEnd);
-    // if (lastDayOfMonth !== 6) {
-    //     const nextMonthStart = new Date(date.getFullYear(), date.getMonth()+1, 0);
-    //     const nextMonthFirstDate = nextMonthStart.getDate();
-    //     for (let i = 1; i <= lastDayOfMonth; i++) {
-    //         const day = new Date(nextMonthStart.getFullYear(), nextMonthStart.getMonth(), nextMonthFirstDate + i);
-    //         nextMonthDays.push(day);
-    //     }
-    // }   
-
-    // console.log(nextMonthDays, lastDayOfMonth);
 
     return (
         <div className="grid grid-cols-1">
