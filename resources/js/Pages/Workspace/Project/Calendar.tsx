@@ -1,32 +1,69 @@
-import { useTasks } from "@/Api/task";
+import { Avatar, AvatarFallback } from "@/Components/Avatar";
 import { Button } from "@/Components/Button";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/Components/Command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/Components/Popover";
 import { CalendarView } from "@/Components/Workspace/Project/Calendar/CalendarView";
 import { ProjectViewLayout, ProjectViewProps } from "@/Components/Workspace/Project/ProjectViewLayout";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import { PageProps, WorkloadUser } from "@/types";
-import { router, usePage } from "@inertiajs/react";
+import { PageProps, Task, WorkloadUser } from "@/types";
+import { usePage } from "@inertiajs/react";
 import { addMonths, format, subMonths } from "date-fns";
 import { ChevronLeft, ChevronRight, Filter, User } from "lucide-react";
 import { useState } from "react";
 
 export default function Calendar() {
-    const { props } = usePage<PageProps<ProjectViewProps & { users: WorkloadUser[] }>>();
+    const { props } = usePage<PageProps<ProjectViewProps & { users: WorkloadUser[], tasks: Task[] }>>();
     const [date, setDate] = useState<Date>(new Date);
-
-    // const { data } = useTasks({
-    //     project_id: props.data.project.id.toString(),
-    //     includeUser: 'true'
-    // });
+    const [users, setUsers] = useState<WorkloadUser[]>(props.users);
+    const [open, setOpen] = useState(false);
 
     return (
         <Authenticated user={props.auth.user} workspaces={props.workspaceList} projects={props.data.projectList} currentWorkspace={props.data.workspace} >
             <ProjectViewLayout>
                 <div className="flex items-center p-3">
                     <div className="grid grid-cols-2 gap-2 items-center mr-2">
-                        <Button className="h-8 px-2 hover:bg-bgactive font-thin text-textweak" variant="outline">
-                            <User className="h-4" />
-                            Person
-                        </Button>
+                        <Popover open={open} onOpenChange={setOpen}>
+                            <PopoverTrigger asChild>
+                                <Button className="h-8 px-2 hover:bg-bgactive font-thin text-textweak" variant="outline">
+                                    <User className="h-4" />
+                                    Person
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="bg-nav text-textweak p-0 border-bordercolor">
+                                <Command>
+                                    <CommandInput className="ring-0 border-none focus:ring-0 focus:border-none " placeholder="Search members..." />
+                                    <CommandEmpty>No members found</CommandEmpty>
+                                    <CommandGroup>
+                                        <div className="flex items-center justify-center">
+                                            <p className="text-textweak text-sm">Select one people</p>
+                                        </div>
+                                        {props.users.map((member) => {
+                                            const handleSelect = () => {
+                                                setUsers((prev) => {
+                                                    const filteredUsers = props.users.filter((value) => value.id === member.id);
+                                                    return filteredUsers
+                                                })
+                                                setOpen(false);
+                                            }
+
+                                            return (
+                                                <CommandItem
+                                                    key={member.id}
+                                                    value={member.name}
+                                                    onSelect={handleSelect}
+                                                    className="gap-2 hover:bg-bgactive"
+                                                >
+                                                    <Avatar>
+                                                        <AvatarFallback className="bg-blue text-textcolor" >{member.name[0].toUpperCase()}</AvatarFallback>
+                                                    </Avatar>
+                                                    {member.name}
+                                                </CommandItem>
+                                            )
+                                        })}
+                                    </CommandGroup>
+                                </Command>
+                            </PopoverContent>
+                        </Popover>
                         <Button className="h-8 px-2 hover:bg-bgactive font-thin text-textweak" variant="outline">
                             <Filter className="h-4" />
                             Filter
@@ -34,7 +71,9 @@ export default function Calendar() {
                     </div>
                     <span> | </span>
                     <div className="flex gap-2 ml-2 items-center">
-                        <Button className="h-8 px-2 hover:bg-bgactive font-thin text-textweak" variant="outline">
+                        <Button className="h-8 px-2 hover:bg-bgactive font-thin text-textweak" variant="outline" onClick={() => {
+                            setDate(new Date(Date.now()))
+                        }}>
                             Today
                         </Button>
                         <div className="flex items-center justify-center text-textweak">

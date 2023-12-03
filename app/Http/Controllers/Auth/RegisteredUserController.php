@@ -24,6 +24,15 @@ class RegisteredUserController extends Controller
         return Inertia::render('Auth/Register');
     }
 
+    public $availableColors = [
+        '#F06A6A',
+        '#F1BD6C',
+        '#4573D2',
+        '#8D84E8',
+        '#F9AAEF',
+        '#5DA283',
+    ];
+
     /**
      * Handle an incoming registration request.
      *
@@ -41,6 +50,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'color' => $this->availableColors[array_rand($this->availableColors)],
         ]);
 
         if ($request->workspace_id != null) {

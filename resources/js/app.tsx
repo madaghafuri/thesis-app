@@ -7,6 +7,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import DialogProvider from './Components/Dialog';
 import { Toaster } from './Components/Toast/Toaster';
 import TaskTrackerContextProvider from './TaskTrackerProvider';
+import { Sheet } from './Components/Sheet';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -19,7 +20,9 @@ createInertiaApp({
         root.render(
                 <DialogProvider>
                     <TaskTrackerContextProvider>
-                        <App {...props} />
+                        {/* <Sheet> */}
+                            <App {...props} />
+                        {/* </Sheet> */}
                         <Toaster />
                     </TaskTrackerContextProvider>
                 </DialogProvider>    

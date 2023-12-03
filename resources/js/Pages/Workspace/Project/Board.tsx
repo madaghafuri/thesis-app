@@ -1,5 +1,8 @@
+import { Avatar, AvatarFallback } from "@/Components/Avatar";
 import { Button } from "@/Components/Button";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/Components/Command";
 import { ContextMenu, ContextMenuContent, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from "@/Components/ContextMenu";
+import { Popover, PopoverContent, PopoverTrigger } from "@/Components/Popover";
 import { Separator } from "@/Components/Separator";
 import { useToast } from "@/Components/Toast/useToast";
 import { BoardSectionContainer } from "@/Components/Workspace/Project/ProjectSectionContainer";
@@ -7,11 +10,12 @@ import { ProjectViewLayout, ProjectViewProps } from "@/Components/Workspace/Proj
 import { TaskCard } from "@/Components/Workspace/Project/Section/Task/TaskCard";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import TaskTrackerContextProvider from "@/TaskTrackerProvider";
-import { PageProps, Section, Task } from "@/types";
+import { PageProps, Section, Task, User } from "@/types";
 import { router, usePage } from "@inertiajs/react";
 import { ContextMenuItem } from "@radix-ui/react-context-menu";
 import { format } from "date-fns";
-import { ArrowRightLeft, Plus, Trash } from "lucide-react";
+import { ArrowRightLeft, Plus, Trash, User as UserIcon } from "lucide-react";
+import { useState } from "react";
 
 type BoardPageProps = {
     sections: Section[];
@@ -21,8 +25,8 @@ type BoardPageProps = {
 export default function Board() {
     const { props } = usePage<PageProps<ProjectViewProps & BoardPageProps>>();
     const { toast } = useToast();
-
-    console.log(props.sections);
+    const [selectedUser, setSelectedUser] = useState<User[]>([]);
+    const [openAssigneeFilter, setOpenAssigneeFilter] = useState(false);
 
     const handleCreateSection = () => {
         router.post(route('section.store', { project: props.data.project.id }));
@@ -31,6 +35,38 @@ export default function Board() {
     return (
         <Authenticated user={props.auth.user} workspaces={props.workspaceList} projects={props.data.projectList} currentWorkspace={props.data.workspace} >
             <ProjectViewLayout>
+                <div className="flex items-center p-3 border-b-[1px] border-bordercolor bg-dark-gray">
+                    <Popover open={openAssigneeFilter} onOpenChange={setOpenAssigneeFilter}>
+                        <PopoverTrigger asChild>
+                            <Button className="h-7 px-2 hover:bg-bgactive outline outline-1 outline-bordercolor">
+                                <UserIcon className="h-5" />
+                                Person
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="p-0 bg-dark-gray border-bordercolor">
+                            <Command className="text-textcolor">
+                                <CommandInput className="ring-0 border-none focus:ring-0 focus:border-none" placeholder="Search members..." />
+                                <CommandEmpty>No Members found</CommandEmpty>
+                                <CommandGroup>
+                                    {props.data.members.map((member) => {
+                                        const handleAssigneeSelect = () => {
+                                            setOpenAssigneeFilter(false);
+                                        }
+
+                                        return (
+                                            <CommandItem key={member.id} className="gap-2 hover:bg-bgactive" onSelect={handleAssigneeSelect}>
+                                                <Avatar>
+                                                    <AvatarFallback className="bg-blue text-white">{member.name[0].toUpperCase()}</AvatarFallback>
+                                                </Avatar>
+                                                {member.name}
+                                            </CommandItem>
+                                        )
+                                    })}
+                                </CommandGroup>
+                            </Command>
+                        </PopoverContent>
+                    </Popover>
+                </div>
                 <div className="text-textcolor px-4 py-2 flex gap-1">
                     {props.sections.map((section) => {
                         const handleAddTask = () => {

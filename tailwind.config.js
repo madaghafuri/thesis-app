@@ -30,7 +30,11 @@ export default {
                 green: '#5da283',
                 indigo: '#8d84e8',
                 magenta: '#f9aaef',
-                pinl: '#ffc7db'
+                pink: '#ffc7db',
+                'dark-gray': '#2a2b2d',
+                'bg-medium': '#252628',
+                neptune: '#74bfbb'
+
             },
             keyframes: {
                 "accordion-down": {

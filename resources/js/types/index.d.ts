@@ -52,6 +52,7 @@ export type Task = {
     user: User | null;
     priority: Priority;
     due_date: string;
+    start_date: string;
     times: TimeTrack[];
     description: string;
     /**

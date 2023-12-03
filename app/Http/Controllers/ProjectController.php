@@ -83,12 +83,16 @@ class ProjectController extends Controller
         $sections = $project->sections()->get();
 
         foreach($sections as $section) {
-            $taskList = $project->tasks()->where('section_id', $section->id)->get();
+            $taskList = $project->tasks()->where('section_id', $section->id)->get()->sortBy('updated_at')->values()->all();
             foreach($taskList as $task) {
                 $user = $task->user()->first();
                 $priority = $task->priority()->first();
+                $times = $task->timeTrackers()->get();
+                $files = $task->files()->get();
                 $task->user = $user;
                 $task->priority = $priority;
+                $task->times = $times;
+                $task->files = $files;
             }
             $section->tasks = $taskList;
         }
@@ -123,19 +127,22 @@ class ProjectController extends Controller
 
     public function calendar(Workspace $workspace, Project $project) {
         $users = $workspace->user()->get();
-        foreach($users as $user) {
-            $tasks = $user->tasks()->get();
-            foreach($tasks as $task) {
-                $priority = $task->priority()->first();
-                $times = $task->timeTrackers()->get();
-                $task->priority = $priority;
-                $task->times = $times;
-            }
-            $user->tasks = $tasks;
+        $tasks = $project->tasks()->get();
+
+        foreach ($tasks as $task) {
+            $assignee = $task->user()->first();
+            $priority = $task->priority()->first();
+            $times = $task->timeTrackers()->get();
+            $files = $task->files()->get();
+            $task->user  = $assignee;
+            $task->priority = $priority;
+            $task->times = $times;
+            $task->files = $files;
         }
 
         return Inertia::render('Workspace/Project/Calendar', [
-            'users' => $users
+            'users' => $users,
+            'tasks' => $tasks
         ]);
     }
 
