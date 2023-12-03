@@ -23,7 +23,7 @@ export default function List() {
     const { showModal } = useModal();
 
     const handleCreateSection = () => {
-        showModal(<CreateSectionForm project={props.data.project} />, 'Create Section');
+        router.post(route('section.store', { project: props.data.project.id }))
     }
 
     return (
