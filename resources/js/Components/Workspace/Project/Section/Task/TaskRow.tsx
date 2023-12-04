@@ -12,14 +12,23 @@ import { Calendar } from "@/Components/Calendar";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { Badge } from "@/Components/Badge";
+import { Sheet, SheetTrigger } from "@/Components/Sheet";
+import { TaskSheet } from "./TaskSheet";
+import { useDebounce } from "@/hooks/useDebounce";
+import { SelectSingleEventHandler } from "react-day-picker";
 
 type TaskRowProps = {
     task: Task;
 }
 
 export function TaskRow({ task }: TaskRowProps) {
-    const { data: currTask, setData: setCurrTask } = useForm<Task>(task);
+    const [currTask, setCurrTask] = useState<Task>(task);
+    const [debouncedTask] = useDebounce(currTask, 1000);
     const [nameHovered, setNameHovered] = useState(false);
+
+    useEffect(() => {
+        router.patch(route('task.update', { task: task.id }), debouncedTask);
+    }, [debouncedTask])
 
     const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setCurrTask((prev) => {
@@ -28,14 +37,12 @@ export function TaskRow({ task }: TaskRowProps) {
     }
 
     const handleConfirmNameChange = () => {
-        // router.patch(route('task.update', { task: task.id }), { name: currTask.name });
     }
 
     const handleSelectAssignee = (user: User) => {
         setCurrTask((prev) => {
             return {...prev, user: user}
         });
-        // router.patch(route('task.update', { task: task.id }), { assignee_id: user.id });
     }
 
     const handleSelectPriority = (value: Priority) => {
@@ -43,29 +50,39 @@ export function TaskRow({ task }: TaskRowProps) {
             return {...prev, priority: value}
         });
     }
+
+    const handleSelectDueDate = (value: Date) => {
+        setCurrTask((prev) => {
+            return {...prev, due_date: new Date(value).toDateString()}
+        })
+    }
     
     return (
         <div className="w-full flex items-center text-textcolor text-sm font-thin hover:bg-bgactive">
-            <div className="w-[44rem] min-h-full border-y-[1px] border-r-[1px] border-bordercolor pl-10 flex items-center" onMouseEnter={() => setNameHovered(true)} onMouseLeave={() => setNameHovered(false)}>
+            <div className="flex w-[60%] items-center border-y-[1px] border-r-[1px] border-bordercolor pl-10" onMouseEnter={() => setNameHovered(true)} onMouseLeave={() => setNameHovered(false)}>
                 <TaskColumnName value={currTask.name || ''} onChange={handleNameChange} className="bg-inherit w-full p-[0.41rem] focus:bg-bgactive rounded-md select-none" onBlur={handleConfirmNameChange} />
                 {nameHovered ? (
-                    <Button className="h-7 px-2 text-xs text-bordercolor hover:bg-dark-gray">
-                        <CornerDownRight className="h-4" />
-                        Open
-                    </Button>
+                    <Sheet>
+                        <SheetTrigger asChild>
+                            <Button className="h-7 px-2 text-xs text-textcolor hover:bg-dark-gray">
+                                <CornerDownRight className="h-4" />
+                                Open
+                            </Button>
+                        </SheetTrigger>
+                        <TaskSheet task={task} />
+                    </Sheet>
                 ): null}
             </div>
-            <div className="w-40 min-h-full border-y-[1px] border-r-[1px] border-bordercolor">
-                <TaskColumnAssignee assignee={currTask.user} task={task} onSelect={handleSelectAssignee} />
-            </div>
-            <div className="w-40 min-h-full border-y-[1px] border-r-[1px] border-bordercolor">
-                <TaskColumnDueDate />
-            </div>
-            <div className="w-40 min-h-full border-y-[1px] border-r-[1px] border-bordercolor">
-                <TaskColumnPriority onSelect={handleSelectPriority} value={currTask.priority} />
-            </div>
-            <div className="grow min-h-full border-y-[1px] border-bordercolor">
-                <Plus className="h-5" />
+            <div className="grow grid grid-cols-3">
+                <div className=" border-y-[1px] border-r-[1px] border-bordercolor">
+                    <TaskColumnAssignee assignee={currTask.user} task={task} onSelect={handleSelectAssignee} />
+                </div>
+                <div className=" min-h-full border-y-[1px] border-r-[1px] border-bordercolor">
+                    <TaskColumnDueDate onSelect={handleSelectDueDate} task={task} />
+                </div>
+                <div className=" min-h-full border-y-[1px] border-r-[1px] border-bordercolor">
+                    <TaskColumnPriority onSelect={handleSelectPriority} value={currTask.priority} />
+                </div>
             </div>
         </div>
     )
@@ -150,22 +167,27 @@ export const TaskColumnAssignee = ({ assignee, onSelect = () => {} }: TaskColumn
     )
 }
 
-export const TaskColumnDueDate = () => {
-    const [date, setDate] = useState<Date>();
+export const TaskColumnDueDate = ({ onSelect = () => {}, task }: { onSelect?: (date:Date) => void; task: Task }) => {
     const { props } = usePage<PageProps<ProjectViewProps>>();
+    const [date, setDate] = useState<Date>(new Date(task.due_date));
+
+    const handleSelectDate = (date: Date) => {
+        onSelect?.(date);
+        setDate(date);
+    }
 
     return (
         <Popover>
             <PopoverTrigger asChild>
                 <Button className="text-textcolor font-thin items-center w-full justify-start">
-                    {date ? format(date, "PPP") : <span>Pick Date</span>}
+                    {task.due_date ? format(date, "PPP") : <span>Pick Date</span>}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="bg-nav text-textweak p-0 border-bordercolor w-auto">
                 <Calendar 
                     mode="single"
                     selected={date}
-                    onSelect={setDate}
+                    onSelect={handleSelectDate as SelectSingleEventHandler}
                     initialFocus
                 />
             </PopoverContent>
