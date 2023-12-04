@@ -11,10 +11,11 @@ import { TaskCard } from "@/Components/Workspace/Project/Section/Task/TaskCard";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import TaskTrackerContextProvider from "@/TaskTrackerProvider";
 import { PageProps, Section, Task, User } from "@/types";
+import { cn } from "@/utils";
 import { router, usePage } from "@inertiajs/react";
 import { ContextMenuItem } from "@radix-ui/react-context-menu";
 import { format } from "date-fns";
-import { ArrowRightLeft, Plus, Trash, User as UserIcon } from "lucide-react";
+import { ArrowRightLeft, Plus, Trash, User as UserIcon, X } from "lucide-react";
 import { useState } from "react";
 
 type BoardPageProps = {
@@ -28,6 +29,16 @@ export default function Board() {
     const [selectedUser, setSelectedUser] = useState<User[]>([]);
     const [openAssigneeFilter, setOpenAssigneeFilter] = useState(false);
 
+    const selectedUserId = selectedUser.map((val) => val.id);
+
+    const filteredSections = selectedUser.length > 0 ? props.sections.map((val) => {
+        return {...val, tasks: val.tasks.filter((val) => {
+            if (!val.user) return false;
+
+            return selectedUserId.includes(val.user.id);
+        })}
+    }): props.sections;
+
     const handleCreateSection = () => {
         router.post(route('section.store', { project: props.data.project.id }));
     }
@@ -38,9 +49,16 @@ export default function Board() {
                 <div className="flex items-center p-3 border-b-[1px] border-bordercolor bg-dark-gray">
                     <Popover open={openAssigneeFilter} onOpenChange={setOpenAssigneeFilter}>
                         <PopoverTrigger asChild>
-                            <Button className="h-7 px-2 hover:bg-bgactive outline outline-1 outline-bordercolor">
+                            <Button className={cn(
+                                "h-7 px-2 outline outline-1 outline-bordercolor text-textweak gap-1",
+                                selectedUser.length > 0 && "outline-blue text-blue"
+                            )}>
                                 <UserIcon className="h-5" />
                                 Person
+                                {selectedUser.length > 0 ? <span>{selectedUser.length}</span> : null}
+                                {selectedUser.length > 0 ? (
+                                    <X className="h-3 rounded-md hover:bg-bgactive" onClick={() => setSelectedUser([])} />
+                                ): null}
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="p-0 bg-dark-gray border-bordercolor">
@@ -50,6 +68,7 @@ export default function Board() {
                                 <CommandGroup>
                                     {props.data.members.map((member) => {
                                         const handleAssigneeSelect = () => {
+                                            setSelectedUser((prev) => [...prev, member]);
                                             setOpenAssigneeFilter(false);
                                         }
 
@@ -68,7 +87,7 @@ export default function Board() {
                     </Popover>
                 </div>
                 <div className="text-textcolor px-4 py-2 flex gap-1">
-                    {props.sections.map((section) => {
+                    {filteredSections.map((section) => {
                         const handleAddTask = () => {
                             router.post(route('task.store', { project: props.data.project.id, section: section.id }))
                         }

@@ -4,7 +4,7 @@ import { usePage } from "@inertiajs/react";
 import { PageProps, Task, WorkloadUser } from "@/types";
 import { ProjectViewProps } from "../ProjectViewLayout";
 
-export function CalendarView({date}: { date: Date }) {
+export function CalendarView({date, tasks}: { date: Date, tasks: Task[] }) {
     const monthStart = startOfMonth(date);
     const monthEnd = endOfMonth(date);
     const daysOfMonth = eachDayOfInterval({ start: monthStart, end: monthEnd });
@@ -37,14 +37,14 @@ export function CalendarView({date}: { date: Date }) {
             <div className="grid grid-cols-7">
                 {prevMonthDays.map((day, index) => {
                     return (
-                        <CalendarDayCell date={day} key={index}>
+                        <CalendarDayCell tasks={tasks} date={day} key={index}>
                             {/* {day.toDateString()} */}
                         </CalendarDayCell>
                     )
                 })}
                 {daysOfMonth.map((day, index) => {
                     return (
-                        <CalendarDayCell key={index} date={day}>
+                        <CalendarDayCell tasks={tasks} key={index} date={day}>
                             {/* {day.toDateString()} */}
                         </CalendarDayCell>
                     )
