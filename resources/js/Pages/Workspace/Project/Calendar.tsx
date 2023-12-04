@@ -14,8 +14,17 @@ import { useState } from "react";
 export default function Calendar() {
     const { props } = usePage<PageProps<ProjectViewProps & { users: WorkloadUser[], tasks: Task[] }>>();
     const [date, setDate] = useState<Date>(new Date);
-    const [users, setUsers] = useState<WorkloadUser[]>(props.users);
     const [open, setOpen] = useState(false);
+    const [users, setUsers] = useState<WorkloadUser[]>([]);
+    const filteredUsersId = users.map((val) => val.id);
+
+    const filteredTasks = users.length > 0 ? props.tasks.filter((val) => {
+        if (!val.user) return false;
+
+        return filteredUsersId.includes(val.user.id)
+    }): props.tasks;
+
+    console.log({users, filteredTasks});
 
     return (
         <Authenticated user={props.auth.user} workspaces={props.workspaceList} projects={props.data.projectList} currentWorkspace={props.data.workspace} >
@@ -39,10 +48,7 @@ export default function Calendar() {
                                         </div>
                                         {props.users.map((member) => {
                                             const handleSelect = () => {
-                                                setUsers((prev) => {
-                                                    const filteredUsers = props.users.filter((value) => value.id === member.id);
-                                                    return filteredUsers
-                                                })
+                                                setUsers((prev) => [...prev, member]);
                                                 setOpen(false);
                                             }
 
@@ -87,7 +93,7 @@ export default function Calendar() {
                         <div>{format(date, "MMMM")}{' '}{format(date, "yyyy")}</div>
                     </div>
                 </div>
-                <CalendarView date={date} />
+                <CalendarView date={date} tasks={filteredTasks} />
             </ProjectViewLayout>
         </Authenticated>
     )

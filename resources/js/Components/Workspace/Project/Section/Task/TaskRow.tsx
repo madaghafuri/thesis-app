@@ -27,7 +27,7 @@ export function TaskRow({ task }: TaskRowProps) {
     const [nameHovered, setNameHovered] = useState(false);
 
     useEffect(() => {
-        router.patch(route('task.update', { task: task.id }), debouncedTask);
+        router.patch(route('task.update', { task: task.id }), debouncedTask as any);
     }, [debouncedTask])
 
     const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {

@@ -6,12 +6,13 @@ import { eachDayOfInterval, endOfMonth, isAfter, isBefore, startOfMonth } from "
 import { CalendarTaskItem } from "./CalendarTaskItem";
 
 type Props = {
-    date: Date
+    date: Date;
+    tasks: Task[];
 }
 
-export function CalendarDayCell({children, date}: PropsWithChildren<Props>) {
+export function CalendarDayCell({children, date, tasks}: PropsWithChildren<Props>) {
     const { props } = usePage<PageProps<ProjectViewProps & { users: WorkloadUser[], tasks: Task[] }>>();
-    const taskList = props.tasks.filter((task) => {
+    const taskList = tasks.filter((task) => {
         if (task.start_date === null || task.due_date === null || isBefore(new Date(task.due_date), new Date(task.start_date)) || isAfter(new Date(task.start_date), new Date(task.due_date))) return false;
 
         const dayRange = eachDayOfInterval({
