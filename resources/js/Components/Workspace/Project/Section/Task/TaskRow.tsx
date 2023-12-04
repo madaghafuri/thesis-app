@@ -59,7 +59,7 @@ export function TaskRow({ task }: TaskRowProps) {
     
     return (
         <div className="w-full flex items-center text-textcolor text-sm font-thin hover:bg-bgactive">
-            <div className="w-[44rem] min-h-full border-y-[1px] border-r-[1px] border-bordercolor pl-10 flex items-center" onMouseEnter={() => setNameHovered(true)} onMouseLeave={() => setNameHovered(false)}>
+            <div className="flex w-[60%] items-center border-y-[1px] border-r-[1px] border-bordercolor pl-10" onMouseEnter={() => setNameHovered(true)} onMouseLeave={() => setNameHovered(false)}>
                 <TaskColumnName value={currTask.name || ''} onChange={handleNameChange} className="bg-inherit w-full p-[0.41rem] focus:bg-bgactive rounded-md select-none" onBlur={handleConfirmNameChange} />
                 {nameHovered ? (
                     <Sheet>
@@ -73,17 +73,16 @@ export function TaskRow({ task }: TaskRowProps) {
                     </Sheet>
                 ): null}
             </div>
-            <div className="w-40 min-h-full border-y-[1px] border-r-[1px] border-bordercolor">
-                <TaskColumnAssignee assignee={currTask.user} task={task} onSelect={handleSelectAssignee} />
-            </div>
-            <div className="w-40 min-h-full border-y-[1px] border-r-[1px] border-bordercolor">
-                <TaskColumnDueDate onSelect={handleSelectDueDate} task={task} />
-            </div>
-            <div className="w-40 min-h-full border-y-[1px] border-r-[1px] border-bordercolor">
-                <TaskColumnPriority onSelect={handleSelectPriority} value={currTask.priority} />
-            </div>
-            <div className="grow min-h-full border-y-[1px] border-bordercolor">
-                <Plus className="h-5" />
+            <div className="grow grid grid-cols-3">
+                <div className=" border-y-[1px] border-r-[1px] border-bordercolor">
+                    <TaskColumnAssignee assignee={currTask.user} task={task} onSelect={handleSelectAssignee} />
+                </div>
+                <div className=" min-h-full border-y-[1px] border-r-[1px] border-bordercolor">
+                    <TaskColumnDueDate onSelect={handleSelectDueDate} task={task} />
+                </div>
+                <div className=" min-h-full border-y-[1px] border-r-[1px] border-bordercolor">
+                    <TaskColumnPriority onSelect={handleSelectPriority} value={currTask.priority} />
+                </div>
             </div>
         </div>
     )
