@@ -51,7 +51,7 @@ export default function List() {
                                 "flex items-center gap-1 h-7 px-2 outline outline-1 outline-bordercolor text-textweak",
                                 selectedUsers.length > 0 && "outline-blue text-blue"
                             )}>
-                                <UserIcon className="h-5" />
+                                <UserIcon className="h-4" />
                                 Person
                                 {selectedUsers.length > 0 ? <span>{selectedUsers.length}</span> : null}
                                 {selectedUsers.length > 0 ? (
@@ -66,6 +66,7 @@ export default function List() {
                                 <CommandGroup>
                                     {props.data.members.map((member) => {
                                         const handleMemberSelect = () => {
+                                            if (selectedUsersId.includes(member.id)) return
                                             setSelectedUser((prev) => [...prev, member]);
                                             setOpen(false);
                                         }

@@ -1,9 +1,11 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-import { PageProps } from '@/types';
+import { Head, usePage } from '@inertiajs/react';
+import { PageProps, Task } from '@/types';
+import { ProjectViewProps } from '@/Components/Workspace/Project/ProjectViewLayout';
 
 export default function Dashboard({ auth, workspaceList }: PageProps) {
-    console.log({ workspaceList });
+    const { props } = usePage<PageProps<ProjectViewProps & { tasks: Task[] }>>();
+    console.log(props.tasks);
 
     return (
         <AuthenticatedLayout

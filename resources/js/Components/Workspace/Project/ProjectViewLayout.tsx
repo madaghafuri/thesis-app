@@ -34,11 +34,11 @@ function ViewLayoutHeader() {
             <div className="grow">
                 <h1 className="text-xl">{props.data.project.name}</h1>
                 <section className="flex text-lg gap-1">
-                    <NavLink href={route('project.list', { workspace: data.workspace.id, project: data.workspace.id })} active={route().current('project.list', { workspace: data.workspace.id, project: data.project.id })} >
+                    <NavLink href={route('project.list', { workspace: data.workspace.id, project: data.project.id })} active={route().current('project.list', { workspace: data.workspace.id, project: data.project.id })} >
                         <ScrollText className="h-4" />
                         List
                     </NavLink>
-                    <NavLink href={route('project.board', { workspace: data.workspace.id, project: data.workspace.id })} active={route().current('project.board', { workspace: data.workspace.id, project: data.project.id })} >
+                    <NavLink href={route('project.board', { workspace: data.workspace.id, project: data.project.id })} active={route().current('project.board', { workspace: data.workspace.id, project: data.project.id })} >
                         <KanbanSquare className="h-4" />
                         Board
                     </NavLink>

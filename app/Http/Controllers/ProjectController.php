@@ -147,11 +147,16 @@ class ProjectController extends Controller
     }
 
     public function dashboard(Workspace $workspace, Project $project) {
-        return Inertia::render('Workspace/Project/Dashboard');
+        $tasks = $project->tasks()->get();
+
+        return Inertia::render('Workspace/Project/Dashboard', [
+            'tasks' => $tasks
+        ]);
     }
 
     public function workload(Workspace $workspace, Project $project) {
         $users = $workspace->user()->get();
+        $tasks = $project->tasks()->get();
         foreach($users as $user) {
             $tasks = $user->tasks()->get();
             foreach($tasks as $task) {

@@ -4,7 +4,7 @@ import { PageProps, Priority, Task, User } from "@/types"
 import { cn } from "@/utils";
 import { router, useForm, usePage } from "@inertiajs/react";
 import { CornerDownRight, Plus } from "lucide-react";
-import { ChangeEvent, InputHTMLAttributes, useEffect, useRef, useState } from "react";
+import { ChangeEvent, InputHTMLAttributes, useCallback, useEffect, useRef, useState } from "react";
 import { ProjectViewProps } from "../../ProjectViewLayout";
 import { Button } from "@/Components/Button";
 import { Avatar, AvatarFallback, } from "@/Components/Avatar";
@@ -26,9 +26,13 @@ export function TaskRow({ task }: TaskRowProps) {
     const [debouncedTask] = useDebounce(currTask, 1000);
     const [nameHovered, setNameHovered] = useState(false);
 
-    useEffect(() => {
+    const patchTask = useCallback(() => {
         router.patch(route('task.update', { task: task.id }), debouncedTask as any);
-    }, [debouncedTask])
+    }, [])
+    
+    useEffect(() => {
+        patchTask();
+    }, [patchTask])
 
     const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setCurrTask((prev) => {

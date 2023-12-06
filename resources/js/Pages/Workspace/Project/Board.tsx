@@ -53,7 +53,7 @@ export default function Board() {
                                 "h-7 px-2 outline outline-1 outline-bordercolor text-textweak gap-1",
                                 selectedUser.length > 0 && "outline-blue text-blue"
                             )}>
-                                <UserIcon className="h-5" />
+                                <UserIcon className="h-4" />
                                 Person
                                 {selectedUser.length > 0 ? <span>{selectedUser.length}</span> : null}
                                 {selectedUser.length > 0 ? (
