@@ -8,7 +8,7 @@ export default function Dashboard() {
 
     return (
         <Authenticated user={props.auth.user} workspaces={props.workspaceList} projects={props.data.projectList} currentWorkspace={props.data.workspace} >
-            <ProjectViewLayout>
+            <ProjectViewLayout >
                 <div className="text-textcolor">
                     Dashboard Content
                 </div>
