@@ -40,6 +40,7 @@ export type Section = {
     created_at: string;
     updated_at: string;
     tasks: Task[]
+    taskCount?: number
 }
 
 export type Task = {
@@ -89,4 +90,13 @@ export type Files = {
     fileName: string;
     created_at: string;
     updated_at: string;
+}
+
+export type Log = {
+    id: number;
+    project_id: number;
+    task_id: number;
+    user_id: number;
+    task: Task;
+    user: User;
 }

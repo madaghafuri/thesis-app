@@ -33,6 +33,10 @@ class Task extends Model
         return $this->hasMany(TaskFiles::class);
     }
 
+    public function logs() {
+        return $this->hasMany(TaskLog::class);
+    }
+
     protected $fillable = [
         'user_id',
         'project_id',
