@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\Section;
+use App\Models\TaskLog;
 use App\Models\Workspace;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 use function Laravel\Prompts\error;
@@ -147,10 +149,36 @@ class ProjectController extends Controller
     }
 
     public function dashboard(Workspace $workspace, Project $project) {
-        $tasks = $project->tasks()->get();
+        $sections = $project->sections()->get();
+        $taskList = $project->tasks()->get()->sortByDesc('updated_at')->values()->all();
+        $taskLogs = $project->logs()->get()->sortByDesc('created_at')->values()->all();
+
+        foreach($sections as $section) {
+            $tasks = $section->tasks()->get();
+            $taskCount = $tasks->count();
+            $section->taskCount = $taskCount;
+        }
+
+        foreach($taskLogs as $log) {
+            $log->user = $log->user()->first();
+            $log->task = $log->task()->first();
+        }
+
+        foreach($taskList as $task) {
+            $user = $task->user()->first();
+            $priority = $task->priority()->first();
+            $times = $task->timeTrackers()->get();
+            $files = $task->files()->get();
+            $task->user = $user;
+            $task->priority = $priority;
+            $task->times = $times;
+            $task->files = $files;
+        }
 
         return Inertia::render('Workspace/Project/Dashboard', [
-            'tasks' => $tasks
+            'sections' => $sections,
+            'tasks' => $taskList,
+            'logs' => $taskLogs
         ]);
     }
 

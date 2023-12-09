@@ -198,6 +198,7 @@ export default function Authenticated({ user, header, children, workspaces, curr
                                                 || route().current('project.board', { workspace: project.workspace_id, project: project.id })
                                                 || route().current('project.calendar', { workspace: project.workspace_id, project: project.id })
                                                 || route().current('project.workload', { workspace: project.workspace_id, project: project.id })
+                                                || route().current('project.dashboard', { workspace: project.workspace_id, project: project.id })
                                             }
                                                 href={route('workspaces.projects.show', { workspace: project.workspace_id, project: project.id })}
                                             >

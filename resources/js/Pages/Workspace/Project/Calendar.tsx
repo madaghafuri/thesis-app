@@ -30,7 +30,7 @@ export default function Calendar() {
         <Authenticated user={props.auth.user} workspaces={props.workspaceList} projects={props.data.projectList} currentWorkspace={props.data.workspace} >
             <ProjectViewLayout>
                 <div className="flex items-center p-3">
-                    <div className="grid grid-cols-2 gap-2 items-center mr-2">
+                    <div className="grid grid-cols-1 gap-2 items-center mr-2">
                         <Popover open={open} onOpenChange={setOpen}>
                             <PopoverTrigger asChild>
                                 <Button className="h-8 px-2 hover:bg-bgactive font-thin text-textweak" variant="outline">
@@ -70,10 +70,6 @@ export default function Calendar() {
                                 </Command>
                             </PopoverContent>
                         </Popover>
-                        <Button className="h-8 px-2 hover:bg-bgactive font-thin text-textweak" variant="outline">
-                            <Filter className="h-4" />
-                            Filter
-                        </Button>
                     </div>
                     <span> | </span>
                     <div className="flex gap-2 ml-2 items-center">

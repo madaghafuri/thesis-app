@@ -31,7 +31,6 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        Log::info($request);
 
         return [
             ...parent::share($request),
