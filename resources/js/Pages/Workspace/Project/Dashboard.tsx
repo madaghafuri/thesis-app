@@ -1,14 +1,16 @@
 import { Avatar, AvatarFallback } from "@/Components/Avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/Card";
 import { Echart } from "@/Components/EChart";
+import { ScrollArea } from "@/Components/ScrollArea";
 import { LogItem } from "@/Components/Workspace/Project/Dashboard/LogItem";
 import { ProjectViewLayout, ProjectViewProps } from "@/Components/Workspace/Project/ProjectViewLayout";
+import { TaskCard } from "@/Components/Workspace/Project/Section/Task/TaskCard";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Log, PageProps, Section, Task } from "@/types";
 import { usePage } from "@inertiajs/react";
 
 export default function Dashboard() {
-    const { props } = usePage<PageProps<ProjectViewProps & { sections: Section[]; logs: Log[] }>>();
+    const { props } = usePage<PageProps<ProjectViewProps & { sections: Section[]; logs: Log[]; tasks: Task[] }>>();
     const data: { value: number | undefined; name: string }[] = props.sections.map((val) => {
         return { value: val.taskCount, name: val.name }
     })
@@ -72,11 +74,13 @@ export default function Dashboard() {
                             <CardTitle>Activity</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            {props.logs.map((log) => {
-                                return (
-                                    <LogItem taskLog={log} />
-                                )
-                            })}
+                            <ScrollArea className="h-96">
+                                {props.logs.map((log) => {
+                                    return (
+                                        <LogItem taskLog={log} />
+                                    )
+                                })}
+                            </ScrollArea>
                         </CardContent>
                     </Card>
                     <Card className="border-bordercolor">
@@ -84,7 +88,13 @@ export default function Dashboard() {
                             <CardTitle>Recent Tasks</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p>Hello World</p>
+                            <ScrollArea className="h-96">
+                                {props.tasks.map((task) => {
+                                    return (
+                                        <TaskCard task={task} />
+                                    )
+                                })}
+                            </ScrollArea>
                         </CardContent>
                     </Card>
                     <Card className="border-bordercolor">
