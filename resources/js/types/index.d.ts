@@ -99,4 +99,7 @@ export type Log = {
     user_id: number;
     task: Task;
     user: User;
+    event: string;
+    created_at: string;
+    updated_at: string;
 }

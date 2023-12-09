@@ -150,8 +150,8 @@ class ProjectController extends Controller
 
     public function dashboard(Workspace $workspace, Project $project) {
         $sections = $project->sections()->get();
-        $taskList = $project->tasks()->get();
-        $taskLogs = $project->logs()->get();
+        $taskList = $project->tasks()->get()->sortByDesc('updated_at')->values()->all();
+        $taskLogs = $project->logs()->get()->sortByDesc('created_at')->values()->all();
 
         foreach($sections as $section) {
             $tasks = $section->tasks()->get();

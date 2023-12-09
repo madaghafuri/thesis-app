@@ -1,13 +1,14 @@
 import { Avatar, AvatarFallback } from "@/Components/Avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/Card";
 import { Echart } from "@/Components/EChart";
+import { LogItem } from "@/Components/Workspace/Project/Dashboard/LogItem";
 import { ProjectViewLayout, ProjectViewProps } from "@/Components/Workspace/Project/ProjectViewLayout";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import { PageProps, Section, Task } from "@/types";
+import { Log, PageProps, Section, Task } from "@/types";
 import { usePage } from "@inertiajs/react";
 
 export default function Dashboard() {
-    const { props } = usePage<PageProps<ProjectViewProps & { sections: Section[] }>>();
+    const { props } = usePage<PageProps<ProjectViewProps & { sections: Section[]; logs: Log[] }>>();
     const data: { value: number | undefined; name: string }[] = props.sections.map((val) => {
         return { value: val.taskCount, name: val.name }
     })
@@ -71,7 +72,11 @@ export default function Dashboard() {
                             <CardTitle>Activity</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p>Hello World</p>
+                            {props.logs.map((log) => {
+                                return (
+                                    <LogItem taskLog={log} />
+                                )
+                            })}
                         </CardContent>
                     </Card>
                     <Card className="border-bordercolor">
