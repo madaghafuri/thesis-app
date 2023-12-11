@@ -35,8 +35,6 @@ export default function List() {
         })}
     }): props.sections;
 
-    console.log(props.sections);
-
     const handleCreateSection = () => {
         router.post(route('section.store', { project: props.data.project.id }))
     }
@@ -73,8 +71,8 @@ export default function List() {
 
                                         return (
                                             <CommandItem key={member.id} onSelect={handleMemberSelect} className="flex items-center gap-2 text-textcolor hover:bg-bgactive">
-                                                <Avatar>
-                                                    <AvatarFallback className="bg-blue">{member.name[0].toUpperCase()}</AvatarFallback>
+                                                <Avatar style={{ backgroundColor: member.color }}>
+                                                    <AvatarFallback>{member.name[0].toUpperCase()}</AvatarFallback>
                                                 </Avatar>
                                                 {member.name}
                                             </CommandItem>

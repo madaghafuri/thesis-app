@@ -14,8 +14,6 @@ type ShowPageProps = {
 export default function Show({ auth, workspaceList }: PageProps) {
     const { props } = usePage<ShowPageProps>();
 
-    console.log({ props });
-
     return (
         <Authenticated user={auth.user} currentWorkspace={props.data.workspace} workspaces={workspaceList} projects={props.data.projectList}>
             <ProjectViewLayout>

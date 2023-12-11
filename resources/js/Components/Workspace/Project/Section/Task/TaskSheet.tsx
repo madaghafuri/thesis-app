@@ -165,7 +165,6 @@ export function TaskSheet({task}: { task: Task }) {
 
             router.post(route('task.files', { task: task.id }), formData, {
                 onProgress: (progress) => {
-                    console.log(progress);
                 },
                 onError: (error) => {
                     console.log(error);
@@ -210,7 +209,7 @@ export function TaskSheet({task}: { task: Task }) {
                                         <AccordionTrigger>
                                             <div className="grid grid-cols-2 items-center text-sm mt-3">
                                                 {task.user ? (
-                                                    <Avatar className="bg-yellow text-black">
+                                                    <Avatar style={{ backgroundColor: task.user.color }} className="text-black">
                                                         <AvatarFallback>M</AvatarFallback>
                                                     </Avatar>
                                                 ): (
@@ -261,8 +260,8 @@ export function TaskSheet({task}: { task: Task }) {
                                 <PopoverTrigger>
                                     {taskData.user ? (
                                         <div className="flex items-center gap-2 rounded-md hover:bg-bgactive p-2 w-fit">
-                                            <Avatar>
-                                                <AvatarFallback className="bg-yellow text-black">{taskData.user.name[0].toUpperCase()}</AvatarFallback>
+                                            <Avatar style={{ backgroundColor: taskData.user.color }}>
+                                                <AvatarFallback className="text-black">{taskData.user.name[0].toUpperCase()}</AvatarFallback>
                                             </Avatar>
                                             {taskData.user.name}
                                         </div>
@@ -295,8 +294,8 @@ export function TaskSheet({task}: { task: Task }) {
                                                     className="text-textcolor gap-2 hover:bg-bgactive"
                                                     onSelect={handleSelectAssignee}
                                                 >
-                                                    <Avatar>
-                                                        <AvatarFallback className="bg-yellow text-black">{member.name[0].toUpperCase()}</AvatarFallback>
+                                                    <Avatar style={{ backgroundColor: member.color }}>
+                                                        <AvatarFallback className="text-black">{member.name[0].toUpperCase()}</AvatarFallback>
                                                     </Avatar>
                                                     {member.name}
                                                 </CommandItem>

@@ -127,8 +127,8 @@ export const TaskColumnAssignee = ({ assignee, onSelect = () => {} }: TaskColumn
                 <Button className="w-full justify-start gap-2" role="combobox">
                     {assignee?.name ? (
                         <>
-                            <Avatar>
-                                <AvatarFallback className="bg-blue text-textcolor" >{props.data.members.find((value) => value.id === assignee.id)?.name[0]}</AvatarFallback>
+                            <Avatar style={{ backgroundColor: assignee.color }}>
+                                <AvatarFallback className="text-black" >{props.data.members.find((value) => value.id === assignee.id)?.name[0]}</AvatarFallback>
                             </Avatar>
                             {props.data.members.find((value) => value.id === assignee.id)?.name}
                         </>
@@ -157,8 +157,8 @@ export const TaskColumnAssignee = ({ assignee, onSelect = () => {} }: TaskColumn
                                         onSelect={handleSelect}
                                         className="gap-2 hover:bg-bgactive"
                                     >
-                                        <Avatar>
-                                            <AvatarFallback className="bg-blue text-textcolor">{member.name[0].toUpperCase()}</AvatarFallback>
+                                        <Avatar style={{ backgroundColor: member.color }}>
+                                            <AvatarFallback className="text-black">{member.name[0].toUpperCase()}</AvatarFallback>
                                         </Avatar>
                                         {member.name}
                                     </CommandItem>

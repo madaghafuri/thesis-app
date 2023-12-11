@@ -13,8 +13,6 @@ type Props = {
 export function EventBlock({ startDate = new Date(), endDate = new Date(), task, dayWidth }: Props) {
     const { leftPos, rangeDurationWidth } = useTaskSize(startDate, endDate, dayWidth);
 
-    console.log(task);
-
     return (
         <div
             className={`text-textcolor h-10 relative`}

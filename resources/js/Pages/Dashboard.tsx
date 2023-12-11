@@ -5,7 +5,6 @@ import { ProjectViewProps } from '@/Components/Workspace/Project/ProjectViewLayo
 
 export default function Dashboard({ auth, workspaceList }: PageProps) {
     const { props } = usePage<PageProps<ProjectViewProps & { tasks: Task[] }>>();
-    console.log(props.tasks);
 
     return (
         <AuthenticatedLayout
