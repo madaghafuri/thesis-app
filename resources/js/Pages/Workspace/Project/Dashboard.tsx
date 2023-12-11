@@ -15,8 +15,6 @@ export default function Dashboard() {
         return { value: val.taskCount, name: val.name }
     })
 
-    console.log(props.logs);
-
     return (
         <Authenticated user={props.auth.user} workspaces={props.workspaceList} projects={props.data.projectList} currentWorkspace={props.data.workspace} >
             <ProjectViewLayout >
@@ -105,7 +103,7 @@ export default function Dashboard() {
                             {props.data.members.map((member) => {
                                 return (
                                     <div className="flex items-center gap-2">
-                                        <Avatar className="bg-blue">
+                                        <Avatar style={{ backgroundColor: member.color }} className="text-black">
                                             <AvatarFallback>{member.name[0].toUpperCase()}</AvatarFallback>
                                         </Avatar>
                                         {member.name}

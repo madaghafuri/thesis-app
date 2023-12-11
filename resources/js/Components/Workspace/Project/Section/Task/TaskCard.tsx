@@ -24,7 +24,7 @@ export function TaskCard({ task, }: { task: Task }) {
                             <div className="flex items-center gap-3">
                                 {task.user ? (
                                     <Avatar>
-                                        <AvatarFallback className="bg-blue">{task.user.name[0]}</AvatarFallback>
+                                        <AvatarFallback style={{ backgroundColor: task.user.color}} className="text-black">{task.user.name[0]}</AvatarFallback>
                                     </Avatar>
                                 )
                                 : (

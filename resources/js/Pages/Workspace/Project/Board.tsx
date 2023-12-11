@@ -74,8 +74,8 @@ export default function Board() {
 
                                         return (
                                             <CommandItem key={member.id} className="gap-2 hover:bg-bgactive" onSelect={handleAssigneeSelect}>
-                                                <Avatar>
-                                                    <AvatarFallback className="bg-blue text-white">{member.name[0].toUpperCase()}</AvatarFallback>
+                                                <Avatar style={{ backgroundColor: member.color }}>
+                                                    <AvatarFallback className="text-white">{member.name[0].toUpperCase()}</AvatarFallback>
                                                 </Avatar>
                                                 {member.name}
                                             </CommandItem>

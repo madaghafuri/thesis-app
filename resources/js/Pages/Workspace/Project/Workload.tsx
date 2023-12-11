@@ -68,7 +68,7 @@ export default function Workload() {
                         <div className="flex items-center border-bordercolor border-[1px] h-full ">
                             <div className="w-1/6 h- px-4 py-2 text-textcolor">
                                 <div className="flex items-center gap-2">
-                                    <Avatar className="bg-yellow text-black">
+                                    <Avatar style={{ backgroundColor: member.color }} className="text-black">
                                         <AvatarFallback>
                                             {member.name[0].toUpperCase()}
                                         </AvatarFallback>

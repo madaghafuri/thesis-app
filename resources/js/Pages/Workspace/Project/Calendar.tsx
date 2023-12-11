@@ -24,8 +24,6 @@ export default function Calendar() {
         return filteredUsersId.includes(val.user.id)
     }): props.tasks;
 
-    console.log({users, filteredTasks});
-
     return (
         <Authenticated user={props.auth.user} workspaces={props.workspaceList} projects={props.data.projectList} currentWorkspace={props.data.workspace} >
             <ProjectViewLayout>
@@ -59,8 +57,8 @@ export default function Calendar() {
                                                     onSelect={handleSelect}
                                                     className="gap-2 hover:bg-bgactive"
                                                 >
-                                                    <Avatar>
-                                                        <AvatarFallback className="bg-blue text-textcolor" >{member.name[0].toUpperCase()}</AvatarFallback>
+                                                    <Avatar style={{ backgroundColor: member.color }}>
+                                                        <AvatarFallback className="text-textcolor" >{member.name[0].toUpperCase()}</AvatarFallback>
                                                     </Avatar>
                                                     {member.name}
                                                 </CommandItem>

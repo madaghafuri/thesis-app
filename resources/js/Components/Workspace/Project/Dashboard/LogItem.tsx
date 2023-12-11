@@ -11,7 +11,7 @@ export function LogItem({ taskLog }: LogItemProps) {
 
     return (
         <div className="py-2 flex items-center gap-3">
-            <Avatar className="bg-blue">
+            <Avatar style={{ backgroundColor: taskLog.user.color }} className="text-black">
                 <AvatarFallback>{taskLog.user.name[0].toUpperCase()}</AvatarFallback>
             </Avatar>
             <div>
