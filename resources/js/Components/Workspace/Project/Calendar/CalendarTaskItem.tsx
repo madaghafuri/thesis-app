@@ -8,7 +8,7 @@ export function CalendarTaskItem({task}: { task: Task }) {
         <Fragment>
             <Sheet>
                 <SheetTrigger>
-                    <div className="rounded-md p-2 bg-neptune text-black text-xs font-thin hover:bg-neptune/30 text-left">
+                    <div style={{ backgroundColor: task.user?.color || '#74bfbb' }} className="rounded-md p-2 text-black text-xs font-thin hover:bg-neptune/30 text-left">
                         {task.name}
                     </div>
                 </SheetTrigger>
