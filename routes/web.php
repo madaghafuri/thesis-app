@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\DownloadFileController;
+use App\Http\Controllers\Auth\ProviderController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -12,12 +12,12 @@ use App\Http\Controllers\WorkspaceController;
 use App\Http\Middleware\HandleProjectViewRequest;
 use App\Models\User;
 use App\Models\Workspace;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -112,5 +112,10 @@ Route::post('/time-tracker/{task}/stop', [TimeTrackerController::class, 'stopTra
 
 Route::post('/invitation', [InvitationController::class, 'sendInvitation'])->name('email.invite');
 Route::get('/invitation/{token}', [InvitationController::class, 'acceptInvitation'])->name('invite.accept');
+
+//Google Auth Route
+Route::get('/auth/redirect', [ProviderController::class, 'redirect'])->name('auth.redirect');
+
+Route::get('/auth/callback', [ProviderController::class, 'callback'])->name('auth.callback');
 
 require __DIR__.'/auth.php';
