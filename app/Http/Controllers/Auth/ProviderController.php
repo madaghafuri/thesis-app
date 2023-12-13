@@ -6,13 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 use Laravel\Socialite\Facades\Socialite;
 
 class ProviderController extends Controller
 {
     //
     public function redirect() {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')->with(['state' => Request::query('workspace_id')])->redirect();
     }
 
     public $availableColors = [
@@ -25,18 +26,23 @@ class ProviderController extends Controller
     ];
 
     public function callback() {
-        $googleUser = Socialite::driver('google')->user();
+        $googleUser = Socialite::driver('google')->stateless()->user();
 
         // ddd($googleUser);
+
         $user = User::updateOrCreate([
             'provider_id' => $googleUser->id,
         ], [
             'name' => $googleUser->name,
             'email' => $googleUser->email,
             'provider_token' => $googleUser->token,
-            'color' => $this->availableColors[array_rand($this->availableColors)],
             'avatar' => $googleUser->avatar,
+            'color' => $this->availableColors[array_rand($this->availableColors)]
         ]);
+
+        if (Request::input('state') != null) {
+            $user->workspace()->attach(Request::input('state'));
+        }
 
         $user->workspace()->create([
             'title' => $user->name."'s Workspace"
