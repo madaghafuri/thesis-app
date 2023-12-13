@@ -5,6 +5,8 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { Button } from '@/Components/Button';
+import GoogleIcon from '@/assets/google.svg?react';
 
 export default function Register({ invited_workspace_id }: { invitation_token: string; invited_workspace_id: number; }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -113,6 +115,20 @@ export default function Register({ invited_workspace_id }: { invitation_token: s
                     </PrimaryButton>
                 </div>
             </form>
+            <div className='relative py-4'>
+                <div className='absolute inset-0 flex items-center'>
+                    <span className='w-full border-t'/>
+                </div>
+                <div className='relative flex justify-center text-xs text-white uppercase'>
+                    <span className='bg-gray-800 px-2'>Or continue with</span>
+                </div>
+            </div>
+            <a href={route('auth.redirect', { workspace_id: invited_workspace_id })}>
+                <Button className='text-black bg-white hover:bg-bgactive gap-2 w-full'>
+                    <GoogleIcon className='h-4 w-4' />
+                    Google
+                </Button>
+            </a>
         </GuestLayout>
     );
 }

@@ -14,8 +14,13 @@ class TaskObserver
     public function created(Task $task): void
     {
         //
-        $changes = $task->getChanges();
-        error_log(json_encode($changes));
+        $taskLog = $task->logs()->create([
+            'event' => 'created',
+            'user_id' => Request::user()->id,
+            'project_id' => $task->project_id
+        ]);
+
+        $taskLog->save();
     }
 
     /**

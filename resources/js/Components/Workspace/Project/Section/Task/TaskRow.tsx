@@ -77,7 +77,7 @@ export function TaskRow({ task }: TaskRowProps) {
                     </Sheet>
                 ): null}
             </div>
-            <div className="grow grid grid-cols-3">
+            <div className="grow grid grid-cols-[33%,33%,33%]">
                 <div className=" border-y-[1px] border-r-[1px] border-bordercolor">
                     <TaskColumnAssignee assignee={currTask.user} task={task} onSelect={handleSelectAssignee} />
                 </div>
@@ -130,7 +130,9 @@ export const TaskColumnAssignee = ({ assignee, onSelect = () => {} }: TaskColumn
                             <Avatar style={{ backgroundColor: assignee.color }}>
                                 <AvatarFallback className="text-black" >{props.data.members.find((value) => value.id === assignee.id)?.name[0]}</AvatarFallback>
                             </Avatar>
-                            {props.data.members.find((value) => value.id === assignee.id)?.name}
+                            <p className="truncate">
+                                {props.data.members.find((value) => value.id === assignee.id)?.name}
+                            </p>
                         </>
                     )
                     : "Unassigned"}

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->bigInteger('workspace_id')->unsigned();
             $table->foreign('workspace_id')->references('id')->on('workspaces');
             $table->string('name');
+            $table->date('deadline')->nullable();
+            $table->float('budget')->nullable();
             $table->timestamps();
         });
     }
