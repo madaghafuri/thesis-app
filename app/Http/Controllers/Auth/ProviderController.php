@@ -44,10 +44,6 @@ class ProviderController extends Controller
             $user->workspace()->attach(Request::input('state'));
         }
 
-        $user->workspace()->create([
-            'title' => $user->name."'s Workspace"
-        ]);
-
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);

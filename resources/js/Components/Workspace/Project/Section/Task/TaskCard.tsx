@@ -2,13 +2,14 @@ import { Avatar, AvatarFallback } from "@/Components/Avatar";
 import { Badge } from "@/Components/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/Card";
 import { Sheet, SheetTrigger } from "@/Components/Sheet";
-import { formatDistanceToNow } from "date-fns";
+import { format, isAfter } from "date-fns";
 import { TaskSheet } from "./TaskSheet";
 import { Task } from "@/types";
 import { Fragment } from "react";
+import { cn } from "@/utils";
 
 export function TaskCard({ task, }: { task: Task }) {
-    const currentTaskDate = new Date(task.due_date);
+    const pastDueDate = isAfter(new Date(), new Date(task.due_date));
 
     return (
         <Fragment>
@@ -33,7 +34,10 @@ export function TaskCard({ task, }: { task: Task }) {
                                     </Avatar>
                                 )}
                                 {task.priority ? (
-                                    <span className="text-textweak text-sm">{task.due_date ? formatDistanceToNow(currentTaskDate) : ''}</span>
+                                    <span className={cn(
+                                        "text-sm",
+                                        pastDueDate ? "text-danger" : "text-textweak"
+                                    )}>{task.due_date ? format(new Date(task.due_date), "PP") : ''}</span>
                                 ) : null}
                             </div>
                         </CardContent>

@@ -58,7 +58,7 @@ export default function Calendar() {
                                                     className="gap-2 hover:bg-bgactive"
                                                 >
                                                     <Avatar style={{ backgroundColor: member.color }}>
-                                                        <AvatarFallback className="text-textcolor" >{member.name[0].toUpperCase()}</AvatarFallback>
+                                                        <AvatarFallback className="text-black" >{member.name[0].toUpperCase()}</AvatarFallback>
                                                     </Avatar>
                                                     {member.name}
                                                 </CommandItem>
