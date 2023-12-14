@@ -71,7 +71,7 @@ export default function List() {
 
                                         return (
                                             <CommandItem key={member.id} onSelect={handleMemberSelect} className="flex items-center gap-2 text-textcolor hover:bg-bgactive">
-                                                <Avatar style={{ backgroundColor: member.color }}>
+                                                <Avatar style={{ backgroundColor: member.color }} className="text-black">
                                                     <AvatarFallback>{member.name[0].toUpperCase()}</AvatarFallback>
                                                 </Avatar>
                                                 {member.name}
