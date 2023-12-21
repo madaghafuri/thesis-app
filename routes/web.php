@@ -10,14 +10,14 @@ use App\Http\Controllers\TaskFileController;
 use App\Http\Controllers\TimeTrackerController;
 use App\Http\Controllers\WorkspaceController;
 use App\Http\Middleware\HandleProjectViewRequest;
+use App\Models\Priority;
+use App\Models\Task;
 use App\Models\User;
 use App\Models\Workspace;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,11 +63,26 @@ Route::resource('workspaces.projects', ProjectController::class)->middleware(['a
 Route::resource('workspaces', WorkspaceController::class)->middleware(['auth'])->only(['store', 'show']);
 
 Route::get('/workspaces/{workspace}/home', function (Workspace $workspace) {
+    $tasks = Task::where('user_id', Auth::user()->id)->get();
+    $members = $workspace->user()->get();
+    $priorities = Priority::all();
+    foreach ($tasks as $task) {
+        $task->project = $task->project()->first();
+        $task->user = $task->user()->first();
+        $task->priority = $task->priority()->first();
+        $task->files = $task->files()->get();
+    }
+
     return Inertia::render('Home', [
         'workspace' => $workspace,
         'projects' => fn () => $workspace->project()->get()
             ? $workspace->project()->get()
-            : null
+            : null,
+        'tasks' => fn () => $workspace->project()->get()
+            ? $tasks
+            : null,
+        'members' => $members,
+        'priorities' => $priorities
     ]);
 })->name('workspaces.home')->middleware(['auth']);
 

@@ -34,7 +34,7 @@ export default function DialogProvider({ children }: PropsWithChildren) {
                 as={Fragment}
             >
                 <Dialog as="div" open={!!Component} onClose={() => setComponent(undefined)} className="fixed inset-0 z-50 flex items-center justify-center bg-white/10 backdrop-blur-sm">
-                        <Dialog.Panel className="w-full max-w-sm rounded-md bg-nav text-textcolor">
+                        <Dialog.Panel className="w-full max-w-2xl rounded-md bg-nav text-textcolor">
                             <div className="p-5 flex items-center justify-between border-bordercolor border-b-[1px]">
                                 <Dialog.Title className="font-bold text-2xl">{title}</Dialog.Title>
                                 <Button className="h-8 hover:bg-bgactive px-2 text-textweak hover:text-textcolor" onClick={() => setComponent(undefined)}>
