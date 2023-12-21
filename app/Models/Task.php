@@ -44,5 +44,6 @@ class Task extends Model
         'due_date',
         'start_date',
         'description',
+        'completed'
     ];
 }

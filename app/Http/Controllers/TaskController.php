@@ -33,6 +33,7 @@ class TaskController extends Controller
             'due_date' => $validatedData["due_date"],
             'start_date' => $validatedData["start_date"],
             'description' => $validatedData["description"],
+            'completed' => $request->completed == 1
         ]);
 
         if ($request["section_id"] !== null) {
