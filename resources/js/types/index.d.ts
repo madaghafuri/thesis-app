@@ -63,6 +63,7 @@ export type Task = {
      */
     files: Files[];
     project: Project;
+    completed: boolean;
 }
 
 export type Priority = {
