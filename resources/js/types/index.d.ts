@@ -4,6 +4,7 @@ export interface User {
     email: string;
     email_verified_at: string;
     color: string;
+    avatar: string;
 }
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
@@ -61,6 +62,7 @@ export type Task = {
      * TODO
      */
     files: Files[];
+    project: Project;
 }
 
 export type Priority = {
