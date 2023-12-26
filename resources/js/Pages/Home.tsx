@@ -11,7 +11,6 @@ export default function Home({ auth, workspaceList, workspace, projects, tasks }
 
     return (
         <Authenticated user={auth.user} workspaces={workspaceList} currentWorkspace={workspace} projects={projects}>
-            <div className="text-textcolor p-6">Hello World</div>
             <div className="px-10 pb-10 pt-6 text-textcolor">
                 <div className="flex flex-col items-center justify-center gap-3">
                     <h1>{format(new Date(), "PPP")}</h1>

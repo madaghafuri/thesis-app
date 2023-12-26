@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback } from "@/Components/Avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/Card";
 import { Echart } from "@/Components/EChart";
+import { Progress } from "@/Components/Progress";
 import { ScrollArea } from "@/Components/ScrollArea";
 import { LogItem } from "@/Components/Workspace/Project/Dashboard/LogItem";
 import { ProjectViewLayout, ProjectViewProps } from "@/Components/Workspace/Project/ProjectViewLayout";
@@ -14,6 +15,9 @@ export default function Dashboard() {
     const data: { value: number | undefined; name: string }[] = props.sections.map((val) => {
         return { value: val.taskCount, name: val.name }
     })
+
+    const completedTask = props.tasks.filter((value) => value.completed);
+    const completedProgress = completedTask.length / props.tasks.length;
 
     return (
         <Authenticated user={props.auth.user} workspaces={props.workspaceList} projects={props.data.projectList} currentWorkspace={props.data.workspace} >
@@ -62,8 +66,10 @@ export default function Dashboard() {
                             <CardHeader>
                                 <CardTitle>Project Completion</CardTitle>
                             </CardHeader>
-                            <CardContent>
-                                <p>Hello World</p>
+                            <CardContent className="flex flex-col gap-3">
+                                <h2 className="font-bold">{(completedProgress * 100).toFixed(0)}% Completion</h2>
+                                <p className="text-white/30 text-sm font-thin">{completedTask.length} / {props.tasks.length} Tasks Completed</p>
+                                <Progress className="" value={completedProgress * 100} />
                             </CardContent>
                         </Card>
                     </div>
