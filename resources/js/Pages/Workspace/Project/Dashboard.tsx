@@ -4,24 +4,41 @@ import { Echart } from "@/Components/EChart";
 import { Progress } from "@/Components/Progress";
 import { ScrollArea } from "@/Components/ScrollArea";
 import { LogItem } from "@/Components/Workspace/Project/Dashboard/LogItem";
-import { ProjectViewLayout, ProjectViewProps } from "@/Components/Workspace/Project/ProjectViewLayout";
+import {
+    ProjectViewLayout,
+    ProjectViewProps,
+} from "@/Components/Workspace/Project/ProjectViewLayout";
 import { TaskCard } from "@/Components/Workspace/Project/Section/Task/TaskCard";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Log, PageProps, Section, Task } from "@/types";
 import { usePage } from "@inertiajs/react";
 
 export default function Dashboard() {
-    const { props } = usePage<PageProps<ProjectViewProps & { sections: Section[]; logs: Log[]; tasks: Task[] }>>();
-    const data: { value: number | undefined; name: string }[] = props.sections.map((val) => {
-        return { value: val.taskCount, name: val.name }
-    })
+    const { props } = usePage<
+        PageProps<
+            ProjectViewProps & {
+                sections: Section[];
+                logs: Log[];
+                tasks: Task[];
+            }
+        >
+    >();
+    const data: { value: number | undefined; name: string }[] =
+        props.sections.map((val) => {
+            return { value: val.taskCount, name: val.name };
+        });
 
     const completedTask = props.tasks.filter((value) => value.completed);
     const completedProgress = completedTask.length / props.tasks.length;
 
     return (
-        <Authenticated user={props.auth.user} workspaces={props.workspaceList} projects={props.data.projectList} currentWorkspace={props.data.workspace} >
-            <ProjectViewLayout >
+        <Authenticated
+            user={props.auth.user}
+            workspaces={props.workspaceList}
+            projects={props.data.projectList}
+            currentWorkspace={props.data.workspace}
+        >
+            <ProjectViewLayout>
                 <div className="text-textcolor p-4 grid grid-cols-3 gap-4">
                     <div className="grid grid-cols-1 gap-4">
                         <Card className="border-bordercolor">
@@ -29,34 +46,34 @@ export default function Dashboard() {
                                 <CardTitle>Task Distribution</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <Echart 
+                                <Echart
+                                    style={{ height: "100%" }}
                                     option={{
                                         legend: {
-                                            top: '0%',
-                                            right: '0%',
+                                            top: "0%",
+                                            right: "0%",
                                             textStyle: {
-                                                color: 'white'
+                                                color: "white",
                                             },
                                             align: "right",
-                                            orient: 'vertical'
-                                            
+                                            orient: "vertical",
                                         },
                                         tooltip: {
-                                            trigger: 'item'
+                                            trigger: "item",
                                         },
                                         darkMode: true,
                                         series: [
                                             {
-                                                type: 'pie',
+                                                type: "pie",
                                                 data,
-                                                radius: ['60%', '100%'],
+                                                radius: ["60%", "100%"],
                                                 labelLine: {
-                                                    show: false
+                                                    show: false,
                                                 },
                                                 label: {
-                                                    show: false
+                                                    show: false,
                                                 },
-                                            }
+                                            },
                                         ],
                                     }}
                                 />
@@ -67,9 +84,18 @@ export default function Dashboard() {
                                 <CardTitle>Project Completion</CardTitle>
                             </CardHeader>
                             <CardContent className="flex flex-col gap-3">
-                                <h2 className="font-bold">{(completedProgress * 100).toFixed(0)}% Completion</h2>
-                                <p className="text-white/30 text-sm font-thin">{completedTask.length} / {props.tasks.length} Tasks Completed</p>
-                                <Progress className="" value={completedProgress * 100} />
+                                <h2 className="font-bold">
+                                    {(completedProgress * 100).toFixed(0)}%
+                                    Completion
+                                </h2>
+                                <p className="text-white/30 text-sm font-thin">
+                                    {completedTask.length} /{" "}
+                                    {props.tasks.length} Tasks Completed
+                                </p>
+                                <Progress
+                                    className=""
+                                    value={completedProgress * 100}
+                                />
                             </CardContent>
                         </Card>
                     </div>
@@ -80,9 +106,7 @@ export default function Dashboard() {
                         <CardContent>
                             <ScrollArea className="h-96">
                                 {props.logs.map((log) => {
-                                    return (
-                                        <LogItem taskLog={log} />
-                                    )
+                                    return <LogItem taskLog={log} />;
                                 })}
                             </ScrollArea>
                         </CardContent>
@@ -94,9 +118,7 @@ export default function Dashboard() {
                         <CardContent>
                             <ScrollArea className="h-96">
                                 {props.tasks.map((task) => {
-                                    return (
-                                        <TaskCard task={task} />
-                                    )
+                                    return <TaskCard task={task} />;
                                 })}
                             </ScrollArea>
                         </CardContent>
@@ -109,17 +131,24 @@ export default function Dashboard() {
                             {props.data.members.map((member) => {
                                 return (
                                     <div className="flex items-center gap-2">
-                                        <Avatar style={{ backgroundColor: member.color }} className="text-black">
-                                            <AvatarFallback>{member.name[0].toUpperCase()}</AvatarFallback>
+                                        <Avatar
+                                            style={{
+                                                backgroundColor: member.color,
+                                            }}
+                                            className="text-black"
+                                        >
+                                            <AvatarFallback>
+                                                {member.name[0].toUpperCase()}
+                                            </AvatarFallback>
                                         </Avatar>
                                         {member.name}
                                     </div>
-                                )
+                                );
                             })}
                         </CardContent>
                     </Card>
                 </div>
             </ProjectViewLayout>
         </Authenticated>
-    )
+    );
 }

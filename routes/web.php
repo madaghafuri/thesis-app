@@ -71,6 +71,7 @@ Route::get('/workspaces/{workspace}/home', function (Workspace $workspace) {
         $task->user = $task->user()->first();
         $task->priority = $task->priority()->first();
         $task->files = $task->files()->get();
+        $task->times = $task->timeTrackers()->get();
     }
 
     return Inertia::render('Home', [

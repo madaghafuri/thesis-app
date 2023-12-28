@@ -1,16 +1,28 @@
-import { useState, PropsWithChildren, ReactNode } from 'react';
-import Dropdown from '@/Components/Dropdown';
-import { Link, router } from '@inertiajs/react';
-import { Project, User, Workspace } from '@/types';
-import { NavSectionContainer } from '@/Components/NavSectionContainer';
-import { NavSectionItem } from '@/Components/NavSectionItem';
-import PrimaryButton from '@/Components/PrimaryButton';
-import { useModal } from '@/Components/Dialog';
-import { CreateWorkspaceForm } from '@/Components/Workspace/CreateWorkspaceForm';
-import { CreateProjectForm } from '@/Components/Workspace/Project/CreateProjectForm';
-import { Briefcase, ChevronLeft, ClipboardCheck, Home, Pencil, Trash } from 'lucide-react';
-import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '@/Components/ContextMenu';
-import Logo from '@/assets/logo.svg?react';
+import { useState, PropsWithChildren, ReactNode } from "react";
+import Dropdown from "@/Components/Dropdown";
+import { Link, router } from "@inertiajs/react";
+import { Project, User, Workspace } from "@/types";
+import { NavSectionContainer } from "@/Components/NavSectionContainer";
+import { NavSectionItem } from "@/Components/NavSectionItem";
+import PrimaryButton from "@/Components/PrimaryButton";
+import { useModal } from "@/Components/Dialog";
+import { CreateWorkspaceForm } from "@/Components/Workspace/CreateWorkspaceForm";
+import { CreateProjectForm } from "@/Components/Workspace/Project/CreateProjectForm";
+import {
+    Briefcase,
+    ChevronLeft,
+    ClipboardCheck,
+    Home,
+    Pencil,
+    Trash,
+} from "lucide-react";
+import {
+    ContextMenu,
+    ContextMenuContent,
+    ContextMenuItem,
+    ContextMenuTrigger,
+} from "@/Components/ContextMenu";
+import Logo from "@/assets/logo.svg?react";
 
 type AuthenticatedProps = {
     user: User;
@@ -18,19 +30,30 @@ type AuthenticatedProps = {
     workspaces?: Workspace[];
     currentWorkspace?: Workspace;
     projects?: Project[];
-}
+};
 
-export default function Authenticated({ user, header, children, workspaces, currentWorkspace, projects }: PropsWithChildren<AuthenticatedProps>) {
-    const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+export default function Authenticated({
+    user,
+    header,
+    children,
+    workspaces,
+    currentWorkspace,
+    projects,
+}: PropsWithChildren<AuthenticatedProps>) {
+    const [showingNavigationDropdown, setShowingNavigationDropdown] =
+        useState(false);
     const { setIsOpen, showModal } = useModal();
 
     const handleCreateWorkspace = () => {
-        showModal(<CreateWorkspaceForm />, 'Create Workspace');
-    }
+        showModal(<CreateWorkspaceForm />, "Create Workspace");
+    };
 
     const handleCreateProject = () => {
-        showModal(<CreateProjectForm currentWorkspace={currentWorkspace} />, 'Create Project');
-    }
+        showModal(
+            <CreateProjectForm currentWorkspace={currentWorkspace} />,
+            "Create Project"
+        );
+    };
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -40,13 +63,18 @@ export default function Authenticated({ user, header, children, workspaces, curr
                         <div className="flex items-center">
                             <div className="shrink-0 flex items-center gap-2">
                                 <Link href="/">
-                                    <Logo className='w-10 h-10' />
+                                    <Logo className="w-10 h-10" />
                                 </Link>
-                                <h1 className='text-white text-3xl font-semibold select-none'>Manja</h1>
+                                <h1 className="text-white text-3xl font-semibold select-none">
+                                    Manja
+                                </h1>
                             </div>
 
                             <div className="hidden h-10 space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <PrimaryButton className='bg-blue' onClick={handleCreateWorkspace}>
+                                <PrimaryButton
+                                    className="bg-blue"
+                                    onClick={handleCreateWorkspace}
+                                >
                                     Create
                                 </PrimaryButton>
                             </div>
@@ -80,8 +108,16 @@ export default function Authenticated({ user, header, children, workspaces, curr
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
-                                        <Dropdown.Link href={route('logout')} method="post" as="button">
+                                        <Dropdown.Link
+                                            href={route("profile.edit")}
+                                        >
+                                            Profile
+                                        </Dropdown.Link>
+                                        <Dropdown.Link
+                                            href={route("logout")}
+                                            method="post"
+                                            as="button"
+                                        >
                                             Log Out
                                         </Dropdown.Link>
                                     </Dropdown.Content>
@@ -116,79 +152,153 @@ export default function Authenticated({ user, header, children, workspaces, curr
                 </div>
             </nav>
 
-            <div className='flex justify-center min-h-screen'>
-                <nav className='w-1/6 bg-nav flex flex-col'>
-                    <div className='p-3 border-b-[1px] border-bordercolor'>
+            <div className="flex justify-center min-h-screen">
+                <nav className="w-1/6 bg-nav flex flex-col">
+                    <div className="p-3 border-b-[1px] border-bordercolor">
                         <Dropdown>
                             <Dropdown.Trigger>
-                                <div className='flex items-center justify-between'>
-                                    <div className='text-textcolor flex flex-row items-center gap-3 select-none'>
+                                <div className="flex items-center justify-between">
+                                    <div className="text-textcolor flex flex-row items-center gap-3 select-none">
                                         <Briefcase />
-                                        <div className='flex flex-col'>
-                                            <h1 className='text-textweak font-semibold'>{currentWorkspace?.title || '...'}</h1>
-                                            <p className='text-xs font-extralight'>Free</p>
+                                        <div className="flex flex-col">
+                                            <h1 className="text-textweak font-semibold">
+                                                {currentWorkspace?.title ||
+                                                    "..."}
+                                            </h1>
+                                            <p className="text-xs font-extralight">
+                                                Free
+                                            </p>
                                         </div>
                                     </div>
-                                    <PrimaryButton className='text-textcolor hover:bg-bgactive px-3'>
+                                    <PrimaryButton className="text-textcolor hover:bg-bgactive px-3">
                                         <ChevronLeft />
                                     </PrimaryButton>
                                 </div>
                             </Dropdown.Trigger>
                             <Dropdown.Content>
-                                <div className='p-3'>
+                                <div className="p-3">
                                     {workspaces?.map((value) => {
                                         return (
-                                            <NavSectionItem className='text-textcolor' active={currentWorkspace?.id == value.id} key={value.id} href={route('workspaces.show', value.id)} >
+                                            <NavSectionItem
+                                                className="text-textcolor"
+                                                active={
+                                                    currentWorkspace?.id ==
+                                                    value.id
+                                                }
+                                                key={value.id}
+                                                href={route(
+                                                    "workspaces.show",
+                                                    value.id
+                                                )}
+                                            >
                                                 {value.title}
                                             </NavSectionItem>
-                                        )
+                                        );
                                     })}
                                 </div>
                             </Dropdown.Content>
                         </Dropdown>
                     </div>
-                    <div className='flex flex-col p-3 border-b-[1px] border-bordercolor'>
-                        <NavSectionItem className='hover:bg-bgactive rounded-lg' active={route().current('workspaces.home', currentWorkspace?.id)} href={route('workspaces.home', { id: currentWorkspace?.id })} >
-                            <Home className='h-4 text-textweak' />
-                            <h3 className='text-textcolor'>Home</h3>
-                        </NavSectionItem>
-                        <NavSectionItem className='hover:bg-bgactive rounded-lg' active={route().current('workspaces.tasks', currentWorkspace?.id)} href={route('workspaces.tasks', currentWorkspace?.id)}>
-                            <ClipboardCheck className='h-4 text-textweak' />
-                            <h3 className='text-textcolor'>My Tasks</h3>
+                    <div className="flex flex-col p-3 border-b-[1px] border-bordercolor">
+                        <NavSectionItem
+                            className="hover:bg-bgactive rounded-lg"
+                            active={route().current(
+                                "workspaces.home",
+                                currentWorkspace?.id
+                            )}
+                            href={route("workspaces.home", {
+                                id: currentWorkspace?.id,
+                            })}
+                        >
+                            <Home className="h-4 text-textweak" />
+                            <h3 className="text-textcolor">Home</h3>
                         </NavSectionItem>
                     </div>
-                    <NavSectionContainer header='Project' onClickAdd={handleCreateProject}>
+                    <NavSectionContainer
+                        header="Project"
+                        onClickAdd={handleCreateProject}
+                    >
                         {/** Dynamically iterated project */}
                         <ContextMenu>
                             <ContextMenuTrigger>
-                                <div className='flex flex-col'>
+                                <div className="flex flex-col">
                                     {projects?.map((project) => {
                                         return (
                                             <NavSectionItem
-                                                className='font-thin text-sm'
+                                                className="font-thin text-sm"
                                                 key={project.id}
-                                                active={route().current('workspaces.projects.show', { workspace: project.workspace_id, project: project.id })
-                                                || route().current('project.list', { workspace: project.workspace_id, project: project.id })
-                                                || route().current('project.board', { workspace: project.workspace_id, project: project.id })
-                                                || route().current('project.calendar', { workspace: project.workspace_id, project: project.id })
-                                                || route().current('project.workload', { workspace: project.workspace_id, project: project.id })
-                                                || route().current('project.dashboard', { workspace: project.workspace_id, project: project.id })
-                                            }
-                                                href={route('workspaces.projects.show', { workspace: project.workspace_id, project: project.id })}
+                                                active={
+                                                    route().current(
+                                                        "workspaces.projects.show",
+                                                        {
+                                                            workspace:
+                                                                project.workspace_id,
+                                                            project: project.id,
+                                                        }
+                                                    ) ||
+                                                    route().current(
+                                                        "project.list",
+                                                        {
+                                                            workspace:
+                                                                project.workspace_id,
+                                                            project: project.id,
+                                                        }
+                                                    ) ||
+                                                    route().current(
+                                                        "project.board",
+                                                        {
+                                                            workspace:
+                                                                project.workspace_id,
+                                                            project: project.id,
+                                                        }
+                                                    ) ||
+                                                    route().current(
+                                                        "project.calendar",
+                                                        {
+                                                            workspace:
+                                                                project.workspace_id,
+                                                            project: project.id,
+                                                        }
+                                                    ) ||
+                                                    route().current(
+                                                        "project.workload",
+                                                        {
+                                                            workspace:
+                                                                project.workspace_id,
+                                                            project: project.id,
+                                                        }
+                                                    ) ||
+                                                    route().current(
+                                                        "project.dashboard",
+                                                        {
+                                                            workspace:
+                                                                project.workspace_id,
+                                                            project: project.id,
+                                                        }
+                                                    )
+                                                }
+                                                href={route(
+                                                    "workspaces.projects.show",
+                                                    {
+                                                        workspace:
+                                                            project.workspace_id,
+                                                        project: project.id,
+                                                    }
+                                                )}
                                             >
                                                 {project.name}
                                             </NavSectionItem>
-                                        )
+                                        );
                                     })}
                                 </div>
                             </ContextMenuTrigger>
-                            <ContextMenuContent className='bg-content text-textcolor border-bordercolor'>
-                                <ContextMenuItem className='hover:bg-bgactive'>
-                                    <Pencil className='h-3.5 text-textweak' />
+                            <ContextMenuContent className="bg-content text-textcolor border-bordercolor">
+                                <ContextMenuItem className="hover:bg-bgactive">
+                                    <Pencil className="h-3.5 text-textweak" />
                                     Rename
                                 </ContextMenuItem>
-                                <ContextMenuItem className='hover:bg-bgactive text-danger'>
-                                    <Trash className='h-3.5'/>
+                                <ContextMenuItem className="hover:bg-bgactive text-danger">
+                                    <Trash className="h-3.5" />
                                     Delete
                                 </ContextMenuItem>
                             </ContextMenuContent>
@@ -196,7 +306,9 @@ export default function Authenticated({ user, header, children, workspaces, curr
                     </NavSectionContainer>
                 </nav>
 
-                <main className='w-5/6 min-h-screen bg-content'>{children}</main>
+                <main className="w-5/6 min-h-screen bg-content">
+                    {children}
+                </main>
             </div>
         </div>
     );
