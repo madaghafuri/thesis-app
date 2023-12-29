@@ -127,7 +127,10 @@ export function TaskView({
                         {completed ? "Completed" : "Mark Complete"}
                     </p>
                 </Button>
-                <TaskTracker task={task} />
+                <div className="flex flex-col">
+                    <p className="text-sm font-bold">Track Time</p>
+                    <TaskTracker task={task} />
+                </div>
             </DialogHeader>
             <SectionTitle
                 className="w-full"

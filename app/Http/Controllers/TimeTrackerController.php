@@ -26,4 +26,14 @@ class TimeTrackerController extends Controller
             ]);
         }
     }
+
+    public function store(Request $request, Task $task) {
+        $timeTracker = $task->timeTrackers()->create([
+            'start_time' => now(),
+            'duration' => $request->duration,
+            'end_time' => now(),
+        ]);
+
+        $timeTracker->save();
+    }
 }

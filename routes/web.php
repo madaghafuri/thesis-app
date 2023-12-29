@@ -125,6 +125,7 @@ Route::controller(TaskFileController::class)->group(function () {
 
 Route::post('/time-tracker/{task}/start', [TimeTrackerController::class, 'startTracking'])->middleware(['auth'])->name('time.start');
 Route::post('/time-tracker/{task}/stop', [TimeTrackerController::class, 'stopTracking'])->middleware(['auth'])->name('time.stop');
+Route::post('/tasks/{task}/time', [TimeTrackerController::class, 'store'])->middleware(['auth'])->name('time.store');
 
 Route::post('/invitation', [InvitationController::class, 'sendInvitation'])->name('email.invite');
 Route::get('/invitation/{token}', [InvitationController::class, 'acceptInvitation'])->name('invite.accept');
