@@ -1,11 +1,14 @@
 import { Avatar, AvatarFallback } from "@/Components/Avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/Card";
+import { useModal } from "@/Components/Dialog";
 import { MyTaskItem } from "@/Components/Home/MyTaskItem";
 import { ScrollArea } from "@/Components/ScrollArea";
+import { InviteWorkspaceForm } from "@/Components/Workspace/InviteWorkspaceForm";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import { PageProps, Project, Task, Workspace } from "@/types";
+import { PageProps, Project, Task, User, Workspace } from "@/types";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { format } from "date-fns";
+import { CircleDashed, Plus, UserIcon } from "lucide-react";
 
 export default function Home({
     auth,
@@ -13,7 +16,33 @@ export default function Home({
     workspace,
     projects,
     tasks,
-}: PageProps & { workspace: Workspace; projects?: Project[]; tasks: Task[] }) {
+    members,
+}: PageProps & {
+    workspace: Workspace;
+    projects?: Project[];
+    tasks: Task[];
+    members: User[];
+}) {
+    const workspaceMembers: User[] = [
+        {
+            avatar: "",
+            color: "",
+            email: "",
+            id: -1,
+            email_verified_at: "",
+            name: "",
+        },
+        ...members,
+    ];
+    const { showModal } = useModal();
+
+    const handleInvite = () => {
+        showModal(
+            <InviteWorkspaceForm workspace={workspace} />,
+            "Invite with email"
+        );
+    };
+
     return (
         <Authenticated
             user={auth.user}
@@ -75,6 +104,47 @@ export default function Home({
                             <CardHeader>
                                 <CardTitle>People</CardTitle>
                             </CardHeader>
+                            <CardContent className="grid grid-cols-4 items-center gap-3">
+                                {workspaceMembers.map((member) => {
+                                    if (member.id === -1) {
+                                        return (
+                                            <div className="flex items-center gap-4 hover:bg-bgactive p-3 rounded-md">
+                                                <div
+                                                    key={member.id}
+                                                    className="relative w-16 h-12 outline-dashed outline-2 rounded-full text-white/50 cursor-pointer"
+                                                    onClick={handleInvite}
+                                                >
+                                                    <Plus className="absolute left-0 right-0 top-0 bottom-0 m-auto inset" />
+                                                </div>
+                                                <p className="text-white/50">
+                                                    Invite
+                                                </p>
+                                            </div>
+                                        );
+                                    }
+
+                                    return (
+                                        <div className="flex items-center gap-4 hover:bg-bgactive p-3 rounded-md">
+                                            <Avatar>
+                                                <AvatarImage
+                                                    src={member.avatar}
+                                                />
+                                                <AvatarFallback
+                                                    style={{
+                                                        backgroundColor:
+                                                            member.color,
+                                                    }}
+                                                >
+                                                    {member.name[0].toUpperCase()}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                            <p className="text-white select-none">
+                                                {member.name}
+                                            </p>
+                                        </div>
+                                    );
+                                })}
+                            </CardContent>
                         </Card>
                     </div>
                 </div>
