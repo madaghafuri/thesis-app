@@ -105,7 +105,7 @@ export function TaskTracker({ task }: { task: Task }) {
                     </p>
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="border-bordercolor text-textcolor p-0">
+            <PopoverContent className="border-bordercolor text-textcolor p-0 bg-nav">
                 <Accordion type="single" collapsible>
                     <AccordionItem value="acc-time">
                         <AccordionTrigger className="px-2">
@@ -130,7 +130,7 @@ export function TaskTracker({ task }: { task: Task }) {
                                 return (
                                     <div
                                         key={time.id}
-                                        className="grid grid-cols-[auto,60%,auto] px-3 py-1 items-center"
+                                        className="grid grid-cols-[20%,60%,20%] px-3 py-1 items-center"
                                     >
                                         <p className="text-xs opacity-50">
                                             {
@@ -280,8 +280,6 @@ export function TrackerManualInput({
                     console.log("seconds exist");
                 });
         });
-
-        // if (totalSeconds <= 0) return;
 
         onTimeValue?.(totalSeconds);
     };
