@@ -10,13 +10,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/Components/Popover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/Tabs";
 import TextInput from "@/Components/TextInput";
 import { useToast } from "@/Components/Toast/useToast";
+import { useTaskTrackerContext } from "@/TaskTrackerProvider";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Task } from "@/types";
 import { cn, secondsToHours } from "@/utils";
 import { router } from "@inertiajs/react";
 import { ClassValue } from "clsx";
 import { format } from "date-fns";
-import { Pencil, PlayCircle, Trash } from "lucide-react";
+import { Pencil, PlayCircle, StopCircle, Trash } from "lucide-react";
 import {
     ChangeEvent,
     FocusEvent,
@@ -31,6 +32,14 @@ export function TaskTracker({ task }: { task: Task }) {
     const [timeTrack, setTimeTrack] = useState(0);
     const [errMessage, setErrMessage] = useState("");
     const { toast } = useToast();
+    const {
+        elapsedTime,
+        startTimer,
+        stopTimer,
+        isCounting,
+        setCurrentlyTrackedTask,
+        currentlyTrackedTask,
+    } = useTaskTrackerContext();
 
     const accumulatedTime = task.times.reduce(
         (acc, val) => (acc += val.duration),
@@ -57,12 +66,43 @@ export function TaskTracker({ task }: { task: Task }) {
         );
     };
 
+    const handleStartTimer = () => {
+        router.post(
+            route("time.start", { task: task.id }),
+            {},
+            {
+                onSuccess: () => {
+                    startTimer();
+                    setCurrentlyTrackedTask(task);
+                },
+            }
+        );
+    };
+
+    const handleStopTimer = () => {
+        router.post(
+            route("time.stop", { task: task.id }),
+            { duration: elapsedTime },
+            {
+                onSuccess: () => {
+                    stopTimer();
+                    setCurrentlyTrackedTask(null);
+                },
+            }
+        );
+    };
+
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button className="h-8 hover:bg-bgactive items-center w-fit px-1 gap-1">
-                    <PlayCircle className="h-5" />
-                    <p>{secondsToHours(accumulatedTime)}</p>
+                    <p>
+                        {!!currentlyTrackedTask &&
+                        currentlyTrackedTask.id === task.id &&
+                        isCounting
+                            ? secondsToHours(elapsedTime)
+                            : secondsToHours(accumulatedTime)}
+                    </p>
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="border-bordercolor text-textcolor p-0">
@@ -119,7 +159,22 @@ export function TaskTracker({ task }: { task: Task }) {
                         <TabsTrigger value="manual">Manual</TabsTrigger>
                     </TabsList>
                     <TabsContent value="timer" className="py-3 px-4">
-                        <PlayCircle />
+                        <div className="flex items-center justify-between">
+                            {isCounting ? (
+                                <StopCircle
+                                    className="cursor-pointer"
+                                    onClick={handleStopTimer}
+                                />
+                            ) : (
+                                <PlayCircle
+                                    className="cursor-pointer"
+                                    onClick={handleStartTimer}
+                                />
+                            )}
+                            <p className="text-sm">
+                                {secondsToHours(elapsedTime)}
+                            </p>
+                        </div>
                     </TabsContent>
                     <TabsContent
                         value="manual"
