@@ -11,7 +11,7 @@ import {
     useDayCellWidth,
 } from "@/Components/Workspace/Project/Workload/hooks";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import { PageProps, Task, User, WorkloadUser } from "@/types";
+import { PageProps, WorkloadUser } from "@/types";
 import { usePage } from "@inertiajs/react";
 import {
     addDays,

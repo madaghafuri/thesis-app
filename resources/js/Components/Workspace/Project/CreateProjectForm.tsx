@@ -3,16 +3,16 @@ import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import { Workspace } from "@/types";
-import { useForm } from "@inertiajs/react"
+import { useForm } from "@inertiajs/react";
 import { FormEvent, useState } from "react";
 
 type ProjectFormData = {
     name: string;
-}
+};
 
 type ProjectFormProps = {
     currentWorkspace?: Workspace;
-}
+};
 
 export function CreateProjectForm({ currentWorkspace }: ProjectFormProps) {
     const { data, setData, post, processing } = useForm<ProjectFormData>();
@@ -24,19 +24,19 @@ export function CreateProjectForm({ currentWorkspace }: ProjectFormProps) {
 
         setLoading(true);
         setTimeout(() => {
-            post(route('workspaces.projects.store', currentWorkspace?.id), {
+            post(route("workspaces.projects.store", currentWorkspace?.id), {
                 onSuccess: () => {
-                    showModal(undefined, '');
+                    showModal(undefined, "");
                     setLoading(false);
-                }
+                },
             });
         }, 1000);
-    }
+    };
 
     return (
         <section>
             <form onSubmit={handleCreateProject}>
-                <div className="flex items-center justify-between p-4">
+                <div className="grid grid-cols-1 items-center p-4 gap-2">
                     <InputLabel htmlFor="project_name" value="Project Name" />
 
                     <TextInput
@@ -44,17 +44,22 @@ export function CreateProjectForm({ currentWorkspace }: ProjectFormProps) {
                         required
                         isFocused
                         value={data.name}
-                        onChange={(e) => setData('name', e.target.value)}
+                        onChange={(e) => setData("name", e.target.value)}
                         autoComplete="name"
+                        className="w-3/4"
                     />
                 </div>
 
                 <div className="flex items-center justify-end p-4">
-                    <PrimaryButton type="submit" className="bg-blue" disabled={loading}>
+                    <PrimaryButton
+                        type="submit"
+                        className="bg-blue"
+                        disabled={loading}
+                    >
                         Create
                     </PrimaryButton>
                 </div>
             </form>
         </section>
-    )
+    );
 }
