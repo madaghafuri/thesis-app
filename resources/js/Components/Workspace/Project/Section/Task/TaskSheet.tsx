@@ -251,6 +251,7 @@ export function TaskSheet({ task }: { task: Task }) {
         setCompleted((prev) => {
             const newState = !prev;
             const formData = { ...task, completed: newState };
+            //@ts-ignore
             router.patch(route("task.update", { task: task.id }), formData, {
                 onError: (e) => {
                     console.error(e);
