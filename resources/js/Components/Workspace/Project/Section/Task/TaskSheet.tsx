@@ -61,6 +61,7 @@ import DOCSIcon from "@/assets/docs.svg?react";
 import PPTIcon from "@/assets/ppt.svg?react";
 import PDFIcon from "@/assets/pdf.svg?react";
 import { TaskTracker } from "./TaskTracker";
+import { useToast } from "@/Components/Toast/useToast";
 
 const FileType: Record<AcceptedFileType, ReactNode> = {
     text: <TextIcon />,
@@ -82,13 +83,18 @@ const FileTypeName: Record<AcceptedFileType, string> = {
 
 export function FileComp({ file }: { file: Files }) {
     const fileType = getFileType(file.filePath);
+    const { toast } = useToast();
 
     const handleDeleteFile = () => {
-        // router.post(route('file.destroy', { file: file.id }), {
-        //     data: {
-        //         fileName: file.files
-        //     },
-        // });
+        router.delete(route("file.destroy", { taskFile: file.id }), {
+            onSuccess: () => {
+                toast({
+                    title: "File has been deleted",
+                    type: "foreground",
+                    variant: "destructive",
+                });
+            },
+        });
     };
 
     const handleDownloadFile = () => {
@@ -124,6 +130,7 @@ export function FileComp({ file }: { file: Files }) {
                 <Button
                     className="hover:bg-bgactive h-8 px-2"
                     onClick={handleDeleteFile}
+                    type="button"
                 >
                     <X className="h-5" />
                 </Button>

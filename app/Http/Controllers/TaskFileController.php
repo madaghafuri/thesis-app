@@ -43,4 +43,10 @@ class TaskFileController extends Controller
 
         abort(404, "File not found");
     }
+
+    public function destroy(TaskFiles $taskFile) {
+        $file = TaskFIles::where('id', $taskFile->id)->first();
+        TaskFiles::destroy($file->id);
+        Storage::delete($file->fileName);
+    }
 }

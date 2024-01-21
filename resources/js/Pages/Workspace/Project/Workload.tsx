@@ -24,6 +24,8 @@ import {
 } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { Gantt, Task as GanttTask } from "gantt-task-react";
+import "gantt-task-react/dist/index.css";
 
 export default function Workload() {
     const { props } =
@@ -35,6 +37,34 @@ export default function Workload() {
     const eachDayInterval = eachDayOfInterval({ start: startDay, end: endDay });
     const { dayRef, dayWidth } = useDayCellWidth();
     const dateRangeISO = eachDayInterval.map((val) => val.toLocaleDateString());
+
+    // const ganttTasks: GanttTask[] = props.users.map((member) => {
+    //     return member.tasks.flatMap((task) => ({
+    //         start: new Date(task.start_date),
+    //         end: new Date(task.due_date),
+    //         name: task.name,
+    //         id: task.id,
+    //         type: "task",
+    //         progress: 70,
+    //         isDisabled: true,
+    //     }));
+    // });
+
+    const ganttTasks: GanttTask[] = [];
+
+    props.users.forEach((member) => {
+        member.tasks.forEach((task) => {
+            ganttTasks.push({
+                start: new Date(task.start_date),
+                end: new Date(task.due_date),
+                name: task.name,
+                id: task.id.toString(),
+                type: "task",
+                progress: 70,
+                isDisabled: true,
+            });
+        });
+    });
 
     return (
         <Authenticated
@@ -97,7 +127,10 @@ export default function Workload() {
                         </div>
                     </div>
                 </div>
-                {props.users.map((member) => {
+                <div>
+                    <Gantt tasks={ganttTasks} />
+                </div>
+                {/* {props.users.map((member) => {
                     const taskByWeek = member.tasks.filter((task) => {
                         const startDate = new Date(
                             task.created_at
@@ -164,7 +197,7 @@ export default function Workload() {
                             </div>
                         </div>
                     );
-                })}
+                })} */}
             </ProjectViewLayout>
         </Authenticated>
     );

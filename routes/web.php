@@ -118,7 +118,7 @@ Route::controller(TaskController::class)->group(function () {
 
 Route::controller(TaskFileController::class)->group(function () {
     Route::post('/tasks/{task}/file', 'upload')->name('task.files')->middleware(['auth']);
-    Route::post('/files/{taskFile}', 'destroy')->name('file.destroy');
+    Route::delete('/files/{taskFile}', 'destroy')->name('file.destroy');
 });
 
 // Route::get('/download', DownloadFileController::class)->name('file.download')->middleware(['auth']);
