@@ -109,7 +109,9 @@ export default function Authenticated({
 
                                     <Dropdown.Content>
                                         <Dropdown.Link
-                                            href={route("profile.edit")}
+                                            href={route("profile.edit", {
+                                                workspace: currentWorkspace?.id,
+                                            })}
                                         >
                                             Profile
                                         </Dropdown.Link>
