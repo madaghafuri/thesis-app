@@ -45,9 +45,13 @@ export function useTaskSize(
     const rangeDurationWidth =
         Math.abs(dayCellWidth * dayDifferences).toString() + "px";
 
+    const maxWidth =
+        Math.abs(dayCellWidth * (7 - weekDayStart)).toString() + "px";
+
     return {
         leftPos,
         rangeDurationWidth,
+        maxWidth,
     };
 }
 export function getAccumulatedHoursByUser(user: WorkloadUser, date: Date) {

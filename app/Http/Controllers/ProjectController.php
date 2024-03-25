@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\Section;
+use App\Models\Task;
 use App\Models\TaskLog;
 use App\Models\Workspace;
 use Illuminate\Http\Request;
@@ -184,9 +185,10 @@ class ProjectController extends Controller
 
     public function workload(Workspace $workspace, Project $project) {
         $users = $workspace->user()->get();
-        $tasks = $project->tasks()->get();
+        $tasks = Task::with('user')->where('project_id', $project->id)->get();
+        error_log($tasks);
         foreach($users as $user) {
-            $tasks = $user->tasks()->get();
+            // $tasks = $user->tasks()->get();
             foreach($tasks as $task) {
                 $priority = $task->priority()->first();
                 $times = $task->timeTrackers()->get();
