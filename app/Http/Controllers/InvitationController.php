@@ -48,7 +48,7 @@ class InvitationController extends Controller
             $user->workspace()->attach($invitation->workspace_id);
         }
 
-        return redirect()->route('workspaces.show', [ 'workspace' => $invitation->workspace_id ]);
+        return redirect()->route('workspaces.home', [ 'workspace' => $invitation->workspace_id ]);
     }
 
     public function registerThroughInvitation() {

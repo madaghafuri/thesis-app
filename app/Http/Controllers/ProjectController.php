@@ -29,7 +29,7 @@ class ProjectController extends Controller
     {
         //
     }
-
+        // ello orld
     /**
      * Store a newly created resource in storage.
      */
@@ -70,7 +70,7 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Workspace $workspace, Project $project)
     {
-        //
+     
     }
 
     /**
@@ -105,7 +105,7 @@ class ProjectController extends Controller
     }
 
     public function board(Workspace $workspace, Project $project) {
-        $sections = $project->sections()->get();
+       $sections = $project->sections()->get();
 
         foreach($sections as $section) {
             $taskList = $project->tasks()->where('section_id', $section->id)->get()->sortBy('updated_at')->values()->all();

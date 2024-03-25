@@ -24,7 +24,6 @@ import {
 } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import "gantt-task-react/dist/index.css";
 
 export default function Workload() {
     const { props } =

@@ -74,9 +74,12 @@ export default function Welcome({
             </div>
 
             <div className="bg-gray-800 h-[300px] flex items-start justify-evenly pt-7">
-                {featureList.map((value) => {
+                {featureList.map((value, index) => {
                     return (
-                        <div className="flex flex-col gap-3 text-white">
+                        <div
+                            className="flex flex-col gap-3 text-white"
+                            key={index}
+                        >
                             <h4>{value.title}</h4>
                             <h2 className="text-4xl w-[300px] font-bold">
                                 {value.subTitle}

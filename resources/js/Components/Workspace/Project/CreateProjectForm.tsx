@@ -2,6 +2,7 @@ import { useModal } from "@/Components/Dialog";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
+import { useToast } from "@/Components/Toast/useToast";
 import { Workspace } from "@/types";
 import { useForm } from "@inertiajs/react";
 import { FormEvent, useState } from "react";
@@ -18,6 +19,7 @@ export function CreateProjectForm({ currentWorkspace }: ProjectFormProps) {
     const { data, setData, post, processing } = useForm<ProjectFormData>();
     const { showModal } = useModal();
     const [loading, setLoading] = useState(false);
+    const { toast } = useToast();
 
     const handleCreateProject = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -28,6 +30,10 @@ export function CreateProjectForm({ currentWorkspace }: ProjectFormProps) {
                 onSuccess: () => {
                     showModal(undefined, "");
                     setLoading(false);
+                    toast({
+                        title: "Project created successfully",
+                        description: `${data.name} project has been created`,
+                    });
                 },
             });
         }, 1000);

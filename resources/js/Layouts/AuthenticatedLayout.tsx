@@ -189,7 +189,7 @@ export default function Authenticated({
                                                 }
                                                 key={value.id}
                                                 href={route(
-                                                    "workspaces.show",
+                                                    "workspaces.home",
                                                     value.id
                                                 )}
                                             >

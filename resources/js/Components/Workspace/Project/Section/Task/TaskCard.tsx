@@ -4,12 +4,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/Components/Card";
 import { Sheet, SheetTrigger } from "@/Components/Sheet";
 import { format, isAfter } from "date-fns";
 import { TaskSheet } from "./TaskSheet";
-import { Task } from "@/types";
+import { PageProps, Task } from "@/types";
 import { Fragment } from "react";
 import { cn } from "@/utils";
+import { usePage } from "@inertiajs/react";
 
-export function TaskCard({ task, }: { task: Task }) {
+export function TaskCard({ task }: { task: Task }) {
     const pastDueDate = isAfter(new Date(), new Date(task.due_date));
+    const { props } = usePage<PageProps>();
 
     return (
         <Fragment>
@@ -17,27 +19,60 @@ export function TaskCard({ task, }: { task: Task }) {
                 <SheetTrigger className="w-full">
                     <Card className="border-bordercolor bg-black text-textcolor hover:bg-black/70">
                         <CardHeader className="p-4">
-                            <CardTitle className="text-left truncate text-lg">{task.name || ""}</CardTitle>
+                            <CardTitle className="text-left truncate text-lg">
+                                {task.name || ""}
+                            </CardTitle>
                         </CardHeader>
                         <CardContent className="flex flex-col justify-center gap-3 p-4 pt-0">
-                            {task.priority ? <Badge className="text-black w-fit" variant={task.priority.name.toLowerCase() as 'high' | 'medium' | 'low'} >{task.priority.name}</Badge>
-                            : null}
+                            {task.priority ? (
+                                <Badge
+                                    className="text-black w-fit"
+                                    variant={
+                                        task.priority.name.toLowerCase() as
+                                            | "high"
+                                            | "medium"
+                                            | "low"
+                                    }
+                                >
+                                    {task.priority.name}
+                                </Badge>
+                            ) : null}
                             <div className="flex items-center gap-3">
                                 {task.user ? (
                                     <Avatar>
-                                        <AvatarFallback style={{ backgroundColor: task.user.color}} className="text-black">{task.user.name[0]}</AvatarFallback>
+                                        <AvatarFallback
+                                            style={{
+                                                backgroundColor:
+                                                    task.user.color,
+                                            }}
+                                            className="text-black"
+                                        >
+                                            {task.user.name[0]}
+                                        </AvatarFallback>
                                     </Avatar>
-                                )
-                                : (
+                                ) : (
                                     <Avatar>
-                                        <AvatarFallback className="-z-40">H</AvatarFallback>
+                                        <AvatarFallback className="-z-40">
+                                            H
+                                        </AvatarFallback>
                                     </Avatar>
                                 )}
                                 {task.priority ? (
-                                    <span className={cn(
-                                        "text-sm",
-                                        pastDueDate ? "text-danger" : "text-textweak"
-                                    )}>{task.due_date ? format(new Date(task.due_date), "PP") : ''}</span>
+                                    <span
+                                        className={cn(
+                                            "text-sm",
+                                            pastDueDate
+                                                ? "text-danger"
+                                                : "text-textweak"
+                                        )}
+                                    >
+                                        {task.due_date
+                                            ? format(
+                                                  new Date(task.due_date),
+                                                  "PP"
+                                              )
+                                            : ""}
+                                    </span>
                                 ) : null}
                             </div>
                         </CardContent>
@@ -46,5 +81,5 @@ export function TaskCard({ task, }: { task: Task }) {
                 <TaskSheet task={task} />
             </Sheet>
         </Fragment>
-    )
+    );
 }

@@ -108,7 +108,10 @@ export default function Home({
                                 {workspaceMembers.map((member) => {
                                     if (member.id === -1) {
                                         return (
-                                            <div className="flex items-center gap-4 hover:bg-bgactive p-3 rounded-md">
+                                            <div
+                                                key={member.id}
+                                                className="flex items-center gap-4 hover:bg-bgactive p-3 rounded-md"
+                                            >
                                                 <div
                                                     key={member.id}
                                                     className="relative w-16 h-12 outline-dashed outline-2 rounded-full text-white/50 cursor-pointer"
@@ -124,7 +127,10 @@ export default function Home({
                                     }
 
                                     return (
-                                        <div className="flex items-center gap-4 hover:bg-bgactive p-3 rounded-md">
+                                        <div
+                                            key={member.id}
+                                            className="flex items-center gap-4 hover:bg-bgactive p-3 rounded-md"
+                                        >
                                             <Avatar>
                                                 <AvatarImage
                                                     src={member.avatar}
