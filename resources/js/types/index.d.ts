@@ -7,12 +7,14 @@ export interface User {
     avatar: string;
 }
 
-export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
+export type PageProps<
+    T extends Record<string, unknown> = Record<string, unknown>
+> = T & {
     auth: {
         user: User;
     };
-    ziggy: any,
-    workspaceList: any[]
+    ziggy: any;
+    workspaceList: any[];
 };
 
 export type Workspace = {
@@ -24,7 +26,7 @@ export type Workspace = {
     title: string;
     created_at: string;
     updated_at: string;
-}
+};
 
 export type Project = {
     id: number;
@@ -32,8 +34,7 @@ export type Project = {
     workspace_id: number;
     created_at: string;
     updated_at: string;
-}
-
+};
 
 export type Section = {
     id: number;
@@ -41,9 +42,9 @@ export type Section = {
     name: string;
     created_at: string;
     updated_at: string;
-    tasks: Task[]
-    taskCount?: number
-}
+    tasks: Task[];
+    taskCount?: number;
+};
 
 export type Task = {
     id: number;
@@ -58,20 +59,21 @@ export type Task = {
     start_date: string;
     times: TimeTrack[];
     description: string;
+    user_id: number;
     /**
      * TODO
      */
     files: Files[];
     project: Project;
     completed: boolean;
-}
+};
 
 export type Priority = {
     id: number;
     name: string;
     created_at: string;
     updated_at: string;
-}
+};
 
 export type TimeTrack = {
     id: number;
@@ -81,11 +83,11 @@ export type TimeTrack = {
     duration: number;
     created_at: string;
     updated_at: string;
-}
+};
 
 export type WorkloadUser = User & {
     tasks: Task[];
-}
+};
 
 export type Files = {
     id: number;
@@ -94,7 +96,7 @@ export type Files = {
     fileName: string;
     created_at: string;
     updated_at: string;
-}
+};
 
 export type Log = {
     id: number;
@@ -106,4 +108,4 @@ export type Log = {
     event: string;
     created_at: string;
     updated_at: string;
-}
+};

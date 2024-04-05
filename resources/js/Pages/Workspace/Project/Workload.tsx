@@ -147,8 +147,10 @@ export default function Workload() {
                             </div>
                             <div className="grid px-4 grow py-2 gap-3">
                                 {taskByWeek.map((task, index) => {
-                                    const startDate = new Date(task.created_at);
+                                    const startDate = new Date(task.start_date);
                                     const endDate = new Date(task.due_date);
+
+                                    if (task.user_id !== member.id) return;
 
                                     return (
                                         <EventBlock

@@ -16,7 +16,7 @@ export function EventBlock({
     task,
     dayWidth,
 }: Props) {
-    const { leftPos, rangeDurationWidth, maxWidth } = useTaskSize(
+    const { leftPos, rangeDurationWidth, maxWidth, minWidth } = useTaskSize(
         startDate,
         endDate,
         dayWidth
@@ -30,7 +30,9 @@ export function EventBlock({
                     left: `${leftPos}%`,
                     width: rangeDurationWidth,
                     maxWidth,
+                    minWidth,
                     backgroundColor: task.user?.color,
+                    color: "black",
                 }}
             >
                 {task.name}
