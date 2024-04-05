@@ -3,6 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Project;
+use App\Models\Section;
+use App\Models\Task;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,7 +22,13 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        
+        Task::withoutEvents(function() {
+            $project = Project::all()->where('id', 1)->first();
+            $section = Section::all()->where('id', 1)->first();
+            Task::factory()->count(20)->for($project)->for($section)->create();
+        });
 
-        $this->call(PrioritySeeder::class);
+        // $this->call(PrioritySeeder::class);
     }
 }

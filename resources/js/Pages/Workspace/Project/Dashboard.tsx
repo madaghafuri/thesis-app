@@ -71,7 +71,8 @@ export default function Dashboard() {
                                                     show: false,
                                                 },
                                                 label: {
-                                                    show: false,
+                                                    show: true,
+                                                    formatter: "{d}%",
                                                 },
                                             },
                                         ],
