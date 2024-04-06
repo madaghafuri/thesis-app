@@ -29,6 +29,6 @@ class DatabaseSeeder extends Seeder
             Task::factory()->count(20)->for($project)->for($section)->create();
         });
 
-        // $this->call(PrioritySeeder::class);
+        $this->call(PrioritySeeder::class);
     }
 }
